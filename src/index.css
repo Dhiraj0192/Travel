@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+    background-color: #dadaec;
+    width: 100vw;
+    overflow-x: hidden;
+    font-family: "Montserrat", sans-serif;
+    
+}
+
+.animatedButton{
+    animation-duration: 10000ms;
+}
