@@ -13,3 +13,7 @@ body {
 .animatedButton{
     animation-duration: 10000ms;
 }
+
+.text{
+    color: white;
+}

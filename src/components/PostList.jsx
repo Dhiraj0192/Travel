@@ -5,14 +5,14 @@ import Footer from "./Footer";
 
 function PostList() {
   return (
-    <div className="mt-16 flex flex-col gap-8 justify-center items-center">
-      <h1 className="text-3xl font-bold text-blue-800">Popular Blogs</h1>
+    <div className="lg:px-32 mt-16 flex flex-col gap-8 justify-center items-center">
+      <h1 className="text-3xl font-bold text-blue-800">Tranding Blogs</h1>
       <p className="text-gray-600">
         Discover trending content from our community of writers
       </p>
 
       <div className="flex items-center justify-between gap-8">
-        <div className="rounded-3xl w-[33%] flex flex-col gap-3 bg-gray-200">
+        <div className="rounded-3xl w-[33%] flex flex-col gap-3 bg-gray-200 shadow-lg">
           <Image src="featured1.jpeg" className="rounded-3xl object-cover" />
           <div className="p-4 flex flex-col items-start justify-center gap-3">
             <p className="text-blue-800 font-bold text-2xl">
@@ -39,7 +39,7 @@ function PostList() {
           </div>
         </div>
 
-        <div className="rounded-3xl w-[33%] flex flex-col gap-3 bg-gray-200">
+        <div className="rounded-3xl w-[33%] flex flex-col gap-3 bg-gray-200 shadow-lg">
           <Image src="featured1.jpeg" className="rounded-3xl object-cover" />
           <div className="p-4 flex flex-col items-start justify-center gap-3">
             <p className="text-blue-800 font-bold text-2xl">
@@ -66,7 +66,7 @@ function PostList() {
           </div>
         </div>
 
-        <div className="rounded-3xl w-[33%] flex flex-col gap-3 bg-gray-200">
+        <div className="rounded-3xl w-[33%] flex flex-col gap-3 bg-gray-200 shadow-lg">
           <Image src="featured1.jpeg" className="rounded-3xl object-cover" />
           <div className="p-4 flex flex-col items-start justify-center gap-3">
             <p className="text-blue-800 font-bold text-2xl">

@@ -1,14 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Image from './Image'
 import { Link } from 'react-router-dom'
+import { useEffect } from 'react';
 
-function FeaturedPosts() {
+function FeaturedPosts({lineBar=true}) {
+    
+
   return (
     <div className="">
-        <div className="w-[50vw] mt-16 h-2 bg-white rounded-3xl mb-20 shadow-blue-600 shadow-md"></div>
+        {lineBar? <div className="w-[50vw] mt-16 h-2 bg-white rounded-3xl mb-20 shadow-blue-600 shadow-md"></div> : ""}
 
-        <h1 className="text-4xl font-bold text-center mb-16">Recent Blogs and Ariticles
-            </h1>
+        {lineBar? <h1 className="text-4xl font-bold text-center mb-16">Recent Blogs and Ariticles
+            </h1> : ""}
         <div className='lg:px-32 mt-8 flex flex-col lg:flex-row gap-8'>
         
         <div className="w-full lg:w-1/2 flex flex-col gap-2">

@@ -14,6 +14,10 @@ import SinglePostPage from './routes/SinglePostPage.jsx';
 import MainLayout from './layouts/MainLayout.jsx';
 import { ClerkProvider } from '@clerk/clerk-react';
 import MainPage from './routes/MainPage.jsx';
+import AdminLoginPage from './routes/adminPages/AdminLogin.jsx';
+import AdminRegisterPage from './routes/adminPages/AdminRegister.jsx';
+import Dashboard from './routes/adminPages/Dashboard.jsx';
+
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
@@ -53,6 +57,19 @@ const router = createBrowserRouter([
         path: "/home",
         element : <MainPage/>
       },
+      {
+        path: "/admin-login",
+        element : <AdminLoginPage/>
+      },
+      {
+        path: "/admin-register",
+        element : <AdminRegisterPage/>
+      },
+      {
+        path: "/admin-dashboard",
+        element : <Dashboard/>
+      },
+      
     ],
   },
 ])
