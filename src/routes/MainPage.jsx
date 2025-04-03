@@ -13,8 +13,9 @@ import BlogHome from '../components/BlogHome'
 function MainPage() {
   return (
     <div className=' flex flex-col'>
+        <Image src="pexels-fmaderebner-238622.jpg" className="blur-sm w-full h-[65vh] absolute top-0 -z-10"/>
         {/* breadcrumb */}
-        <div className="h-96 flex flex-col bg-[url('pexels-fmaderebner-238622.jpg')] bg-cover bg-center bg-no-repeat justify-center">
+        <div className="h-96 flex flex-col justify-center">
         <div className="flex gap-4 lg:px-32 text-white ">
             <Link to="/home" className='text-xl'>Home</Link>
             <span className='text-xl text-white'>.</span>
