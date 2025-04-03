@@ -9,11 +9,12 @@ import Image from '../components/Image'
 import FeaturedPosts from '../components/FeaturedPosts'
 import BlogHome from '../components/BlogHome'
 
+
 function MainPage() {
   return (
     <div className=' flex flex-col'>
         {/* breadcrumb */}
-        <div className="h-96 flex flex-col bg-[url('public/pexels-fmaderebner-238622.jpg')] bg-cover bg-center bg-no-repeat justify-center">
+        <div className="h-96 flex flex-col bg-[url('pexels-fmaderebner-238622.jpg')] bg-cover bg-center bg-no-repeat justify-center">
         <div className="flex gap-4 lg:px-32 text-white ">
             <Link to="/home" className='text-xl'>Home</Link>
             <span className='text-xl text-white'>.</span>
