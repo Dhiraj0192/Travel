@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import truncate from "html-truncate";
 import { decode } from "html-entities";
 import { convert } from "html-to-text";
+import AddsSlot from "../components/AddsSlot";
 
 function BlogPage() {
   const user = useSelector((state) => state.user);
@@ -237,7 +238,7 @@ function BlogPage() {
             </div>
           </div>
 
-          <div className="lg:pr-32 flex-1 flex  flex-wrap gap-4">
+          <div className="lg:pr-32 flex-1 flex  flex-wrap gap-4 mb-20">
             
 
                 {searchData ? searchData.map(blog =><div
@@ -385,6 +386,10 @@ function BlogPage() {
                 ))}
           </div>
         </div>
+        
+      </div>
+      <div className="mt-10 mb-10">
+      <AddsSlot/>
       </div>
 
       <Footer />

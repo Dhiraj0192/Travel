@@ -31,6 +31,7 @@ import { Button } from "./ui/button";
 import { showToast } from "../helpers/showToast";
 import { getEnv } from "../helpers/getEnv";
 import { GrNotes } from "react-icons/gr";
+import { IoMdArrowDropdownCircle } from "react-icons/io";
 
 function Navbar() {
   // const { isSignedIn } = useAuth();
@@ -116,9 +117,10 @@ function Navbar() {
       <div className="text-white hidden md:flex items-center gap-8 xl:gap-12 font-medium">
         <Link to={`${user.isLoggedIn ? "/home" : "/"}`}>Home</Link>
         <Link to="/blogs">Blogs</Link>
-        <Link to="/">Gallery</Link>
+        <Link to="/gallery">Gallery</Link>
         <Link to="/">About</Link>
         <Link to="/">Contact</Link>
+        <Link to="/travel-packages">Packages</Link>
         {/* <SignedOut> */}
         {!user.isLoggedIn ? (
           <Link to="/login">
@@ -129,11 +131,14 @@ function Navbar() {
         ) : (
           <>
             <DropdownMenu>
-              <DropdownMenuTrigger>
-                <Avatar>
+            <Avatar>
                   <AvatarImage src={user.user.avatar} />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
+              <DropdownMenuTrigger>
+                
+                <IoMdArrowDropdownCircle className="h-7 w-7 -ml-10" />
+
               </DropdownMenuTrigger>
               <DropdownMenuContent className=" w-[18vw] absolute top-4 -right-32">
                 <DropdownMenuLabel className="bg-gray-800 rounded-md">
@@ -149,7 +154,7 @@ function Navbar() {
                     Profile</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild className="text-md font-semibold mb-1 text-gray-500 hover:bg-gray-200">
-                    <Link to="">
+                    <Link to="/your-blogs">
                     <GrNotes />
                     Your Blog</Link>
                 </DropdownMenuItem>

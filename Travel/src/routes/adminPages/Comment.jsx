@@ -172,7 +172,7 @@ const CommentsDashboard = () => {
                       <p className="text-white">{comment?.coment}</p>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-50">
-                      {comment?.blogid.title}
+                      {comment?.blogid?.title}
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-50">
                       {moment(commentData?.createdAt).format('DD-MM-YYYY')}
@@ -207,7 +207,7 @@ const CommentsDashboard = () => {
                         <p className="text-white">{comment?.coment}</p>
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-50">
-                        {comment?.blogid.title}
+                        {comment?.blogid?.title}
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-50">
                         {moment(commentData?.createdAt).format('DD-MM-YYYY')}

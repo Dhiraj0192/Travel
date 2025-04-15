@@ -17,7 +17,7 @@ const CategoriesManagement = ({editClicked, setEditClicked}) => {
     credentials: 'include'
   },[refreshData])
 
-  const categories = categoryData?.category;
+  let categories = categoryData?.category;
 
   useEffect(()=>{
     if (categories) {

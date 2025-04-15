@@ -38,6 +38,7 @@ import Dropzone from "react-dropzone";
 import Editor from "../../components/Editor";
 import { Link } from "react-router-dom";
 import moment from "moment/moment";
+import { deleteData } from "../../helpers/handleDelete";
 
 function PendingPosts() {
   const [selectedCategoryBlogs, setSelectedCategoryBlogs] = useState();

@@ -1,0 +1,258 @@
+import React, { useEffect, useState } from "react";
+import { FiSearch, FiPlus, FiFilter, FiChevronDown } from "react-icons/fi";
+import Sidebar from "../../components/adminComponents/Sidebar";
+import AllPost from "../../components/adminComponents/AllPost";
+import { showToast } from "../..//helpers/showToast";
+import { Card } from "../../components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+  FormLabel,
+} from "../../components/ui/form";
+import { Input } from "../../components/ui/input";
+import { Button } from "../../components/ui/button";
+import { getEnv } from "../../helpers/getEnv";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import slugify from "slugify";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../components/ui/select";
+import { useFetch } from "../../hooks/userFetch";
+import Dropzone from "react-dropzone";
+import Editor from "../../components/Editor";
+import { useSelector } from "react-redux";
+import { useAuth, useUser } from "@clerk/clerk-react";
+import { Checkbox } from "../../components/ui/checkbox";
+import { CKFinder } from "ckeditor5";
+import { Navigate } from "react-router-dom";
+import { decode } from "entities";
+
+function AddPackage() {
+  const { user } = useUser();
+
+  // const user = useSelector((state)=> state.user)
+  // console.log(userId);
+
+  const [filePreview, setFilePreview] = useState();
+  const [uploading, setUploading] = useState(false);
+  const [file, setFile] = useState();
+  
+
+  const formSchema = z.object({
+    
+    title: z.string().min(3, "Title must be at least 3 character long."),
+    price: z.string(),
+    packageurl: z.string(),
+    
+  });
+
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+        title: "",
+        price: "",
+        packageurl: "",
+      
+    },
+  });
+
+
+  async function onSubmit(values) {
+    try {
+      setUploading(true);
+      const newValues = { ...values};
+      
+
+      if (!file) {
+        setUploading(false);
+        showToast("error", "Package image required.");
+      }
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("data", JSON.stringify(newValues));
+      const response = await fetch(`${getEnv("VITE_API_BASE_URL")}/package/add-package`, {
+        method: "post",
+        credentials: "include",
+        body: formData,
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        setUploading(false);
+        return showToast("error", data.message);
+      }
+      
+      form.reset();
+      
+      setFile();
+      setFilePreview();
+      
+      setUploading(false);
+      showToast("success", data.message);
+      
+
+      
+    } catch (error) {
+      setUploading(false);
+      showToast("error", error.message);
+    }
+  }
+
+  const handleFileSlection = (files) => {
+    const file = files[0];
+    const preview = URL.createObjectURL(file);
+    setFile(file);
+    setFilePreview(preview);
+  };
+
+  return (
+    <div className="w-full flex bg-transparent">
+      <div className="w-[20%] h-screen fixed">
+        <Sidebar />
+      </div>
+
+      <div className="w-[80%] absolute left-[20%] bg-gray-900 px-6 py-6 min-h-screen">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6 pt-[13vh] pl-[16vw]">
+          <div>
+            <h1 className="text-2xl font-semibold text-white">
+              Let's Add Package
+            </h1>
+            
+          </div>
+        </div>
+
+        {/* add categories */}
+
+        <div className=" w-[50vw] ml-[16vw]">
+          <Card className="w-full bg-gray-600 p-5 mb-10">
+            <h1 className="text-white text-2xl font-bold mb-5">Add Package</h1>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)}>
+                <div className="flex items-center justify-between w-full">
+                  <div className="flex flex-col items-start">
+                  <div className="mb-3">
+                    <FormField
+                      control={form.control}
+                      name="title"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-white text-lg">
+                            Title
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              className="bg-gray-200 w-[34vw]"
+                              placeholder="Enter Package title.."
+                              {...field}
+                            />
+                          </FormControl>
+
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="mb-3">
+                  <FormField
+                    control={form.control}
+                    name="price"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-white text-lg">
+                          Price
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                          
+                            className="bg-gray-300 w-[34vw]"
+                            placeholder="Enter package price"
+                            {...field}
+                          />
+                        </FormControl>
+
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                  
+
+                  </div>
+                  <div className="mb-3 ">
+                  <span className="text-white pb-4 text-lg">
+                    Package Image
+                  </span>
+                  <Dropzone
+                    onDrop={(acceptedFiles) =>
+                      handleFileSlection(acceptedFiles)
+                    }
+                  >
+                    {({ getRootProps, getInputProps }) => (
+                      <div {...getRootProps()}>
+                        <input {...getInputProps()} />
+
+                        <div className="flex justify-center items-center w-44 h-44 border-2 border-dashed rounded cursor-pointer">
+                          <img src={filePreview} alt="" srcset="" />
+                        </div>
+                      </div>
+                    )}
+                  </Dropzone>
+                </div>
+                  
+                  
+                </div>
+
+                
+
+                <div className="mb-3">
+                  <FormField
+                    control={form.control}
+                    name="packageurl"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-white text-lg">
+                          Url
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            className="bg-gray-300"
+                            placeholder="Enter package url"
+                            {...field}
+                          />
+                        </FormControl>
+
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                
+
+                
+
+                
+                <div className="mt-5">
+                  <Button  type="submit" className="w-full bg-blue-500">
+                    {uploading ? "Please Wait...." : "Add Package"}
+                  </Button>
+                </div>
+              </form>
+            </Form>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default AddPackage;

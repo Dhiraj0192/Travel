@@ -7,6 +7,11 @@ const blogSchema = new mongoose.Schema({
         required: true,
         
     },
+    authorid:{
+        type: String,
+        
+        
+    },
     authorimage:{
         type: String,
         required :true,

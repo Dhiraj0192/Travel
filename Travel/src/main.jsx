@@ -33,6 +33,16 @@ import BlogPage from './routes/BlogPage.jsx';
 import Users from './routes/adminPages/Users';
 import WriteBlogPage from './routes/WriteBlogPage';
 import PendingPosts from './routes/adminPages/PendingBlog';
+import UserBlogPage from './routes/UserBlogs';
+import UserEditPage from './routes/UserEditPage';
+import TravelBookingPage from './routes/TravelBookingPage';
+import AddPackage from './routes/adminPages/AddPackage';
+import Packages from './routes/adminPages/Packages';
+import EditPackage from './routes/adminPages/EditPackage';
+import AddAdvertise from './routes/adminPages/AddAdvertise';
+import EditAdvertise from './routes/adminPages/EditAdvertise';
+import GalleryPage from './routes/GalleryPage';
+import TermsConditionPage from './routes/TermsConditionPage';
 
 
 
@@ -55,12 +65,20 @@ const router = createBrowserRouter([
         element : <BlogPage/>
       },
       {
+        path: "/your-blogs",
+        element : <UserBlogPage/>
+      },
+      {
         path: "/blog/:category/:post",
         element : <SinglePostPage/>
       },
       {
         path: "/write-blog",
         element : <WriteBlogPage/>
+      },
+      {
+        path: "/edit-user-blog/:blog_id",
+        element : <UserEditPage/>
       },
       {
         path: "/login",
@@ -77,6 +95,18 @@ const router = createBrowserRouter([
       {
         path: "/account",
         element : <AccountPage/>
+      },
+      {
+        path: "/gallery",
+        element : <GalleryPage/>
+      },
+      {
+        path: "/travel-packages",
+        element : <TravelBookingPage/>
+      },
+      {
+        path: "/terms-condition",
+        element : <TermsConditionPage/>
       },
 
       {
@@ -111,6 +141,10 @@ const router = createBrowserRouter([
         path: "/admin-blog/edit/:blog_id",
         element : <EditBlog/>
       },
+      {
+        path: "/admin-package/edit/:package_id",
+        element : <EditPackage/>
+      },
       
       {
         path: "/admin-categories",
@@ -123,6 +157,22 @@ const router = createBrowserRouter([
       {
         path: "/admin-comments",
         element : <CommentsDashboard/>
+      },
+      {
+        path: "/admin-add-package",
+        element : <AddPackage/>
+      },
+      {
+        path: "/admin-packages",
+        element : <Packages/>
+      },
+      {
+        path: "/admin-add-advertise",
+        element : <AddAdvertise/>
+      },
+      {
+        path: "/admin-advertise/edit/:advertise_id",
+        element : <EditAdvertise/>
       },
       
       

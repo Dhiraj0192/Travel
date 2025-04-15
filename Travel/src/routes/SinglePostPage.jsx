@@ -74,10 +74,13 @@ function SinglePostPage() {
               </span>
               
             </div>
-            <div className="flex items-center justify-start gap-6">
+            {singleblog?.blog.status === "pending" ? <div className="flex items-center gap-4">
+              <h2 className="font-semibold text-gray-700 text-lg">Status : </h2>
+              <div className="bg-red-400 px-6 rounded-3xl ">{singleblog?.blog.status}</div>
+            </div> : <div className="flex items-center justify-start gap-6">
                 <CommentCount props={{blogid: singleblog.blog._id}} />
                 <LikeCount props={{blogid: singleblog.blog._id}} />
-              </div>
+              </div>}
           </div>
           <div className="hidden lg:block w-2/5">
             <img
@@ -98,9 +101,9 @@ function SinglePostPage() {
               }}
             ></div>
 
-            <div className="border-gray-600 border-t mt-5 pt-5">
+            {singleblog?.blog.status === 'pending' ? <></> : <div className="border-gray-600 border-t mt-5 pt-5">
               <Comment props={{blogid:singleblog.blog._id}} />
-            </div>
+            </div>}
 
             
           </div>

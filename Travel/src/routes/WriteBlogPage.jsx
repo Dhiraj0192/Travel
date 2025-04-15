@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Image from "../components/Image";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useFetch } from "../hooks/userFetch";
 import { getEnv } from "../helpers/getEnv";
 import { z } from "zod";
@@ -32,6 +32,7 @@ import { showToast } from "../helpers/showToast";
 
 function WriteBlogPage() {
     const user = useSelector((state) => state.user);
+    const navigate = useNavigate();
       
     
       // Protect the /single page route
@@ -58,7 +59,8 @@ function WriteBlogPage() {
     slug: z.string().min(3, "slug must be 3 character long."),
     blogContent: z.string().min(3, "Blog content must be 3 character long."),
     isFeatured: z.boolean(),
-    status: z.string()
+    status: z.string(),
+    
   });
 
   const form = useForm({
@@ -91,6 +93,7 @@ function WriteBlogPage() {
       setUploading(true);
       const newValues = {
         ...values,
+        authorid : user?.user._id,
         author: user?.user.name,
         authorimage: user?.user.avatar || "https://www.flaticon.com/free-icon/user_9187604",
         role: user?.user.role
@@ -121,6 +124,7 @@ function WriteBlogPage() {
       setFilePreview();
       setUploading(false);
       showToast("success", data.message);
+      navigate('/your-blogs');
     } catch (error) {
       setUploading(false);
       showToast("error", error.message);

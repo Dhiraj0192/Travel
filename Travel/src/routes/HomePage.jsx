@@ -12,6 +12,7 @@ import CTASection from "../components/CTAsection";
 import Image from "../components/Image";
 import PopularCategories from "../components/PopularCategories";
 import RecentBlogs from "../components/RecentBlogs";
+import AddsSlot from "../components/AddsSlot";
 
 function HomePage() {
   return (
@@ -110,6 +111,8 @@ function HomePage() {
         <PopularCategories/>
 
         <UserSay />
+
+        <AddsSlot/>
 
         <CTASection />
       </div>

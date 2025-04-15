@@ -26,6 +26,7 @@ export const addBlog = async (req,res,next)=>{
         // console.log(data);
         
         
+        console.log("slug : ",data.slug);
         
 
         const post = new Blog({
@@ -33,11 +34,12 @@ export const addBlog = async (req,res,next)=>{
             authorimage: data.authorimage,
             category: data.category,
             title: data.title,
-            slug: data.slug,
+            slug: data.slug ? data.slug : "",
             featuredimage : featuredImage,
             blogcontent : encode(data.blogContent),
             isFeatured : data.isFeatured,
             status: data.status,
+            authorid : data.authorid || "",
             
         })
         
@@ -126,6 +128,62 @@ export const updateBlog = async (req,res,next)=>{
     } catch (error) {
         next(handleError(500, error.message))
     }
+
+}
+
+export const updateUserBlog = async (req,res,next)=>{
+  try {
+      const {blogid} = req.params
+      console.log(blogid);
+      
+      const data = JSON.parse(req.body.data)
+      
+
+      const blog = await Blog.findById(blogid)
+      
+      const objectId = new mongoose.Types.ObjectId(data.category);
+      
+      
+      let featuredImage = blog.featuredimage
+      
+      
+      if (req.file) {
+            // Upload an image
+            const uploadResult = await cloudinary.uploader
+              .upload(
+                req.file.path,
+                {folder : 'travel-blog',resource_type : 'auto'}
+              )
+              .catch((error) => {
+                next(handleError(500,error.message))
+              });
+      
+              featuredImage = uploadResult.secure_url
+      }
+
+      const newblog = await Blog.findByIdAndUpdate(blogid,{
+          author : data.author,
+          category: objectId,
+          title: data.title,
+          slug: data.slug,
+          blogcontent: data.blogcontent,
+          featuredimage : featuredImage,
+          authorid : data.authorid,
+          authorimage : data.authorimage,
+          
+          
+      },{new : true})
+
+
+      res.status(200).json({
+          success : true,
+          message : 'Blog Updated Successfully.',
+          newblog
+      })
+      
+  } catch (error) {
+      next(handleError(500, error.message))
+  }
 
 }
 
@@ -312,7 +370,7 @@ export const getFeaturedBlogs = async (req, res) => {
     try {
 
       const {slug} = req.params
-      const blog = await Blog.findOne({slug,status: 'published'}).populate('category','name slug').lean().exec()
+      const blog = await Blog.findOne({slug}).populate('category','name slug').lean().exec()
 
       res.status(200).json({
         blog
@@ -353,4 +411,65 @@ export const getFeaturedBlogs = async (req, res) => {
       next(handleError(500, error.message))
     }
   }
+
+
+  export const getBlogsByUserId = async (req, res, next) => {
+    try {
+        const { userid } = req.params; 
+        
+        const blogs = await Blog.find({ 
+            
+            authorid: userid
+        })
+        .populate('category', 'name slug')
+        .populate('author', 'name _id')
+        .sort({ createdAt: -1 })
+        .lean()
+        .exec();
+
+        res.status(200).json({
+            success: true,
+            blogs
+        });
+        
+    } catch (error) {
+        next(handleError(500, error.message));
+    }
+}
+
+export const getUserBlogsByCategory = async (req, res, next) => {
+  try {
+      let { categoryId ,userid} = req.params;
+      const blogs = await Blog.find({ category: categoryId, authorid: userid })
+          .populate("category", "name slug")
+          .populate('author', 'name _id')
+          .sort({ createdAt: -1 })
+          .lean()
+          .exec();
+
+      res.status(200).json({
+          success: true,
+          blogs,
+      });
+  } catch (error) {
+      next(handleError(500, error.message));
+  }
+};
+
+export const userSearch = async (req, res, next) =>{
+  try {
+
+    const { userid ,q} = req.params
+    
+    const blog = await Blog.find({authorid: userid,title: {$regex : q}}).populate('author','name avatar role').populate('category','name slug')
+
+    res.status(200).json({
+      blog,
+    })
+    
+  } catch (error) {
+    next(handleError(500, error.message))
+  }
+}
+
   

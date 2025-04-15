@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../../components/adminComponents/Sidebar";
 
 import { BsFileEarmarkPostFill } from "react-icons/bs";
@@ -14,8 +14,15 @@ import TopPostsDashboard from "../../components/adminComponents/TopPost";
 import RecentUsersTable from "../../components/adminComponents/RecentUsers";
 import { useFetch } from "../../hooks/userFetch";
 import { getEnv } from "../../helpers/getEnv";
+import { Link } from "react-router-dom";
+import { Label } from "../../components/ui/label"
+import { Switch } from "../../components/ui/switch"
+import { deleteData } from "../../helpers/handleDelete";
+import { showToast } from "../../helpers/showToast";
 
 function Dashboard() {
+  const [isChecked, setIsChecked] = useState(false);
+  const [id, setId] = useState("");
   const { data } = useFetch(
     `${getEnv("VITE_API_BASE_URL")}/dashboard/blog-count`,
     {
@@ -23,6 +30,17 @@ function Dashboard() {
       credentials: "include",
     }
   );
+
+  const { data: advertise } = useFetch(
+    `${getEnv("VITE_API_BASE_URL")}/advertise/advertise`,
+    {
+      method: "get",
+      credentials: "include",
+    }
+  );
+  console.log(advertise);
+
+  
 
   const { data: commentCount } = useFetch(
     `${getEnv("VITE_API_BASE_URL")}/dashboard/comment-count`,
@@ -40,12 +58,40 @@ function Dashboard() {
     }
   );
 
+  const handleDelete = () => {
+    if (advertise?.advertise.length > 0) {
+      setId(advertise ? advertise?.advertise[0]._id : "")
+      if (id != undefined) {
+        const respnse = deleteData(
+          `${getEnv("VITE_API_BASE_URL")}/advertise/delete/${id}`
+        );
+        if (respnse) {
+          
+          showToast("success", "Advertise deleted");
+        } else {
+          showToast("error", "Data not deleted.");
+        }
+        
+      }
+    }
+    else{
+      showToast("success", "Advertise Empty");
+      return
+    }
+    
+      
+    };
+
+    
+    if (isChecked === true) {
+      handleDelete();
+    }
+    
+    
+    
+
 
   
-
-
-  
-
   return (
     <div className="w-full flex">
       <div className="w-[20%] h-screen fixed">
@@ -54,13 +100,25 @@ function Dashboard() {
 
       <div className="w-[80%] absolute left-[20%] bg-gray-900 px-6 py-6">
         <div className="flex flex-col items-start gap-2">
-          <div className="flex flex-col gap-4">
-            <h1 className="text-3xl font-bold text-white">
+          <div className="flex flex-col gap-4 w-full">
+            <div className="flex items-center justify-between">
+              <div className="flex flex-col items-start gap-2">
+              <h1 className="text-3xl font-bold text-white">
               Welcome to Traveller's Mirror Dashboard
             </h1>
             <p className="text-gray-300 text-lg">
               Here's an overview of your blog performance
             </p>
+            
+              </div>
+              <Link to={`/admin-advertise/edit/${id}`} className="py-3 font-bold px-8 bg-blue-600 rounded-lg text-white -mr-20">Update Ads</Link>
+              <div className="flex items-center space-x-2 ">
+      <Switch onCheckedChange={setIsChecked} 
+      checked={isChecked} id="airplane-mode" />
+      <Label htmlFor="airplane-mode" className="text-white">On/Off Advertise Mode</Label>
+    </div>
+            </div>
+            
           </div>
 
           <div className="flex items-center justify-between mt-3 mb-10 w-full gap-8">

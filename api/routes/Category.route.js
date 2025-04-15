@@ -15,4 +15,5 @@ CategoryRoute.get('/category-count',totalCategory)
 CategoryRoute.get('/search/:q',search)
 
 
+
 export default CategoryRoute

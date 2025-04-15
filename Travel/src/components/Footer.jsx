@@ -26,7 +26,7 @@ function Footer() {
                 <p className="font-bold text-lg text-white">Quick Links</p>
                 <div className="flex flex-col">
                     <Link to="/">Home</Link>
-                    <Link to="/">Features</Link>
+                    <Link to="/blogs">Blogs</Link>
                     <Link to="/">About</Link>
                     <Link to="/">Contact Us</Link>
                 </div>
@@ -48,9 +48,9 @@ function Footer() {
             © 2025 Traveller's Mirror. All rights reserved. Designed By Dhiraj Yadav 😎
             </p>
             <div className="flex items-center justify-between gap-4">
-                <Link to="/">Terms of Service</Link>
-                <Link to="/">Privacy Policy</Link>
-                <Link to="/">Cookie Policy</Link>
+                <Link to="/terms-condition">Terms of Service</Link>
+                <Link to="/terms-condition">Privacy Policy</Link>
+                <Link to="/terms-condition">Cookie Policy</Link>
             </div>
         </div>
 

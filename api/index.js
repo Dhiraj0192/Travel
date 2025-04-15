@@ -11,6 +11,8 @@ import CommentRoute from "./routes/Comment.route.js";
 import BlogLikeRoute from "./routes/Bloglike.route.js";
 import DashboardRoute from "./routes/Dashboard.route.js";
 import UploadRoute from "./routes/Upload.route.js";
+import PackageRoute from "./routes/Package.route.js";
+import AdveriseRoute from "./routes/Advertise.route.js";
 dotenv.config()
 
 
@@ -35,6 +37,8 @@ app.use('/api/comment',CommentRoute)
 app.use('/api/blog-like',BlogLikeRoute)
 app.use('/api/dashboard',DashboardRoute)
 app.use('/api/ck',UploadRoute)
+app.use('/api/package',PackageRoute)
+app.use('/api/advertise',AdveriseRoute)
 
 
 mongoose.connect(process.env.MONGODB_CONN, {dbName: 'blog'})

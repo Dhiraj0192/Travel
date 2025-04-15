@@ -9,6 +9,7 @@ import { RiLogoutBoxRLine } from "react-icons/ri";
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { SignedOut, useAuth, UserButton } from '@clerk/clerk-react';
 import { TbLogs } from "react-icons/tb";
+import { LuPackage } from "react-icons/lu";
 
 
 function Sidebar() {
@@ -48,6 +49,7 @@ function Sidebar() {
                     
 
                 </div>
+                
 
                 <div className="ml-6 flex items-center justify-start gap-3">
                     <TbLogs className='w-5 h-5 text-white'/>
@@ -59,6 +61,18 @@ function Sidebar() {
                 <div className="ml-6 flex items-center justify-start gap-3">
                     <TbLogs className='w-5 h-5 text-white'/>
                     <Link to="/admin-pending-posts" ><p className="text-gray-300 text-md ">Pending Blogs</p> </Link>
+                    
+
+                </div>
+                <div className="ml-6 flex items-center justify-start gap-3">
+                    <LuPackage className='w-5 h-5 text-white'/>
+                    <Link to="/admin-packages" ><p className="text-gray-300 text-md ">Packages</p> </Link>
+                    
+
+                </div>
+                <div className="ml-6 flex items-center justify-start gap-3">
+                    <LuPackage className='w-5 h-5 text-white'/>
+                    <Link to="/admin-add-package" ><p className="text-gray-300 text-md ">Add Package</p> </Link>
                     
 
                 </div>
@@ -85,17 +99,17 @@ function Sidebar() {
         </div>
 
 
-        {/* <div className="ml-6 mt-16 flex flex-col gap-4">
-            <p className="text-gray-400 text-md font-bold">SETTINGS</p>
+        <div className="ml-6 mt-16 flex flex-col gap-4">
+            <p className="text-gray-400 text-md font-bold">Advertise Management</p>
             <div className="flex flex-col gap-4 items-start justify-start">
                 <div className="ml-6 flex items-center justify-start gap-3">
                     <FaUser className='w-5 h-5 text-white'/>
-                    <p className="text-gray-300 text-md ">Profile</p>
+                    <Link to="/admin-add-advertise" ><p className="text-gray-300 text-md ">Add Advertise</p> </Link>
 
                 </div>
 
             </div>
-        </div> */}
+        </div>
 
 
         <div className="w-full pt-4 border-t-2 border-gray-500 flex items-center pl-6 absolute bottom-2 justify-between">
