@@ -38,7 +38,14 @@ import Loading from "../../components/Loading";
 import { Checkbox } from "../../components/ui/checkbox";
 
 function EditPackage() {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
+    const { isSignedIn } = useAuth();
+    if (isSignedIn === false) {
+  
+      navigate('/admin-login');
+      
+    }
+  
   const packageid = useParams();
   console.log(packageid);
   

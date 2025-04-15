@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import Sidebar from "../../components/adminComponents/Sidebar";
 
@@ -14,13 +15,21 @@ import TopPostsDashboard from "../../components/adminComponents/TopPost";
 import RecentUsersTable from "../../components/adminComponents/RecentUsers";
 import { useFetch } from "../../hooks/userFetch";
 import { getEnv } from "../../helpers/getEnv";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Label } from "../../components/ui/label"
 import { Switch } from "../../components/ui/switch"
 import { deleteData } from "../../helpers/handleDelete";
 import { showToast } from "../../helpers/showToast";
+import { useAuth } from "@clerk/clerk-react";
 
 function Dashboard() {
+  const navigate = useNavigate()
+  const { isSignedIn } = useAuth();
+  if (isSignedIn === false) {
+
+    navigate('/admin-login');
+    
+  }
   const [isChecked, setIsChecked] = useState(false);
   const [id, setId] = useState("");
   const { data } = useFetch(

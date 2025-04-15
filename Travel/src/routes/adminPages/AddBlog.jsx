@@ -33,11 +33,18 @@ import { useSelector } from "react-redux";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import { Checkbox } from "../../components/ui/checkbox";
 import { CKFinder } from "ckeditor5";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { decode } from "entities";
 
 function AddBlog() {
-  const { user } = useUser();
+  const navigate = useNavigate()
+  const { isSignedIn } = useAuth();
+  if (isSignedIn === false) {
+
+    navigate('/admin-login');
+    
+  }
+  const { user} = useUser();
 
   // const user = useSelector((state)=> state.user)
   console.log("user",user);
@@ -117,8 +124,8 @@ function AddBlog() {
       
       setFile();
       setFilePreview();
-      form.setValue("category", "");
-      form.setValue("blogContent", decode(""));
+      form.setValue("category", "Select Category");
+      form.setValue("blogContent", "");
       setUploading(false);
       showToast("success", data.message);
       
@@ -138,12 +145,12 @@ function AddBlog() {
   };
 
   return (
-    <div className="w-full flex">
+    <div className="w-full flex ">
       <div className="w-[20%] h-screen fixed">
         <Sidebar />
       </div>
 
-      <div className="w-[80%] absolute left-[20%] bg-gray-900 px-6 py-6">
+      <div className="w-[80%] absolute left-[20%] bg-gray-900 px-6 py-6 min-h-screen">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
           <div>
             <h1 className="text-2xl font-semibold text-white">
@@ -185,6 +192,8 @@ function AddBlog() {
                     />
                   </div>
 
+                  
+
                   <div className="mb-3">
                     <FormField
                       control={form.control}
@@ -203,6 +212,13 @@ function AddBlog() {
                                 <SelectValue placeholder="Select Category" />
                               </SelectTrigger>
                               <SelectContent>
+                              <SelectItem
+                                      key=
+                                      'select-category'
+                                      value={`${field.value != "" ? field.value : "Select Category"}`}
+                                    >
+                                      Select Category
+                                    </SelectItem>
                                 {categoryData ? (
                                   categoryData.category.map((category) => (
                                     <SelectItem
@@ -250,7 +266,7 @@ function AddBlog() {
                   
                 </div>
 
-                <div className="mb-3">
+                <div className="mb-3 hidden">
                   <FormField
                     control={form.control}
                     name="slug"
@@ -287,7 +303,7 @@ function AddBlog() {
                           <Editor
                           
                             props={{
-                              initialData: "",
+                              initialData: field.value,
                               onChange: handleEditorData,
                             }}
                           />

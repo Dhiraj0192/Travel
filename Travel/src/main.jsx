@@ -43,6 +43,7 @@ import AddAdvertise from './routes/adminPages/AddAdvertise';
 import EditAdvertise from './routes/adminPages/EditAdvertise';
 import GalleryPage from './routes/GalleryPage';
 import TermsConditionPage from './routes/TermsConditionPage';
+import AdminBlogShow from './routes/adminPages/AdminBlogShow';
 
 
 
@@ -71,6 +72,10 @@ const router = createBrowserRouter([
       {
         path: "/blog/:category/:post",
         element : <SinglePostPage/>
+      },
+      {
+        path: "/adminblog/:category/:post",
+        element : <AdminBlogShow/>
       },
       {
         path: "/write-blog",
@@ -174,6 +179,7 @@ const router = createBrowserRouter([
         path: "/admin-advertise/edit/:advertise_id",
         element : <EditAdvertise/>
       },
+      
       
       
       

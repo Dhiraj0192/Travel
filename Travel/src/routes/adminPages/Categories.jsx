@@ -28,8 +28,16 @@ import { useEffect } from "react";
 import slugify from "slugify";
 import { useFetch } from "../../hooks/userFetch.js";
 import EditCategory from "../../components/adminComponents/EditCategory";
+import { useAuth } from "@clerk/clerk-react";
 
 function Categories() {
+  const navigate = useNavigate()
+    const { isSignedIn } = useAuth();
+    if (isSignedIn === false) {
+  
+      navigate('/admin-login');
+      
+    }
   
   const [editClicked, setEditClicked] = useState(false);
   
@@ -44,7 +52,7 @@ function Categories() {
     setCategories(items);
   };
 
-  const navigate = useNavigate();
+  
   const formSchema = z.object({
     name: z.string().min(3, "Category field must be 3 character long."),
     slug: z.string().min(3, "Slug field must be 3 character long."),

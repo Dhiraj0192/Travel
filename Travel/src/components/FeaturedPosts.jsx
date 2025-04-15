@@ -13,10 +13,10 @@ function FeaturedPosts({ lineBar = true , selectedCategoryBlogs, searchData }) {
       const [limit, setLimit] = useState(9)
       const [sort, setSort] = useState('-createdAt'); 
       
-      const categoryId  = '67f36b931b58ce135a81e9d5';
+      const categoryId  = 'Travel';
       
         
-      let {data} = useFetch(`${getEnv('VITE_API_BASE_URL')}/blog/blog/category/${categoryId}?limit=${limit}&sort=${sort}`,{
+      let {data} = useFetch(`${getEnv('VITE_API_BASE_URL')}/blog/blog/travelcategory/${categoryId}?limit=${limit}&sort=${sort}`,{
         method : 'get',
         credentials: 'include'
     })
@@ -76,16 +76,16 @@ function FeaturedPosts({ lineBar = true , selectedCategoryBlogs, searchData }) {
                       <div className="flex items-center gap-4 text-sm lg:text-base ">
                         <h1 className="font-semibold">{index +1}.</h1>
                         <Link className="text-blue-800">
-                        {blog.category.name}</Link>
+                        {blog.category?.name}</Link>
                         <span className="text-gray-500 text-sm">{moment(blog?.createdAt).format("DD-MM-YYYY")}</span>
                       </div>
                       <Link
-                        to={`/blog/${blog.category.slug}/${blog.slug}`}
+                        to={`/blog/${blog.category?.slug}/${blog.slug}`}
                         className="text-base sm:text-lg md:text-xl lg:text-xl xl:text-xl font-medium cursor-pointer"
                       >
                         {blog.title}
                       </Link>
-                      <Link to={`/blog/${blog.category.slug}/${blog.slug}`}><p className="text-blue-600 text-sm font-bold "> Read... </p></Link>
+                      <Link to={`/blog/${blog.category?.slug}/${blog.slug}`}><p className="text-blue-600 text-sm font-bold "> Read... </p></Link>
                     </div>
                   </div>
                 </div>)
@@ -104,16 +104,16 @@ function FeaturedPosts({ lineBar = true , selectedCategoryBlogs, searchData }) {
                     <div className="flex items-center gap-4 text-sm lg:text-base ">
                       <h1 className="font-semibold">{index +1}.</h1>
                       <Link className="text-blue-800">
-                      {blog.category.name}</Link>
+                      {blog.category?.name}</Link>
                       <span className="text-gray-500 text-sm">{moment(blog?.createdAt).format("DD-MM-YYYY")}</span>
                     </div>
                     <Link
-                      to={`/blog/${blog.category.slug}/${blog.slug}`}
+                      to={`/blog/${blog.category?.slug}/${blog.slug}`}
                       className="text-base sm:text-lg md:text-xl lg:text-xl xl:text-xl font-medium cursor-pointer"
                     >
                       {blog.title}
                     </Link>
-                    <Link to={`/blog/${blog.category.slug}/${blog.slug}`}><p className="text-blue-600 text-sm font-bold "> Read... </p></Link>
+                    <Link to={`/blog/${blog.category?.slug}/${blog.slug}`}><p className="text-blue-600 text-sm font-bold "> Read... </p></Link>
                     
                   </div>
                 </div>

@@ -84,17 +84,19 @@ const AllPost = ({ selectedCategoryBlogs ,searchData }) => {
             </tr>
           </thead>
           <tbody className="bg-transparent divide-y divide-gray-200">
-            {searchData ? searchData.map(blog =><tr key={blog.id}>
+            {searchData ? searchData.map(blog =><Link to={`/adminblog/${blog.category.slug}/${blog.slug}`}><tr key={blog.id}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-50">
                       {blog.author}
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-50">
-                      {blog.title}
+                  <Link to={`/adminblog/${blog.category.slug}/${blog.slug}`}>
+                  <td className="px-6 py-4 whitespace-nowrap ">
+                    <div className="text-sm font-medium text-gray-50 hover:text-black">
+                      {blog.title.substring(0, 25)}....
                     </div>
                   </td>
+                  </Link>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-50">
                       {blog.category.name}
@@ -124,24 +126,26 @@ const AllPost = ({ selectedCategoryBlogs ,searchData }) => {
                       </button>
                     </div>
                   </td>
-                </tr> ) :
+                </tr></Link> ) :
             
             blogData && blogData?.blog?.length > 0 ? (
               blogData.blog.map((blog) => (
-                <tr key={blog.id}>
+               <tr key={blog.id}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-50">
                       {blog.author}
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-50">
-                      {blog.title}
+                  <Link to={`/adminblog/${blog.category.slug}/${blog.slug}`}>
+                  <td className="px-6 py-4 whitespace-nowrap ">
+                    <div className="text-sm font-medium text-gray-50 hover:text-black">
+                      {blog.title.substring(0, 25)}....
                     </div>
                   </td>
+                  </Link>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-50">
-                      {blog.category.name}
+                      {blog.category?.name}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -171,20 +175,22 @@ const AllPost = ({ selectedCategoryBlogs ,searchData }) => {
                 </tr>
               ))
             ) : 
-              selectedCategoryBlogs && selectedCategoryBlogs.map((blog , index) => <tr key={blog.id}>
+              selectedCategoryBlogs && selectedCategoryBlogs.map((blog , index) => <Link to={`/adminblog/${blog.category.slug}/${blog.slug}`}><tr key={blog.id}></tr><tr key={blog.id}>
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="text-sm font-medium text-gray-50">
                   {blog.author}
                 </div>
               </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <div className="text-sm font-medium text-gray-50">
-                  {blog.title}
-                </div>
-              </td>
+              <Link to={`/adminblog/${blog.category.slug}/${blog.slug}`}>
+                  <td className="px-6 py-4 whitespace-nowrap ">
+                    <div className="text-sm font-medium text-gray-50 hover:text-black">
+                      {blog.title.substring(0, 25)}....
+                    </div>
+                  </td>
+                  </Link>
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="text-sm text-gray-50">
-                  {blog.category.name}
+                  {blog.category?.name}
                 </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
@@ -211,7 +217,7 @@ const AllPost = ({ selectedCategoryBlogs ,searchData }) => {
                   </button>
                 </div>
               </td>
-            </tr>
+            </tr></Link>
             )}
           </tbody>
         </table>

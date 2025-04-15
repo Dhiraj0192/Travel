@@ -12,7 +12,7 @@ import { convert } from 'html-to-text';
   const [limit, setLimit] = useState(5)
   const [sort, setSort] = useState('-createdAt'); 
   const [travelBlog , setTravelBlog] = useState();
-  const categoryId  = '67f36b931b58ce135a81e9d5';
+  const categoryId  = 'Travel';
 
   const {data: blogData} = useFetch(`${getEnv('VITE_API_BASE_URL')}/blog/featured?limit=${limit}`,{
         method : 'get',
@@ -20,7 +20,7 @@ import { convert } from 'html-to-text';
   })
 
 
-  const {data: blogDataByCategory} = useFetch(`${getEnv('VITE_API_BASE_URL')}/blog/blog/category/${categoryId}?limit=${limit}&sort=${sort}`,{
+  const {data: blogDataByCategory} = useFetch(`${getEnv('VITE_API_BASE_URL')}/blog/blog/travelcategory/${categoryId}?limit=${limit}&sort=${sort}`,{
     method : 'get',
     credentials: 'include'
 })
@@ -174,7 +174,7 @@ console.log(blogDataByCategory);
               </div>
               <div className="p-6 bg-white">
                 <span className="inline-block px-3 py-1 text-xs font-semibold text-indigo-600 bg-indigo-50 rounded-full mb-2">
-                  {blog.category.name}
+                  {blog.category?.name}
                 </span>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">{blog.title}</h3>
                 <p className="text-gray-700 text-sm w-[26vw]" >{plainText(blog.blogcontent).substring(0, 100).trim() + (plainText.length > 100 ? '...' : '')}</p>
@@ -184,7 +184,7 @@ console.log(blogDataByCategory);
                 </div>
                 
                 <div className="mt-4 w-[10vw]">
-                                            <Link to={`/blog/${blog.category.slug}/${blog.slug}`}><p className="text-white text-sm font-bold bg-blue-600 px-4 py-2 rounded-md"> Read More... </p>
+                                            <Link to={`/blog/${blog.category?.slug}/${blog.slug}`}><p className="text-white text-sm font-bold bg-blue-600 px-4 py-2 rounded-md"> Read More... </p>
                                            </Link>
                                         </div>
 
@@ -240,7 +240,7 @@ console.log(blogDataByCategory);
               className="p-6 border border-gray-400 rounded-lg hover:border-indigo-300 hover:shadow-md transition-all duration-300 bg-slate-500"
             >
               <span className="inline-block px-3 py-1 text-xs font-semibold text-indigo-600 bg-indigo-50 rounded-full mb-3">
-                {travelblog.category.name}
+                {travelblog.category?.name}
               </span>
               <h3 className="text-lg font-bold text-blue-300 mb-2">{travelblog.title}</h3>
               <p className="text-gray-100 text-sm" >{plainText(travelblog.blogcontent).substring(0, 100).trim() + (plainText.length > 100 ? '...' : '')}</p>
@@ -250,7 +250,7 @@ console.log(blogDataByCategory);
               </div>
 
               <div className="mt-4 w-[10vw]">
-                                            <Link to={`/blog/${travelblog.category.slug}/${travelblog.slug}`}><p className="text-white text-sm font-bold bg-blue-600 px-4 py-2 rounded-md"> Read More... </p>
+                                            <Link to={`/blog/${travelblog.category?.slug}/${travelblog.slug}`}><p className="text-white text-sm font-bold bg-blue-600 px-4 py-2 rounded-md"> Read More... </p>
                                            </Link>
                                         </div>
             </div>) : <></>}

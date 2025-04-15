@@ -181,7 +181,7 @@ export default function Editor({props}) {
 					TableToolbar,
 					TextPartLanguage,
 					TextTransformation,
-					Title,
+					
 					TodoList,
 					Underline,
 					WordCount
@@ -321,7 +321,7 @@ export default function Editor({props}) {
 	return (
 		<div className="main-container">
 			<div
-				className="editor-container editor-container_classic-editor editor-container_include-block-toolbar editor-container_include-word-count editor-container_include-fullscreen "
+				className="editor-container editor-container_classic-editor editor-container_include-block-toolbar editor-container_include-word-count editor-container_include-fullscreen"
 				ref={editorContainerRef}
 			>
 				<div className="editor-container__editor">

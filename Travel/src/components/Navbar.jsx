@@ -114,7 +114,7 @@ function Navbar() {
         </div>
       </div>
       {/* desktop menu */}
-      <div className="text-white hidden md:flex items-center gap-8 xl:gap-12 font-medium">
+      <div className="text-white hidden md:flex items-center gap-8 xl:gap-10 font-medium">
         <Link to={`${user.isLoggedIn ? "/home" : "/"}`}>Home</Link>
         <Link to="/blogs">Blogs</Link>
         <Link to="/gallery">Gallery</Link>
@@ -131,13 +131,14 @@ function Navbar() {
         ) : (
           <>
             <DropdownMenu>
+              <Link to="/write-blog" className="px-3 py-1 rounded-md bg-gray-300 text-black font-semibold text-md">Write Blog</Link>
             <Avatar>
                   <AvatarImage src={user.user.avatar} />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
               <DropdownMenuTrigger>
                 
-                <IoMdArrowDropdownCircle className="h-7 w-7 -ml-10" />
+                <IoMdArrowDropdownCircle className="h-7 w-7 -ml-8" />
 
               </DropdownMenuTrigger>
               <DropdownMenuContent className=" w-[18vw] absolute top-4 -right-32">
@@ -153,11 +154,7 @@ function Navbar() {
                     <FaUserSecret/>
                     Profile</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild className="text-md font-semibold mb-1 text-gray-500 hover:bg-gray-200">
-                    <Link to="/write-blog">
-                    <GrNotes />
-                    Add Blog</Link>
-                </DropdownMenuItem>
+                
                 <DropdownMenuItem asChild className="text-md font-semibold mb-1 text-gray-500 hover:bg-gray-200">
                     <Link to="/your-blogs">
                     <GrNotes />

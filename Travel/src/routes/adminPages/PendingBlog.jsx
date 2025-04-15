@@ -36,11 +36,19 @@ import {
 import { useFetch } from "../../hooks/userFetch";
 import Dropzone from "react-dropzone";
 import Editor from "../../components/Editor";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import moment from "moment/moment";
 import { deleteData } from "../../helpers/handleDelete";
+import { useAuth } from "@clerk/clerk-react";
 
 function PendingPosts() {
+  const navigate = useNavigate()
+  const { isSignedIn } = useAuth();
+  if (isSignedIn === false) {
+
+    navigate('/admin-login');
+    
+  }
   const [selectedCategoryBlogs, setSelectedCategoryBlogs] = useState();
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
   const [query, setQuery] = useState();
@@ -269,11 +277,13 @@ function PendingPosts() {
                               {blog.author}
                             </div>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm font-medium text-gray-50">
-                              {blog.title}
-                            </div>
-                          </td>
+                          <Link to={`/adminblog/${blog.category.slug}/${blog.slug}`}>
+                  <td className="px-6 py-4 whitespace-nowrap ">
+                    <div className="text-sm font-medium text-gray-50 hover:text-black">
+                      {blog.title.substring(0, 25)}....
+                    </div>
+                  </td>
+                  </Link>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="text-sm text-gray-50">
                               {blog.category.name}
@@ -313,11 +323,13 @@ function PendingPosts() {
                               {blog.author}
                             </div>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm font-medium text-gray-50">
-                              {blog.title}
-                            </div>
-                          </td>
+                          <Link to={`/adminblog/${blog.category.slug}/${blog.slug}`}>
+                  <td className="px-6 py-4 whitespace-nowrap ">
+                    <div className="text-sm font-medium text-gray-50 hover:text-black">
+                      {blog.title.substring(0, 25)}....
+                    </div>
+                  </td>
+                  </Link>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="text-sm text-gray-50">
                               {blog.category.name}
@@ -357,11 +369,13 @@ function PendingPosts() {
                               {blog.author}
                             </div>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm font-medium text-gray-50">
-                              {blog.title}
-                            </div>
-                          </td>
+                          <Link to={`/adminblog/${blog.category.slug}/${blog.slug}`}>
+                  <td className="px-6 py-4 whitespace-nowrap ">
+                    <div className="text-sm font-medium text-gray-50 hover:text-black">
+                      {blog.title.substring(0, 25)}....
+                    </div>
+                  </td>
+                  </Link>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="text-sm text-gray-50">
                               {blog.category.name}

@@ -14,8 +14,17 @@ import moment from "moment/moment";
 import { useEffect, useState } from "react";
 import { deleteData } from "../../helpers/handleDelete";
 import { showToast } from "../../helpers/showToast";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@clerk/clerk-react";
 
 const CommentsDashboard = () => {
+  const navigate = useNavigate()
+  const { isSignedIn } = useAuth();
+  if (isSignedIn === false) {
+
+    navigate('/admin-login');
+    
+  }
   const [refreshData, setRefreshData] = useState(false);
   const [query, setQuery] = useState();
   let [searchComment , setSearchComment] = useState([]);

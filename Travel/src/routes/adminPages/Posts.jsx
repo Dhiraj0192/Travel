@@ -29,9 +29,17 @@ import {
 import { useFetch } from "../../hooks/userFetch";
 import Dropzone from "react-dropzone";
 import Editor from "../../components/Editor";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "@clerk/clerk-react";
 
 function Posts() {
+  const navigate = useNavigate()
+  const { isSignedIn } = useAuth();
+  if (isSignedIn === false) {
+
+    navigate('/admin-login');
+    
+  }
   const [selectedCategoryBlogs, setSelectedCategoryBlogs] = useState();
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
   const [query, setQuery] = useState();

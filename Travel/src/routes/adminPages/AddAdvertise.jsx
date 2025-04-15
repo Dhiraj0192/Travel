@@ -33,11 +33,18 @@ import { useSelector } from "react-redux";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import { Checkbox } from "../../components/ui/checkbox";
 import { CKFinder } from "ckeditor5";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { decode } from "entities";
 
 function AddAdvertise() {
-  const { user } = useUser();
+  const navigate = useNavigate()
+  const { isSignedIn } = useAuth();
+  if (isSignedIn === false) {
+
+    navigate('/admin-login');
+    
+  }
+  
 
   // const user = useSelector((state)=> state.user)
   // console.log(userId);

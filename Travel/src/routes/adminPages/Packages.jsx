@@ -8,11 +8,19 @@ import { getEnv } from "../../helpers/getEnv";
 
 import { useFetch } from "../../hooks/userFetch";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import moment from "moment/moment";
 import { deleteData } from "../../helpers/handleDelete";
+import { useAuth } from "@clerk/clerk-react";
 
 function Packages() {
+  const navigate = useNavigate()
+  const { isSignedIn } = useAuth();
+  if (isSignedIn === false) {
+
+    navigate('/admin-login');
+    
+  }
   
   const [query, setQuery] = useState();
     let [searchData , setSearchData] = useState();

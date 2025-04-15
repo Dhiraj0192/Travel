@@ -38,7 +38,14 @@ import Loading from "../../components/Loading";
 import { Checkbox } from "../../components/ui/checkbox";
 
 function EditBlog() {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
+    const { isSignedIn } = useAuth();
+    if (isSignedIn === false) {
+  
+      navigate('/admin-login');
+      
+    }
+  
   const blogid = useParams();
 
   const { user } = useUser();
@@ -279,7 +286,7 @@ function EditBlog() {
                   </div>
                 </div>
 
-                <div className="mb-3">
+                <div className="mb-3 hiddenn">
                   <FormField
                     control={form.control}
                     name="slug"

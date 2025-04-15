@@ -8,8 +8,17 @@ import { getEnv } from "../../helpers/getEnv";
 import { FiTrash2 } from "react-icons/fi";
 import { showToast } from "../../helpers/showToast";
 import { deleteData } from "../../helpers/handleDelete";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@clerk/clerk-react";
 
 function Users() {
+  const navigate = useNavigate()
+  const { isSignedIn } = useAuth();
+  if (isSignedIn === false) {
+
+    navigate('/admin-login');
+    
+  }
 
 
   const { data :userCount } = useFetch(

@@ -63,8 +63,8 @@ function LoginPage() {
       dispath(setUser(data.user))
       navigate("/home");
       toast(data.message, {
-        position: "bottom-right",
-        autoClose: 5000,
+        position: "top-right",
+        autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: false,
         pauseOnHover: true,

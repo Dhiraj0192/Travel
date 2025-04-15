@@ -4,11 +4,14 @@ import { useFetch } from '../hooks/userFetch';
 import React, { useEffect, useState } from 'react'
 import { BiSolidLike } from "react-icons/bi";
 import { showToast } from '../helpers/showToast';
+import { toast } from 'react-toastify';
 
 
 const LikeCount = ({props}) => {
     const [likeCount, setLikeCount] = useState(0)
     const user = useSelector(state => state.user)
+    
+    
     
     
     const {
@@ -29,19 +32,35 @@ const LikeCount = ({props}) => {
     const handleLike = async () =>{
         try {
 
-            const response = await fetch(`${getEnv("VITE_API_BASE_URL")}/blog-like/do-like`,{
-                method : 'post',
-                credentials : 'include',
-                headers : { 'Content-type': "application/json"},
-                body : JSON.stringify({ user: user.user._id, blogid: props.blogid})
-            })
-
-            if (!response.ok) {
-                showToast('error', response.statusText)
+            if (user.isLoggedIn === false) {
+                return toast("Please Login to Like!", {
+                        position: "top-left",
+                        autoClose: 5000,
+                        hideProgressBar: true,
+                        closeOnClick: false,
+                        pauseOnHover: false,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "colored",
+                        
+                        });
+                
             }
-
-            const responseData = await response.json()
-            setLikeCount(responseData.likecount)
+            else{
+                const response = await fetch(`${getEnv("VITE_API_BASE_URL")}/blog-like/do-like`,{
+                    method : 'post',
+                    credentials : 'include',
+                    headers : { 'Content-type': "application/json"},
+                    body : JSON.stringify({ user: user.user._id, blogid: props.blogid})
+                })
+    
+                if (!response.ok) {
+                    showToast('error', response.statusText)
+                }
+    
+                const responseData = await response.json()
+                setLikeCount(responseData.likecount)
+            }
             
         } catch (error) {
             showToast('error',error.message)

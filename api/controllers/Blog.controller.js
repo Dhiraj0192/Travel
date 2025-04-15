@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import cloudinary from "../config/cloudinary.js";
 import { handleError } from "../helpers/handleError.js";
 import Blog from "../models/blog.model.js";
+import Category from "../models/category.model.js";
 import {encode} from 'entities';
 
 export const addBlog = async (req,res,next)=>{
@@ -128,6 +129,29 @@ export const updateBlog = async (req,res,next)=>{
     } catch (error) {
         next(handleError(500, error.message))
     }
+
+}
+
+export const updateApprovalBlog = async (req,res,next)=>{
+  try {
+      const {blogid} = req.params
+  
+
+      const newblog = await Blog.findByIdAndUpdate(blogid,{
+          
+          status : "published",
+      },{new : true})
+
+
+      res.status(200).json({
+          success : true,
+          message : 'Blog Approved Successfully.',
+          newblog
+      })
+      
+  } catch (error) {
+      next(handleError(500, error.message))
+  }
 
 }
 
@@ -465,6 +489,24 @@ export const userSearch = async (req, res, next) =>{
 
     res.status(200).json({
       blog,
+    })
+    
+  } catch (error) {
+    next(handleError(500, error.message))
+  }
+}
+
+
+export const getBlogsByTravelCategorys = async (req, res,next) => {
+  try {
+
+    const { categoryId } = req.params;
+    const catName = await Category.findOne({ name: categoryId }).lean().exec();
+    
+    const blogs = await Blog.find({ category: catName?._id.toString(),status: 'published' }).populate('category', 'name slug').populate('author', 'username avatar').sort({createdAt : -1}).lean().exec();
+
+    res.status(200).json({
+      blogs
     })
     
   } catch (error) {

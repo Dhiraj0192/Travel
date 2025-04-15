@@ -16,10 +16,7 @@ import { useSelector } from "react-redux";
 function SinglePostPage() {
   const user = useSelector((state) => state.user);
 
-  // Protect the /single page route
-  if (!user.isLoggedIn) {
-    return <Navigate to="/login" replace />;
-  }
+  
   
   const { post } = useParams();
 
