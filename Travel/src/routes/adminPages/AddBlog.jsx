@@ -40,7 +40,7 @@ function AddBlog() {
   const { user } = useUser();
 
   // const user = useSelector((state)=> state.user)
-  // console.log(userId);
+  // console.log("user",user?.fullName);
 
   const [filePreview, setFilePreview] = useState();
   const [uploading, setUploading] = useState(false);
@@ -91,7 +91,7 @@ function AddBlog() {
   async function onSubmit(values) {
     try {
       setUploading(true);
-      const newValues = { ...values, author: user.fullName, authorimage : user.imageUrl || "https://www.flaticon.com/free-icon/user_9187604" };
+      const newValues = { ...values, author: user?.fullName, authorimage : user.imageUrl || "https://www.flaticon.com/free-icon/user_9187604" };
       console.log(newValues);
 
       if (!file) {
