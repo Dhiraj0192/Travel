@@ -40,7 +40,7 @@ function AddBlog() {
   const { user } = useUser();
 
   // const user = useSelector((state)=> state.user)
-  // console.log("user",user?.fullName);
+  console.log("user",user);
 
   const [filePreview, setFilePreview] = useState();
   const [uploading, setUploading] = useState(false);
