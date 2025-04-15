@@ -23,6 +23,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import {useDispatch} from 'react-redux'
 import { setUser } from "../redux/user/user.slice.js";
+import { toast } from "react-toastify";
 
 function RegisterPage() {
   const dispath = useDispatch()
@@ -66,7 +67,18 @@ function RegisterPage() {
       }
 
       navigate("/login");
-      showToast("success", data.message);
+      toast(data.message, {
+              position: "bottom-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: false,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+              
+              });
+      
     } catch (error) {
       showToast("error", error.message);
     }

@@ -29,6 +29,7 @@ import { getEnv } from "../helpers/getEnv";
 import { useSelector } from "react-redux";
 import Loading from "../components/Loading";
 import { showToast } from "../helpers/showToast";
+import { toast } from "react-toastify";
 
 function AccountPage() {
   const dispath = useDispatch();
@@ -92,14 +93,46 @@ function AccountPage() {
 
       const data = await response.json();
       if (!response.ok) {
-        return showToast("error", data.message);
+        return toast(data.message, {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          
+          });
+        
       }
 
       dispath(setUser(data.user));
+      toast(data.message, {
+                            position: "bottom-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: false,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            theme: "colored",
+                            
+                            });
 
-      showToast("success", data.message);
+      
     } catch (error) {
-      showToast("error", error.message);
+      toast(error.message, {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        
+        });
     }
   }
 

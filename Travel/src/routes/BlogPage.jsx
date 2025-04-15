@@ -139,22 +139,13 @@ function BlogPage() {
             <span className="text-xl text-white">.</span>
           </div>
           {/* introduction */}
-          <div className="lg:px-32 flex items-center justify-between">
-            <div className=" w-[60vw]">
-              <h1 className="text-white text-2xl md:text-5xl lg:text-5xl font-bold">
-                Share your content, engage with readers, and grow audience.
-              </h1>
-              <p className="mt-8 text-md md:text-xl text-white">
-                Our intuitive editor makes it easy to express yourself with
-                text, images, and multimedia.
-              </p>
-            </div>
-            <Link to="/write-blog" className="">
+          <div className="lg:px-32 flex items-center gap-8">
+          <Link to="/write-blog" className="">
               <svg
                 viewBox="0 0 200 200"
                 width="170"
                 height="200"
-                className="text-lg tracking-widest animate-spin animatedButton mr-3 text"
+                className="text-xl font-bold tracking-widest animate-spin animatedButton -ml-2 text"
               >
                 <path
                   id="circlePath"
@@ -171,7 +162,7 @@ function BlogPage() {
                 </text>
               </svg>
 
-              <button className="absolute top-64 right-40 w-24 h-24 bg-blue-800 rounded-full flex items-center justify-center">
+              <button className="absolute top-64 left-40 w-24 h-24 bg-blue-800 rounded-full flex items-center justify-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -186,6 +177,16 @@ function BlogPage() {
                 </svg>
               </button>
             </Link>
+            <div className=" w-[60vw]">
+              <h1 className="text-white text-2xl md:text-5xl lg:text-5xl font-bold">
+                Share your content, engage with readers, and grow audience.
+              </h1>
+              <p className="mt-8 text-md md:text-xl text-white">
+                Our intuitive editor makes it easy to express yourself with
+                text, images, and multimedia.
+              </p>
+            </div>
+            
           </div>
         </div>
       </div>

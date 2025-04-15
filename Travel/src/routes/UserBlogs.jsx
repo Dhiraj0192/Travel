@@ -13,6 +13,7 @@ import { deleteData } from "../helpers/handleDelete";
 import { FaBookOpenReader } from "react-icons/fa6";
 import { AiFillEdit } from "react-icons/ai";
 import { MdDelete } from "react-icons/md";
+import { toast } from "react-toastify";
 
 
 
@@ -136,9 +137,31 @@ function UserBlogPage() {
       );
       if (respnse) {
         setRefreshData(!refreshData);
-        showToast("success", "Data deleted");
+        toast("Data deleted", {
+                      position: "bottom-right",
+                      autoClose: 5000,
+                      hideProgressBar: false,
+                      closeOnClick: false,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                      theme: "colored",
+                      
+                      });
+        
       } else {
-        showToast("error", "Data not deleted.");
+        toast("Data not deleted", {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          
+          });
+        
       }
     };
   return (

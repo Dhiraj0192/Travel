@@ -29,6 +29,7 @@ import slugify from "slugify";
 import Footer from "../components/Footer";
 import { useSelector } from "react-redux";
 import { showToast } from "../helpers/showToast";
+import { toast } from "react-toastify";
 
 function WriteBlogPage() {
     const user = useSelector((state) => state.user);
@@ -123,11 +124,32 @@ function WriteBlogPage() {
       setFile();
       setFilePreview();
       setUploading(false);
-      showToast("success", data.message);
+      toast(data.message, {
+              position: "bottom-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: false,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+              
+              });
       navigate('/your-blogs');
     } catch (error) {
       setUploading(false);
-      showToast("error", error.message);
+      toast(error.message, {
+              position: "bottom-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: false,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+              
+              });
+      
     }
   }
 

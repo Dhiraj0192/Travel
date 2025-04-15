@@ -31,6 +31,7 @@ import { useSelector } from "react-redux";
 import { showToast } from "../helpers/showToast";
 import Navbar from "../components/Navbar";
 import { decode } from "entities";
+import { toast } from "react-toastify";
 // import { CKEditor } from '@ckeditor/ckeditor5-react';
 // import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
@@ -165,18 +166,51 @@ function UserEditPage() {
       const data = await response.json();
       if (!response.ok) {
         setUploading(false);
-        return showToast("error", data.message);
+        return toast(data.message, {
+                      position: "bottom-right",
+                      autoClose: 5000,
+                      hideProgressBar: false,
+                      closeOnClick: false,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                      theme: "colored",
+                      
+                      });
+        
       }
 
       form.reset();
       setFile();
       setFilePreview();
       setUploading(false);
-      showToast("success", data.message);
+      toast(data.message, {
+                    position: "bottom-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    
+                    });
+      
       navigate('/your-blogs');
     } catch (error) {
       setUploading(false);
-      showToast("error", error.message);
+      toast(error.message, {
+                    position: "bottom-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    
+                    });
+      
     }
   }
 

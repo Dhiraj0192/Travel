@@ -62,7 +62,7 @@ function Navbar() {
     
           dispath(removeUser())
           navigate("/");
-          showToast("success", data.message);
+          
         } catch (error) {
           showToast("error", error.message);
         }
@@ -152,6 +152,11 @@ function Navbar() {
                     <Link to="/account">
                     <FaUserSecret/>
                     Profile</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild className="text-md font-semibold mb-1 text-gray-500 hover:bg-gray-200">
+                    <Link to="/write-blog">
+                    <GrNotes />
+                    Add Blog</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild className="text-md font-semibold mb-1 text-gray-500 hover:bg-gray-200">
                     <Link to="/your-blogs">

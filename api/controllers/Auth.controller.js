@@ -22,7 +22,7 @@ export const Register = async (req,res,next)=>{
 
         res.status(200).json({
             success:true,
-            message: 'Registration successful.'
+            message: "Registration successful. Welcome to Traveller's Mirror, let's login!"
         })
 
         
@@ -65,7 +65,7 @@ export const Login = async (req,res)=>{
         res.status(200).json({
             success: true,
             user:newuser,
-            message: 'login successful.'
+            message: "Welcome to Traveller's Mirror !!."
         })
     } catch (error) {
         next(handleError(500,error.message))
@@ -108,7 +108,7 @@ export const GoogleLogin = async (req,res)=>{
         res.status(200).json({
             success: true,
             user:newuser,
-            message: 'login successful.'
+            message: "Welcome to Traveller's Mirror !!."
         })
     } catch (error) {
         next(handleError(500,error.message))
