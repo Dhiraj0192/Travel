@@ -42,6 +42,22 @@ export const showAllBlog = async (req,res,next)=>{
 
 }
 
+export const showAllPendingBlog = async (req,res,next)=>{
+  try {
+      const { limit = 9 } = req.query;
+
+      const blog = await Blog.find({status : 'pending'}).populate('category','name slug').sort({createdAt : -1})?.limit(parseInt(limit)).lean().exec()
+
+      res.status(200).json({
+          blog
+      })
+      
+  } catch (error) {
+      next(handleError(500, error.message))
+  }
+
+}
+
 export const totalUser = async (req, res, next) => {
   try {
     const totaluser = await User.countDocuments();

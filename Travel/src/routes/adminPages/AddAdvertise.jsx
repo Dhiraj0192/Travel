@@ -35,6 +35,7 @@ import { Checkbox } from "../../components/ui/checkbox";
 import { CKFinder } from "ckeditor5";
 import { Navigate, useNavigate } from "react-router-dom";
 import { decode } from "entities";
+import { toast } from "react-toastify";
 
 function AddAdvertise() {
   const navigate = useNavigate()
@@ -67,7 +68,18 @@ function AddAdvertise() {
 
       if (!file) {
         setUploading(false);
-        showToast("error", "Advertise image required.");
+        toast("Advertise image required.", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                
+                });
+       
       }
       const formData = new FormData();
       formData.append("file", file);
@@ -81,7 +93,17 @@ function AddAdvertise() {
       const data = await response.json();
       if (!response.ok) {
         setUploading(false);
-        return showToast("error", data.message);
+        return toast(data.message, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          
+          }); 
       }
       
       form.reset();
@@ -90,13 +112,36 @@ function AddAdvertise() {
       setFilePreview();
       
       setUploading(false);
-      showToast("success", data.message);
+      toast(data.message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        
+        });
+      
       
 
       
     } catch (error) {
       setUploading(false);
-      showToast("error", error.message);
+      
+      
+      toast(error.message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        
+        });
     }
   }
 

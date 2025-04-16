@@ -4,6 +4,10 @@ import { handleError } from "../helpers/handleError.js";
 import Blog from "../models/blog.model.js";
 import Category from "../models/category.model.js";
 import {encode} from 'entities';
+import http from 'http';
+import {Server} from 'socket.io';
+import express from 'express';
+import cors from 'cors';
 
 export const addBlog = async (req,res,next)=>{
     try {
@@ -134,6 +138,8 @@ export const updateBlog = async (req,res,next)=>{
 
 export const updateApprovalBlog = async (req,res,next)=>{
   try {
+    const app = express();
+
       const {blogid} = req.params
   
 
@@ -141,6 +147,31 @@ export const updateApprovalBlog = async (req,res,next)=>{
           
           status : "published",
       },{new : true})
+      console.log(newblog);
+      
+
+      const title = newblog?.title;
+      const message = `Hey, your blog : ${title} is approved from Traveller's Mirror`
+      const server = http.createServer(app)
+      const io = new Server(server,{
+        cors:{
+          origin: '*',
+          methhod: ['GET','POST'],
+        }
+      })
+
+      io.emit('pushNotification',{
+        message
+      })
+
+      io.on('connection',(socket)=>{
+        console.log('Connevted');
+        socket.on('disconnect',()=>{
+          console.log('Client disconnected');
+          
+        })
+        
+      })
 
 
       res.status(200).json({

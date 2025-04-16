@@ -16,6 +16,7 @@ import { deleteData } from "../../helpers/handleDelete";
 import { showToast } from "../../helpers/showToast";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
+import { toast } from "react-toastify";
 
 const CommentsDashboard = () => {
   const navigate = useNavigate()
@@ -56,9 +57,31 @@ const CommentsDashboard = () => {
       );
       if (respnse) {
         setRefreshData(!refreshData);
-        showToast("success", "Data deleted");
+        toast("Data deleted", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          
+          });
+        
       } else {
-        showToast("error", "Data not deleted.");
+        toast("Data not deleted", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          
+          });
+        
       }
     };
 

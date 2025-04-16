@@ -29,6 +29,7 @@ import slugify from "slugify";
 import { useFetch } from "../../hooks/userFetch.js";
 import EditCategory from "../../components/adminComponents/EditCategory";
 import { useAuth } from "@clerk/clerk-react";
+import { toast } from "react-toastify";
 
 function Categories() {
   const navigate = useNavigate()
@@ -103,9 +104,31 @@ function Categories() {
       }
       form.reset()
       navigate("/admin-categories");
-      showToast("success", data.message);
+      toast(data.message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        
+        });
+      
     } catch (error) {
-      showToast("error", error.message);
+      toast(error.message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        
+        });
+      
     }
   }
 

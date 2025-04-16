@@ -10,6 +10,7 @@ import { showToast } from "../../helpers/showToast";
 import { deleteData } from "../../helpers/handleDelete";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
+import { toast } from "react-toastify";
 
 function Users() {
   const navigate = useNavigate()
@@ -42,10 +43,32 @@ function Users() {
         `${getEnv("VITE_API_BASE_URL")}/dashboard/delete/${id}`
       );
       if (respnse) {
+        toast("Data deleted", {
+                            position: "top-right",
+                            autoClose: 3000,
+                            hideProgressBar: false,
+                            closeOnClick: false,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            theme: "colored",
+                            
+                            });
         
-        showToast("success", "Data deleted");
+        
       } else {
-        showToast("error", "Data not deleted.");
+        toast("Data not deleted", {
+                            position: "top-right",
+                            autoClose: 3000,
+                            hideProgressBar: false,
+                            closeOnClick: false,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            theme: "colored",
+                            
+                            });
+        
       }
     };
   

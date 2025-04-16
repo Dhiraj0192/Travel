@@ -35,6 +35,7 @@ import { Checkbox } from "../../components/ui/checkbox";
 import { CKFinder } from "ckeditor5";
 import { Navigate, useNavigate } from "react-router-dom";
 import { decode } from "entities";
+import { toast } from "react-toastify";
 
 function AddBlog() {
   const navigate = useNavigate()
@@ -127,13 +128,35 @@ function AddBlog() {
       form.setValue("category", "Select Category");
       form.setValue("blogContent", "");
       setUploading(false);
-      showToast("success", data.message);
+      toast(data.message, {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: false,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+              
+              });
+      
       
 
       
     } catch (error) {
       setUploading(false);
-      showToast("error", error.message);
+      toast(error.message, {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: false,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+              
+              });
+      
     }
   }
 

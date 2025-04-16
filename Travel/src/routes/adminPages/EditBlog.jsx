@@ -36,6 +36,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { decode } from "entities";
 import Loading from "../../components/Loading";
 import { Checkbox } from "../../components/ui/checkbox";
+import { toast } from "react-toastify";
 
 function EditBlog() {
   const navigate = useNavigate()
@@ -164,9 +165,31 @@ function EditBlog() {
       setFilePreview();
 
       navigate("/admin-posts");
-      showToast("success", data.message);
+      toast(data.message, {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: false,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+              
+              });
+      
     } catch (error) {
-      showToast("error", error.message);
+      toast(error.message, {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: false,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+              
+              });
+      
     }
   }
 

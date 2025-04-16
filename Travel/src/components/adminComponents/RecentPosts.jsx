@@ -51,7 +51,7 @@ const BlogAdminDashboard = () => {
   return (
     <div className="p-6 w-full bg-gray-600 rounded-lg shadow-sm">
       <div className="flex items-center justify-between mb-3">
-        <h2 className="text-xl font-semibold text-white">Recent Posts</h2>
+        <h2 className="text-xl font-semibold text-white">Recent Blogs</h2>
         <div className="flex justify-end">
           <Link
             to="/admin-posts"
@@ -94,11 +94,13 @@ const BlogAdminDashboard = () => {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-50">{blog.author}</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-50">
-                      {blog.title}
-                    </div>
-                  </td>
+                  <Link to={`/adminblog/${blog.category.slug}/${blog.slug}`}>
+                                    <td className="px-6 py-4 whitespace-nowrap ">
+                                      <div className="text-sm font-medium text-gray-50 hover:text-black">
+                                        {blog.title.substring(0, 25)}....
+                                      </div>
+                                    </td>
+                                    </Link>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-50">
                       {blog.category.name}

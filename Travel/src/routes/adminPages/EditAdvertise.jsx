@@ -36,6 +36,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { decode } from "entities";
 import Loading from "../../components/Loading";
 import { Checkbox } from "../../components/ui/checkbox";
+import { toast } from "react-toastify";
 
 function EditAdvertise() {
   const navigate = useNavigate()
@@ -109,7 +110,18 @@ function EditAdvertise() {
 
       const data = await response.json();
       if (!response.ok) {
-        return showToast("error", data.message);
+        return toast(data.message, {
+                  position: "top-right",
+                  autoClose: 3000,
+                  hideProgressBar: false,
+                  closeOnClick: false,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "colored",
+                  
+                  });
+         
       }
 
       form.reset();
@@ -117,9 +129,32 @@ function EditAdvertise() {
       setFilePreview();
 
       navigate("/admin-dashboard");
-      showToast("success", data.message);
+      toast(data.message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        
+        });
+      
     } catch (error) {
-      showToast("error", error.message);
+      toast(error.message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        
+        });
+      
+      
     }
   }
 

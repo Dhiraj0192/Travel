@@ -35,6 +35,8 @@ import CommentCount from "../../components/CommentCount";
 import { decode } from "entities";
 import { deleteData } from "../../helpers/handleDelete";
 import { useAuth } from "@clerk/clerk-react";
+import { toast } from "react-toastify";
+
 
 
 function AdminBlogShow() {
@@ -71,9 +73,31 @@ function AdminBlogShow() {
         if (respnse) {
           setRefreshData(!refreshData);
           navigate("/admin-posts");
-          showToast("success", "Data deleted");
+          toast("Data deleted", {
+                  position: "top-right",
+                  autoClose: 3000,
+                  hideProgressBar: false,
+                  closeOnClick: false,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "colored",
+                  
+                  });
+          
         } else {
-          showToast("error", "Data not deleted.");
+          toast("Data not deleted", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            
+            });
+          
         }
       };
 
@@ -111,11 +135,34 @@ function AdminBlogShow() {
             }
       
             
-      
+            
             navigate("/admin-posts");
-            showToast("success", data.message);
+            // send notification to user
+            toast(data.message, {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: false,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+              
+              });
+            
           } catch (error) {
-            showToast("error", error.message);
+            toast(error.message, {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: false,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+              
+              });
+            
           }
         }
     

@@ -21,6 +21,7 @@ import { Switch } from "../../components/ui/switch"
 import { deleteData } from "../../helpers/handleDelete";
 import { showToast } from "../../helpers/showToast";
 import { useAuth } from "@clerk/clerk-react";
+import RecentPendingBlog from "../../components/adminComponents/RecentPendingBlog";
 
 function Dashboard() {
   const navigate = useNavigate()
@@ -129,7 +130,6 @@ function Dashboard() {
             </div>
             
           </div>
-
           <div className="flex items-center justify-between mt-3 mb-10 w-full gap-8">
             {/* total posts */}
 
@@ -164,6 +164,16 @@ function Dashboard() {
             
             
           </div>
+
+          <div className="">
+            <h1 className="text-3xl font-bold text-white">Approval Pending Blogs</h1>
+          </div>
+
+          
+
+          <RecentPendingBlog/>
+
+          
 
           <BlogAdminDashboard />
 

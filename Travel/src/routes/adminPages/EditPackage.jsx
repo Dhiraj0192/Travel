@@ -36,6 +36,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { decode } from "entities";
 import Loading from "../../components/Loading";
 import { Checkbox } from "../../components/ui/checkbox";
+import { toast } from "react-toastify";
 
 function EditPackage() {
   const navigate = useNavigate()
@@ -119,7 +120,17 @@ function EditPackage() {
         !values.price ||
         !values.packageurl
       ) {
-        return showToast("error", "All fields are required.");
+        return toast("All fields are required.", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                
+                }); 
       }
 
       const newValues = {
@@ -143,7 +154,17 @@ function EditPackage() {
 
       const data = await response.json();
       if (!response.ok) {
-        return showToast("error", data.message);
+        return toast(data.message, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          
+          });
       }
 
       form.reset();
@@ -151,9 +172,31 @@ function EditPackage() {
       setFilePreview();
 
       navigate("/admin-packages");
-      showToast("success", data.message);
+      toast(data.message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        
+        });
+      
     } catch (error) {
-      showToast("error", error.message);
+      toast(error.message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        
+        });
+      
     }
   }
 
