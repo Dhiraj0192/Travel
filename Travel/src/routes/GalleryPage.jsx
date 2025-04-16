@@ -42,36 +42,26 @@ return (
             <div className="flex flex-col lg:px-32 w-full mt-20 mb-10">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {[
-                        "https://images.pexels.com/photos/1231231/pexels-photo-1231231.jpeg",
-                        "https://images.pexels.com/photos/2342342/pexels-photo-2342342.jpeg",
-                        "https://images.pexels.com/photos/3453453/pexels-photo-3453453.jpeg",
+                        "https://images.pexels.com/photos/413960/pexels-photo-413960.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+                        "https://images.pexels.com/photos/450441/pexels-photo-450441.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+                        "https://images.pexels.com/photos/2577274/pexels-photo-2577274.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
                         
-                        "https://images.pexels.com/photos/6786786/pexels-photo-6786786.jpeg",
-                        "https://images.pexels.com/photos/1231231/pexels-photo-1231231.jpeg",
-                        "https://images.pexels.com/photos/2342342/pexels-photo-2342342.jpeg",
-                        "https://images.pexels.com/photos/3453453/pexels-photo-3453453.jpeg",
+                        "https://images.pexels.com/photos/38238/maldives-ile-beach-sun-38238.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+                        "https://images.pexels.com/photos/2104742/pexels-photo-2104742.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+                        "https://images.pexels.com/photos/238622/pexels-photo-238622.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+                        "https://images.pexels.com/photos/210012/pexels-photo-210012.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
                         
-                        "https://images.pexels.com/photos/6786786/pexels-photo-6786786.jpeg",
-                        "https://images.pexels.com/photos/1231231/pexels-photo-1231231.jpeg",
-                        "https://images.pexels.com/photos/2342342/pexels-photo-2342342.jpeg",
-                        "https://images.pexels.com/photos/3453453/pexels-photo-3453453.jpeg",
+                        "https://images.pexels.com/photos/2114206/pexels-photo-2114206.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+                        "https://images.pexels.com/photos/2325446/pexels-photo-2325446.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+                        "https://images.pexels.com/photos/356808/pexels-photo-356808.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+                        "https://images.pexels.com/photos/2398220/pexels-photo-2398220.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
                         
-                        "https://images.pexels.com/photos/6786786/pexels-photo-6786786.jpeg",
-                        "https://images.pexels.com/photos/1231231/pexels-photo-1231231.jpeg",
-                        "https://images.pexels.com/photos/2342342/pexels-photo-2342342.jpeg",
-                        "https://images.pexels.com/photos/3453453/pexels-photo-3453453.jpeg",
+                        "https://images.pexels.com/photos/1000445/pexels-photo-1000445.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+                        "https://images.pexels.com/photos/160483/hiker-traveler-trip-travel-160483.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+                        "https://images.pexels.com/photos/531602/pexels-photo-531602.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+                        "https://images.pexels.com/photos/716421/pexels-photo-716421.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+                        "https://images.pexels.com/photos/1275393/pexels-photo-1275393.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
                         
-                        "https://images.pexels.com/photos/6786786/pexels-photo-6786786.jpeg",
-                        "https://images.pexels.com/photos/1231231/pexels-photo-1231231.jpeg",
-                        "https://images.pexels.com/photos/2342342/pexels-photo-2342342.jpeg",
-                        "https://images.pexels.com/photos/3453453/pexels-photo-3453453.jpeg",
-                        
-                        "https://images.pexels.com/photos/6786786/pexels-photo-6786786.jpeg",
-                        "https://images.pexels.com/photos/1231231/pexels-photo-1231231.jpeg",
-                        "https://images.pexels.com/photos/2342342/pexels-photo-2342342.jpeg",
-                        "https://images.pexels.com/photos/3453453/pexels-photo-3453453.jpeg",
-                        
-                        "https://images.pexels.com/photos/6786786/pexels-photo-6786786.jpeg",
                     ].map((src, index) => (
                         <div
                             key={index}
