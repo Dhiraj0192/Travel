@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { IKImage } from "imagekitio-react";
 import Image from "./Image";
-import { Link, useNavigate } from "react-router-dom";
+import { data, Link, useNavigate } from "react-router-dom";
 import {
   SignedIn,
   SignedOut,
@@ -32,13 +32,62 @@ import { showToast } from "../helpers/showToast";
 import { getEnv } from "../helpers/getEnv";
 import { GrNotes } from "react-icons/gr";
 import { IoMdArrowDropdownCircle } from "react-icons/io";
+import { IoNotifications } from "react-icons/io5";
+import io from 'socket.io-client';
+ 
+const socket = io('http://localhost:3000')
 
 function Navbar() {
+  
   // const { isSignedIn } = useAuth();
+  const [notification, setNotification] = useState();
 
 
   const user = useSelector((state) => state.user);
+  console.log(user);
 
+  const [notifications, setNotifications] = useState([]);
+
+  useEffect(() => {
+    // Connect to WebSocket server
+    const ws = new WebSocket('http://localhost:3001');
+
+    ws.onopen = () => {
+      console.log('Connected to WebSocket server');
+    };
+
+    ws.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+      if (message.type === 'notification') {
+        setNotifications(prev => [...prev, message.data]);
+        // Optionally show browser notification
+        if ('Notification' in window && Notification.permission === 'granted') {
+          new Notification(message.data.title, {
+            body: message.data.body
+          });
+        }
+      }
+    };
+
+    ws.onclose = () => {
+      console.log('Disconnected from WebSocket server');
+    };
+
+    return () => {
+      ws.close();
+    };
+  }, []);
+
+  // Request notification permission
+  const requestNotificationPermission = () => {
+    if ('Notification' in window) {
+      Notification.requestPermission().then(permission => {
+        console.log('Notification permission:', permission);
+      });
+    }
+  };
+  
+ 
   const navigate = useNavigate();
 
   const dispath = useDispatch()
@@ -118,9 +167,49 @@ function Navbar() {
         <Link to={`${user.isLoggedIn ? "/home" : "/"}`}>Home</Link>
         <Link to="/blogs">Blogs</Link>
         <Link to="/gallery">Gallery</Link>
-        <Link to="/">About</Link>
-        <Link to="/">Contact</Link>
+        <Link to="/about">About</Link>
+        <Link to="/contact">Contact</Link>
         <Link to="/travel-packages">Packages</Link>
+
+        
+        {user.isLoggedIn === true && <SignedIn redirectUrl="/home"></SignedIn> ? <Link to="" ><DropdownMenu>
+              
+            
+              <DropdownMenuTrigger className="">
+              <IoNotifications className="h-6 w-6 mt-4 -mr-6" />
+              <div className="bg-red-600 p-1 rounded-full w-6 h-6 flex items-center justify-center absolute top-4">
+              <p className="  text-white">2</p>
+              </div>
+
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className=" w-[18vw] min-h-[30vh] absolute top-4 -right-32">
+                
+                
+                <DropdownMenuItem asChild className="text-md font-semibold mb-1 text-gray-500 hover:bg-gray-200">
+                <ul>
+          {notifications.map((notif, index) => (
+            <li key={index}>
+              <h3>{notif.title}</h3>
+              <p>{notif.body}</p>
+              <small>{new Date(notif.timestamp).toLocaleString()}</small>
+            </li>
+          ))}
+        </ul>
+            </DropdownMenuItem>
+                
+                
+                
+                
+              </DropdownMenuContent>
+            </DropdownMenu></Link> : <></>}
+        
+        
+            
+         
+
+        
+
+        <Link to="/write-blog" className="px-3 py-1 rounded-md bg-gray-300 text-black font-semibold text-md">Write Blog</Link>
         {/* <SignedOut> */}
         {!user.isLoggedIn ? (
           <Link to="/login">
@@ -130,13 +219,14 @@ function Navbar() {
           </Link>
         ) : (
           <>
-            <DropdownMenu>
+            {/* <DropdownMenu>
               <Link to="/write-blog" className="px-3 py-1 rounded-md bg-gray-300 text-black font-semibold text-md">Write Blog</Link>
-            <Avatar>
+            
+              <DropdownMenuTrigger className="absolute bottom-10 right-10">
+              <Avatar>
                   <AvatarImage src={user.user.avatar} />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
-              <DropdownMenuTrigger>
                 
                 <IoMdArrowDropdownCircle className="h-7 w-7 -ml-8" />
 
@@ -169,7 +259,7 @@ function Navbar() {
                 </DropdownMenuItem>
                 
               </DropdownMenuContent>
-            </DropdownMenu>
+            </DropdownMenu> */}
           </>
         )}
 

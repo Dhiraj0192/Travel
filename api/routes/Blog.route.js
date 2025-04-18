@@ -1,5 +1,5 @@
 import express from "express"
-import { addBlog, deleteBlog, editBlog, getBlog, getBlogsByCategory, getBlogsByTravelCategorys, getBlogsByUserId, getFeaturedBlogs, getTrendingBlogs, getUserBlogsByCategory, search, showAllBlog, showAllPendingBlog, updateApprovalBlog, updateBlog, updateUserBlog } from "../controllers/Blog.controller.js"
+import { addBlog, deleteBlog, editBlog, getBlog, getBlogsByCategory, getBlogsByTravelCategorys, getBlogsByUserId, getFeaturedBlogs, getTrendingBlogs, getUserBlogsByCategory, search, sendNoti, showAllBlog, showAllPendingBlog, updateApprovalBlog, updateBlog, updateUserBlog } from "../controllers/Blog.controller.js"
 import upload from "../config/multer.js"
 
 
@@ -23,4 +23,5 @@ BlogRoute.get('/userblog/:userid',getBlogsByUserId)
 
 BlogRoute.get("/:categoryId/:userid", getUserBlogsByCategory)
 BlogRoute.get('/usersearch/:userid/:q',search)
+BlogRoute.post('/sendNoti/:message',sendNoti)
 export default BlogRoute

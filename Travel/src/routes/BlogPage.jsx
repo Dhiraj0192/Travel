@@ -10,6 +10,7 @@ import truncate from "html-truncate";
 import { decode } from "html-entities";
 import { convert } from "html-to-text";
 import AddsSlot from "../components/AddsSlot";
+import UserIcon from "../components/UserIcon";
 
 function BlogPage() {
   const user = useSelector((state) => state.user);
@@ -125,6 +126,7 @@ function BlogPage() {
   }
   return (
     <div className=" flex flex-col ">
+      <UserIcon/>
       <div className="w-full h-[45vh] overflow-hidden bg-gradient-to-b from-[#879cbf8b] to-[#1a1c208b] bg-opacity-5">
         <img
           src="/adventure.jpg"

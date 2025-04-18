@@ -37,7 +37,7 @@ function Footer() {
             <p className="font-bold text-lg text-white">Stay Updated</p>
             <p className="font-bold text-gray-200">Subscribe to our newsletter for the latest updates and blogging tips.</p>
 
-            <Link to="/">
+            <Link to="/contact">
                             <button className='py-2 px-20 rounded-3xl bg-blue-800 text-white'>Subscribe !</button>
                         </Link>
             </div>

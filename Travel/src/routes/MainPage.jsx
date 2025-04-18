@@ -4,7 +4,7 @@ import MainCategories from "../components/MainCategories";
 import PostList from "../components/PostList";
 import Footer from "../components/Footer";
 import ReadyBlog from "../components/ReadyBlog";
-import { FaCheckCircle } from "react-icons/fa";
+import { FaCheckCircle, FaUserSecret } from "react-icons/fa";
 import Image from "../components/Image";
 import FeaturedPosts from "../components/FeaturedPosts";
 import BlogHome from "../components/BlogHome";
@@ -14,8 +14,44 @@ import moment from "moment";
 import { convert } from 'html-to-text';
 import { decode } from "entities";
 import { useSelector } from "react-redux";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
+import { GrNotes } from "react-icons/gr";
+import { IoLogOut } from "react-icons/io5";
+import { useEffect } from "react"
+import io from 'socket.io-client';
+ 
+const socket = io('http://localhost:3000')
 
 function MainPage() {
+  useEffect(()=>{
+      if (Notification.permission === 'default' || Notification.permission === 'denied'){
+        Notification.requestPermission().then((permission)=>{
+          if (permission === 'granted') {
+            console.log('Notification permission granted');
+            
+          } else {
+            console.log('Notification permission denied');
+          }
+        });
+      }
+  
+      socket.on('pushNotification',(data)=>{
+        console.log('Received Notification', data);
+        if (Notification.permission === 'granted') {
+          new Notification('Approved Notifiaction',{
+            body: body.message,
+            icon: 'https://via.placeholder.com/50'
+          });
+        }
+  
+        
+        
+      });
+      return ()=>{
+        socket.off('pushNotification')
+      }
+    })
   const user = useSelector((state) => state.user);
 
   // Protect the /single page route
@@ -95,8 +131,74 @@ function MainPage() {
         
       };
 
+      const handleLogout = async()=>{
+          try {
+                const response = await fetch(
+                  `${getEnv("VITE_API_BASE_URL")}/auth/logout`,
+                  {
+                    method: "get",
+                    
+                    credentials: "include",
+                    
+                  }
+                );
+          
+                const data = await response.json();
+                if (!response.ok) {
+                  return showToast("error", data.message);
+                }
+          
+                dispath(removeUser())
+                navigate("/");
+                
+              } catch (error) {
+                showToast("error", error.message);
+              }
+        }
+
   return (
     <div className=" flex flex-col ">
+      <DropdownMenu>
+              
+            
+              <DropdownMenuTrigger className="fixed bottom-10 right-10 z-50 flex">
+              <Avatar className="w-16 h-16 border-gray-800 border-2">
+                  <AvatarImage src={user.user.avatar} />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+                
+                {/* <IoMdArrowDropdownCircle className="h-7 w-7 -ml-8" /> */}
+
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className=" w-[18vw] min-h-[26vh] absolute bottom-0 right-10">
+                <DropdownMenuLabel className="bg-gray-800 rounded-md">
+                    <p className="text-blue-300 ">{user.user.name}</p>
+                    <p className="text-sm text-white font-normal">
+                        {user.user.email}
+                    </p>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild className="text-md font-semibold mb-1 text-gray-500 hover:bg-gray-400">
+                    <Link to="/account">
+                    <FaUserSecret/>
+                    Profile</Link>
+                </DropdownMenuItem>
+                
+                <DropdownMenuItem asChild className="text-md font-semibold mb-1 text-gray-500 hover:bg-gray-400">
+                    <Link to="/your-blogs">
+                    <GrNotes />
+                    Your Blog</Link>
+                </DropdownMenuItem>
+
+                <DropdownMenuSeparator className="bg-gray-200"/>
+                
+                <DropdownMenuItem onClick={handleLogout} className="text-md font-semibold mb-1 text-gray-500 hover:bg-gray-200">
+                <IoLogOut/>
+                Log Out
+                </DropdownMenuItem>
+                
+              </DropdownMenuContent>
+            </DropdownMenu>
       <div className="w-full h-[63vh] overflow-hidden bg-gradient-to-b from-[#879cbf8b] to-[#1a1c208b] bg-opacity-5">
         <img
           src="/bucketlist.jpg"

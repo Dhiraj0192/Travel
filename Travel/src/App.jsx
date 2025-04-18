@@ -1,45 +1,42 @@
-import Navbar from "./components/Navbar"
+import Navbar from "./components/Navbar";
+import { useEffect } from "react";
+import { io } from "socket.io-client"; // Import Socket.IO client
 
-import { useEffect } from "react"
-import io from 'socket.io-client';
- 
-const socket = io('http://localhost:3000')
+// Replace 'http://localhost:3000' with your Socket.IO server URL
+const socket = io(process.env.REACT_APP_BACKEND_URL || "http://localhost:3000");
 
 const App = () => {
-  useEffect(()=>{
-    if (Notification.permission === 'default' || Notification.permission === 'denied'){
-      Notification.requestPermission().then((permission)=>{
-        if (permission === 'granted') {
-          console.log('Notification permission granted');
-          
-        } else {
-          console.log('Notification permission denied');
-        }
-      });
-    }
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("Socket.IO connection established");
 
-    socket.on('pushNotification',(data)=>{
-      console.log('Received Notification', data);
-      if (Notification.permission === 'granted') {
-        new Notification('Approved Notifiaction',{
-          body: body.message,
-          icon: 'https://via.placeholder.com/50'
-        });
-      }
-
-      
-      
+      // Send a test message to the server
+      socket.emit("testEvent", { type: "test", content: "Hello, server!" });
     });
-    return ()=>{
-      socket.off('pushNotification')
-    }
-  })
+
+    socket.on("pushNotification", (data) => {
+      console.log("Socket.IO message received:", data);
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Socket.IO connection closed");
+    });
+
+    socket.on("connect_error", (error) => {
+      console.error("Socket.IO connection error:", error);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+
   return (
-    <div className=''>
+    <div className="">
       {/* navbar */}
       <Navbar />
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;

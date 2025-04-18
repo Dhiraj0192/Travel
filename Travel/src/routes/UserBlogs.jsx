@@ -14,6 +14,7 @@ import { FaBookOpenReader } from "react-icons/fa6";
 import { AiFillEdit } from "react-icons/ai";
 import { MdDelete } from "react-icons/md";
 import { toast } from "react-toastify";
+import UserIcon from "../components/UserIcon";
 
 
 
@@ -166,6 +167,7 @@ function UserBlogPage() {
     };
   return (
     <div className=" flex flex-col ">
+      <UserIcon/>
       <div className="w-full h-[30vh] overflow-hidden bg-gradient-to-b from-[#879cbf8b] to-[#1a1c208b] bg-opacity-5">
         <img
           src="/adventure.jpg"

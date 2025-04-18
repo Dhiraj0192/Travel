@@ -12,6 +12,7 @@ import CommentCount from "../components/CommentCount";
 import LikeCount from "../components/LikeCount";
 import { Navigate } from 'react-router-dom'
 import { useSelector } from "react-redux";
+import UserIcon from "../components/UserIcon";
 
 function SinglePostPage() {
   const user = useSelector((state) => state.user);
@@ -52,6 +53,7 @@ function SinglePostPage() {
       <Navbar />
 
       <div className="lg:px-32 flex flex-col gap-8 mt-10">
+        <UserIcon/>
         <div className="flex justify-center items-center gap-8">
           <div className=" lg:w-3/5 flex flex-col gap-8">
             <h1 className="text-xl md:text-3xl xl:text-4xl 2xl:text-5xl font-semibold">

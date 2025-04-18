@@ -44,6 +44,8 @@ import EditAdvertise from './routes/adminPages/EditAdvertise';
 import GalleryPage from './routes/GalleryPage';
 import TermsConditionPage from './routes/TermsConditionPage';
 import AdminBlogShow from './routes/adminPages/AdminBlogShow';
+import ContactPage from './routes/ContactPage';
+import AboutPage from './routes/AboutPage';
 
 
 
@@ -68,6 +70,14 @@ const router = createBrowserRouter([
       {
         path: "/your-blogs",
         element : <UserBlogPage/>
+      },
+      {
+        path: "/contact",
+        element : <ContactPage/>
+      },
+      {
+        path: "/about",
+        element : <AboutPage/>
       },
       {
         path: "/blog/:category/:post",

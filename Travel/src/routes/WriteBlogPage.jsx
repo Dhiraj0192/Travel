@@ -30,6 +30,7 @@ import Footer from "../components/Footer";
 import { useSelector } from "react-redux";
 import { showToast } from "../helpers/showToast";
 import { toast } from "react-toastify";
+import UserIcon from "../components/UserIcon";
 
 function WriteBlogPage() {
     const user = useSelector((state) => state.user);
@@ -124,7 +125,7 @@ function WriteBlogPage() {
       setFile();
       setFilePreview();
       setUploading(false);
-      toast(data.message, {
+      toast("Your blog is submitted in Review Process. Please wait gently.", {
               position: "bottom-right",
               autoClose: 5000,
               hideProgressBar: false,
@@ -161,6 +162,7 @@ function WriteBlogPage() {
   };
   return (
     <div className="flex flex-col">
+      <UserIcon/>
       <div className="w-full h-[30vh] overflow-hidden bg-gradient-to-b from-[#879cbf8b] to-[#1a1c208b] bg-opacity-5">
         <Image
           src="pexels-fmaderebner-238622.jpg"

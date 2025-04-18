@@ -128,11 +128,30 @@ function AdminBlogShow() {
                 body: formData,
               }
             );
-      
             const data = await response.json();
             if (!response.ok) {
               return showToast("error", data.message);
             }
+
+            const message = "Hey, your blog is approved from Traveller's Mirror";
+
+            const sendNoti = await fetch(
+              `${getEnv("VITE_API_BASE_URL")}/blog/sendNoti/${message}`,
+              {
+                method: "post",
+                credentials: "include",
+                
+              }
+            );
+
+            const notdata = await sendNoti.json();
+            if (!sendNoti.ok) {
+              return showToast("error", data.message);
+            }
+            console.log(notdata);
+            
+      
+            
       
             
             

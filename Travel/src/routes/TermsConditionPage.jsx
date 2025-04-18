@@ -1,9 +1,11 @@
 import React from "react";
 import Footer from "../components/Footer";
+import UserIcon from "../components/UserIcon";
 
 function TermsConditionPage() {
   return (
     <div className="">
+      <UserIcon/>
       <div className="lg:px-32 mt-20 mb-20">
       <p className="text-black text-2xl ">Terms Of Use</p>
 

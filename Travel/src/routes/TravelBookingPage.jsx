@@ -9,6 +9,7 @@ import { getEnv } from "../helpers/getEnv";
 import { Link, Navigate } from "react-router-dom";
 import { MdEmail } from "react-icons/md";
 import { FaRocketchat } from "react-icons/fa";
+import UserIcon from "../components/UserIcon";
 
 function TravelBookingPage() {
     const user = useSelector((state) => state.user);
@@ -81,6 +82,7 @@ function TravelBookingPage() {
       
   return (
     <div className="flex flex-col min-h-screen">
+      <UserIcon/>
       <div className="w-full ">
         <div className="overflow-hidden bg-gradient-to-b from-[#4b55678b] to-[#1a1c208b] bg-opacity-5 h-[54vh]">
         <img
