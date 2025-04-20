@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import MainCategories from "../components/MainCategories";
 import PostList from "../components/PostList";
 import Footer from "../components/Footer";
@@ -20,6 +20,9 @@ import { GrNotes } from "react-icons/gr";
 import { IoLogOut } from "react-icons/io5";
 import { useEffect } from "react"
 import io from 'socket.io-client';
+import { showToast } from "../helpers/showToast";
+import { useDispatch } from "react-redux";
+import { removeUser } from "../redux/user/user.slice";
  
 const socket = io('http://localhost:3000')
 
@@ -63,6 +66,8 @@ function MainPage() {
   const [limit, setLimit] = useState(9);
   const [selectedCategoryBlogs, setSelectedCategoryBlogs] = useState();
   const [query, setQuery] = useState();
+  const navigate = useNavigate();
+  const dispath = useDispatch()
     let [searchData , setSearchData] = useState();
     const {data: categoryData, loading, error} = useFetch(`${getEnv('VITE_API_BASE_URL')}/category/all-category`,{
       method : 'get',

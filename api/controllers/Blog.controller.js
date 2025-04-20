@@ -595,9 +595,6 @@ function sendNotificationToAll(message) {
 
 
     
-    
-
-    
   } catch (error) {
     next(handleError(500, error.message));
   }
