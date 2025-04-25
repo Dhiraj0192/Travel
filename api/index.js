@@ -4,7 +4,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import mongoose from "mongoose";
 import { createServer } from "http";
-import { Server } from "socket.io";
+
 import AuthRoute from "./routes/Auth.route.js";
 import UserRoute from "./routes/User.route.js";
 import CategoryRoute from "./routes/Category.route.js";
@@ -28,13 +28,7 @@ dotenv.config();
 const port = process.env.PORT;
 const app = express();
 const server = createServer(app); // Create an HTTP server
-const io = new Server(server, {
-  cors: {
-    origin: process.env.FRONTEND_URL,
-    methods: ["GET", "POST"],
-    credentials: true,
-  },
-});
+
 
 
 

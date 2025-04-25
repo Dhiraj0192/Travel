@@ -651,16 +651,7 @@ export const getBlogsByTravelCategorys = async (req, res, next) => {
     next(handleError(500, error.message));
   }
 };
-const app = express();
-const server = createServer(app);
 
-const io = new Server(server, {
-  cors: {
-    origin: process.env.FRONTEND_URL,
-    methods: ["GET", "POST"],
-    credentials: true,
-  },
-});
 
 export const sendNoti = async (req, res, next) => {
   try {
