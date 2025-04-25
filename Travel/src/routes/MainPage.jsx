@@ -19,12 +19,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 import { GrNotes } from "react-icons/gr";
 import { IoLogOut } from "react-icons/io5";
 import { useEffect } from "react"
-import io from 'socket.io-client';
+
 import { showToast } from "../helpers/showToast";
 import { useDispatch } from "react-redux";
 import { removeUser } from "../redux/user/user.slice";
  
-const socket = io('http://localhost:3000')
+
 
 function MainPage() {
   
