@@ -277,7 +277,7 @@ function Navbar() {
           >
             <div className="flex flex-col p-4 space-y-4 overflow-y-auto">
               <Link
-                to="/home"
+                to={user?.isLoggedIn ? "/home" : "/"}
                 className="py-2 px-4 text-gray-700 hover:bg-gray-100 rounded-md"
                 onClick={() => setOpen(false)}
               >
