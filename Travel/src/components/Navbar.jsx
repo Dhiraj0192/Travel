@@ -38,7 +38,7 @@ import { FaLinkedin, FaTwitter, FaCheck } from "react-icons/fa";
 import { useFetch } from "../hooks/userFetch";
 
 
-const socket = io("http://localhost:3000");
+
 
 function Navbar() {
   const { isSignedIn } = useAuth();
@@ -61,20 +61,7 @@ function Navbar() {
     
         console.log(otherData);
 
-  useEffect(() => {
-    const ws = new WebSocket("http://localhost:3001");
-    ws.onopen = () => console.log("Connected to WebSocket server");
-    ws.onmessage = (event) => {
-      const message = JSON.parse(event.data);
-      if (message.type === "notification") {
-        setNotifications((prev) => [...prev, message.data]);
-        if ("Notification" in window && Notification.permission === "granted") {
-          new Notification(message.data.title, { body: message.data.body });
-        }
-      }
-    };
-    return () => ws.close();
-  }, []);
+  
 
   useEffect(() => {
     const fetchNotifications = async () => {
