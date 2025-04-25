@@ -32,10 +32,7 @@ function AboutPage() {
   const user = useSelector((state) => state.user);
   const [previewImage, setPreviewImage] = useState(null);
 
-  // Protect the /single page route
-  if (!user.isLoggedIn) {
-    return <Navigate to="/login" replace />;
-  }
+
 
   const [sort, setSort] = useState("-createdAt");
 
@@ -43,23 +40,34 @@ function AboutPage() {
   let [searchData, setSearchData] = useState();
   const [refreshData, setRefreshData] = useState(false);
 
+  const {
+            data: otherData,
+            loading,
+            error,
+          } = useFetch(`${getEnv("VITE_API_BASE_URL")}/other/details`, {
+            method: "get",
+            credentials: "include",
+          });
+      
+          
+
   
 
   return (
     <div className="flex flex-col min-h-screen">
         <UserIcon/>
       <div className="w-full ">
-        <div className="overflow-hidden bg-gradient-to-b from-[#4b55678b] to-[#1a1c208b] bg-opacity-5 h-[34vh]">
+        <div className="overflow-hidden bg-gradient-to-b from-[#4b55678b] to-[#1a1c208b] bg-opacity-5 h-[25vh] lg:h-[33vh]">
           <img
             src="https://images.pexels.com/photos/12231824/pexels-photo-12231824.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-            className="w-full h-[45vh] absolute top-0 -z-10 bg-cover "
+            className="w-full h-[32vh] lg:h-[50vh] absolute top-0 -z-10 bg-cover "
           />
           {/* breadcrumb */}
           <div className="h-[20vh] flex flex-col justify-center">
             {/* introduction */}
-            <div className="lg:px-32 flex items-center justify-between">
-              <div className="mt-40 w-[60vw]">
-                <h1 className=" text-white text-xl md:text-5xl lg:text-5xl font-bold">
+            <div className="lg:px-32 md:px-6 px-6 flex items-center justify-between">
+              <div className="lg:mt-40 mt-20 lg:w-[60vw] w-full">
+                <h1 className=" text-white text-2xl md:text-5xl lg:text-5xl font-bold">
                   About
                 </h1>
                 <p className="text-gray-200 text-lg font-semibold font-serif mt-6">
@@ -70,12 +78,12 @@ function AboutPage() {
           </div>
         </div>
 
-        <div className="flex flex-col lg:px-32 w-full mt-20 mb-10">
+        <div className="flex flex-col lg:px-32 w-full  mb-10">
           
           <div className="mt-16  flex flex-col">
-            <div className="flex items-center gap-1">
-                <div className="flex flex-col items-start gap-4 w-[65vw] text-justify">
-                    <h2 className="text-3xl font-bold text-blue-800">About</h2>
+            <div className="flex items-center gap-1 lg:flex-row flex-col">
+                <div className="flex flex-col items-start gap-4 w-full md:px-6 px-6 lg:w-[65vw] text-justify">
+                    
 
                     <div className="flex items-center gap-2">
                     <h1 className="text-black text-xl font-semibold">Traveller's Mirror</h1>
@@ -148,7 +156,7 @@ Explore the Globe: Use our interactive map to wander virtually, or filter blogs 
                 </div>
 
                 <div className="">
-                <div className="flex flex-col lg:px-10 w-full mt-20 mb-10">
+                <div className="flex flex-col md:px-6 lg:px-10 w-full mt-20 mb-10">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {[
                         "https://images.pexels.com/photos/413960/pexels-photo-413960.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
@@ -204,10 +212,10 @@ Explore the Globe: Use our interactive map to wander virtually, or filter blogs 
           </div>
 
           {/* need help */}
-          <div className="w-[80vw] flex items-center gap-6 mt-32 rounded-lg ml-4 bg-gray-100 shadow-md">
+          <div className="w-full lg:w-[80vw] flex md:flex-row flex-col px-6 lg:px-0 items-center gap-6 mt-32 rounded-lg lg:ml-4 bg-gray-100 shadow-md">
             <img
               src="https://images.pexels.com/photos/326576/pexels-photo-326576.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-              className="w-[30vw] h-[53vh] rounded-l-xl"
+              className="md:w-[30vw] w-full h-[35vh] md:h-[53vh] rounded-l-xl"
               alt=""
             />
             <div className="flex-col items-start gap-3">
@@ -225,7 +233,7 @@ Explore the Globe: Use our interactive map to wander virtually, or filter blogs 
                   </div>
                   <div className="flex flex-col gap-1">
                     <p className="text-gray-600 text-sm">Call us at</p>
-                    <p className="text-black text-lg">+1 (800) 123-4567</p>
+                    <p className="text-black text-lg">{otherData?.number}</p>
                   </div>
                 </div>
 
@@ -236,7 +244,7 @@ Explore the Globe: Use our interactive map to wander virtually, or filter blogs 
                   <div className="flex flex-col gap-1">
                     <p className="text-gray-600 text-sm">Email us at</p>
                     <p className="text-black text-lg">
-                      support@travelpackages.com
+                    {otherData?.email}
                     </p>
                   </div>
                 </div>

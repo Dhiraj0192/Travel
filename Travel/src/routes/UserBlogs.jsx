@@ -168,24 +168,19 @@ function UserBlogPage() {
   return (
     <div className=" flex flex-col ">
       <UserIcon/>
-      <div className="w-full h-[30vh] overflow-hidden bg-gradient-to-b from-[#879cbf8b] to-[#1a1c208b] bg-opacity-5">
+      <div className="w-full h-[40vh] md:h-[30vh] lg:h-[30vh] overflow-hidden bg-gradient-to-b from-[#879cbf8b] to-[#1a1c208b] bg-opacity-5">
         <img
           src="/adventure.jpg"
-          className="w-full h-[40vh] absolute top-0 -z-10 bg-contain "
+          className="w-full h-[48vh] md:h-[38vh] lg:h-[48vh] absolute top-0 -z-10 bg-contain "
         />
         {/* breadcrumb */}
         <div className=" flex flex-col justify-center gap-4">
-          <div className="flex gap-4 lg:px-32 text-white mt-20 -mb-20">
-            <Link to="/home" className="text-xl text-blue-200">
-              Your Blogs and Articles
-            </Link>
-            <span className="text-xl text-white">.</span>
-          </div>
+          
           {/* introduction */}
-          <div className="lg:px-32 flex items-center justify-between">
+          <div className="md:px-6 lg:px-32 flex md:flex-row flex-col items-center justify-between mt-16 md:mt-16 lg:mt-7">
             <div className=" w-[60vw]">
               
-              <p className=" text-md md:text-xl text-white">
+              <p className=" text-md md:text-2xl text-white font-bold text-center">
                 Our intuitive editor makes it easy to express yourself with
                 text, images, and multimedia.
               </p>
@@ -212,7 +207,7 @@ function UserBlogPage() {
                 </text>
               </svg>
 
-              <button className="absolute top-40 right-40 w-24 h-24 bg-blue-800 rounded-full flex items-center justify-center">
+              <button className="absolute top-[29vh] md:top-[17vh] lg:top-[27vh] right-[40vw] md:right-[10vw] lg:right-40 w-24 h-24 bg-blue-800 rounded-full flex items-center justify-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -231,8 +226,8 @@ function UserBlogPage() {
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-8 w-full mb-20">
-        <div className="lg:pl-32 lg:w-[20vw] h-max sticky top-10">
+      <div className="flex flex-col md:flex-row gap-8 w-full  md:mb-20 px-6 md:px-0 -mt-8 md:-mt-0">
+        <div className="lg:pl-32 md:px-6 lg:w-[20vw] md:h-max md:sticky md:top-10">
           <h1 className="mt-20 mb-12 text-xl font-medium">Categories </h1>
           <div className="flex flex-col gap-3 text-sm">
             {categories && categories.length > 0 ? (
@@ -279,7 +274,7 @@ function UserBlogPage() {
             </div>
           </div> */}
 
-          <div className="lg:pr-32 pt-20 pb-10 w-full">
+          <div className="lg:pr-32 pt-10 md:pt-20 pb-10 w-full">
             <h2 className="font-semibold text-lg">Your Blogs</h2>
             <div className="w-full h-[1px] bg-gray-600"></div>
           </div>
@@ -289,7 +284,7 @@ function UserBlogPage() {
 
                 {searchData ? searchData.map(blog =><div
                     key={blog._id}
-                    className=" rounded-xl w-[32%]  flex flex-col "
+                    className=" rounded-xl w-[100%] md:w-[40%] lg:w-[32%]  flex flex-col mb-5 md:mb-0"
                   >
                     <img
                       src={blog.featuredimage}
@@ -336,7 +331,7 @@ function UserBlogPage() {
               ? blogData?.blogs.map((blog, index) => (
                   <div
                     key={blog._id}
-                    className=" rounded-xl w-[32%]  flex flex-col "
+                    className=" rounded-xl w-[100%] md:w-[48%]  lg:w-[32%] flex flex-col mb-5 md:mb-0"
                   >
                     <img
                       src={blog.featuredimage}

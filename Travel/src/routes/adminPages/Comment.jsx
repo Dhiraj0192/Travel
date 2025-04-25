@@ -29,6 +29,7 @@ const CommentsDashboard = () => {
   const [refreshData, setRefreshData] = useState(false);
   const [query, setQuery] = useState();
   let [searchComment , setSearchComment] = useState([]);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   let {
       data: commentData,
@@ -137,11 +138,24 @@ const CommentsDashboard = () => {
 
   return (
     <div className="w-full flex">
-      <div className="w-[20%] h-screen fixed">
+      <div
+        className={`fixed z-50 bg-gray-800 h-screen transition-transform ${
+          sidebarOpen ? "translate-x-0 w-[65%]" : "-translate-x-full"
+        } lg:translate-x-0 lg:w-[20%]`}
+      >
         <Sidebar />
       </div>
 
-      <div className="w-[80%] absolute left-[20%] bg-gray-900 px-6 py-6 min-h-screen">
+      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-gray-900 px-6 py-6 min-h-screen">
+        {/* Toggle Button for Mobile */}
+        <div className="lg:hidden flex justify-end mb-4">
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="text-white text-3xl focus:outline-none"
+          >
+            {sidebarOpen ? "✕" : "☰"}
+          </button>
+        </div>
         <div>
           <h1 className="text-2xl font-semibold text-white">Comments</h1>
           <p className="text-gray-300 mt-3">

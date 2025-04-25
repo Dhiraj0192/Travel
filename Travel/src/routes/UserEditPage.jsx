@@ -32,6 +32,8 @@ import { showToast } from "../helpers/showToast";
 import Navbar from "../components/Navbar";
 import { decode } from "entities";
 import { toast } from "react-toastify";
+import { FaCloudUploadAlt } from "react-icons/fa";
+import UserIcon from "../components/UserIcon";
 // import { CKEditor } from '@ckeditor/ckeditor5-react';
 // import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
@@ -141,6 +143,7 @@ function UserEditPage() {
   async function onSubmit(values) {
     try {
       setUploading(true);
+      
       const newValues = {
         ...values,
         authorid : user?.user._id,
@@ -218,17 +221,18 @@ function UserEditPage() {
   return (
     <div className="flex flex-col">
         <Navbar/>
-      <div className="w-full h-[30vh] overflow-hidden bg-gradient-to-b from-[#879cbf8b] to-[#1a1c208b] bg-opacity-5">
+        <UserIcon/>
+      <div className="w-full h-[25vh] lg:h-[32vh] overflow-hidden bg-gradient-to-b from-[#879cbf8b] to-[#1a1c208b] bg-opacity-5">
         <Image
           src="pexels-fmaderebner-238622.jpg"
-          className="w-full h-[40vh] absolute top-0 -z-10 bg-cover "
+          className="w-full h-[32vh] lg:h-[50vh] absolute top-0 -z-10 bg-cover "
         />
         {/* breadcrumb */}
         <div className="h-[30vh] flex flex-col justify-center">
           {/* introduction */}
           <div className="lg:px-32 flex items-center justify-between">
-            <div className=" w-[60vw]">
-              <h1 className="text-white text-xl md:text-5xl lg:text-5xl font-bold">
+            <div className=" w-full md:w-[60vw] ">
+              <h1 className="text-white text-center text-xl md:text-3xl lg:text-5xl font-bold md:text-center">
                 Edit your content, engage with readers, and grow audience.
               </h1>
             </div>
@@ -236,165 +240,167 @@ function UserEditPage() {
         </div>
       </div>
 
-      <div className="flex flex-col lg:px-32 w-full mt-10 mb-10">
-        <h1 className="text-gray-600 font-bold text-xl">Let's Edit Your Blog Here...</h1>
-
-        <div className=" mt-6">
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-              <div className="flex items-center justify-between w-full">
-                <div className="flex flex-col items-start">
-                  <div className="mb-3">
-                    <FormField
-                      control={form.control}
-                      name="title"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-gray-500 text-3xl ">
-                            Write Blog Title Here...
-                          </FormLabel>
-                          <FormControl>
-                            <Input
-                              className="bg-gray-200 h-10 
-                               file:text-2xl
-                              focus-visible:outline-none
-                              focus-visible:border-0
-                              w-[69vw]"
-                              
-                              {...field}
-                            />
-                          </FormControl>
-
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  <div className="mb-3 mt-6">
-                    <FormField
-                      control={form.control}
-                      name="category"
-                      render={({ field }) => (
-                        <FormItem>
-                            <div className="flex items-center justify-start gap-2">
-                            <FormLabel className="text-gray-500 text-2xl w-[14vw]">
-                            Select Category
-                          </FormLabel>
-                          <FormControl>
-                            <Select
-                              onValueChange={field.onChange}
-                              value={field.value}
-                            >
-                              <SelectTrigger className="w-[54vw] bg-gray-200 text-black">
-                                <SelectValue placeholder="All Category..." />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {categoryData ? (
-                                  categoryData.category.map((category) => (
-                                    <SelectItem
-                                      key={category._id}
-                                      value={category._id}
-                                    >
-                                      {category.name}
-                                    </SelectItem>
-                                  ))
-                                ) : (
-                                  <></>
-                                )}
-                              </SelectContent>
-                            </Select>
-                          </FormControl>
-                            </div>
-                          
-
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
-                <div className="mb-3 ">
-                <FormLabel className="text-gray-500 text-xl w-[14vw]">
-                            Featured Image
-                          </FormLabel>
-                  <Dropzone
-                    onDrop={(acceptedFiles) =>
-                      handleFileSlection(acceptedFiles)
-                    }
-                  >
-                    {({ getRootProps, getInputProps }) => (
-                      <div {...getRootProps()}>
-                        <input {...getInputProps()} />
-
-                        <div className="flex justify-center items-center w-44 h-44 border-2 border-gray-500 border-dashed rounded cursor-pointer">
-                          <img src={filePreview} alt="" srcset="" />
+      <div className="flex flex-col px-6 lg:px-32 w-full mt-10 mb-10">
+              <h1 className="text-gray-600 font-bold text-xl">Let's Edit Blog Here...</h1>
+      
+              <div className=" mt-6">
+                <Form {...form}>
+                  <form onSubmit={form.handleSubmit(onSubmit)}>
+                    <div className="flex md:flex-row flex-col items-center justify-between w-full">
+                     
+                      <div className="flex flex-col items-start">
+                        <div className="mb-3">
+                          <FormField
+                            control={form.control}
+                            name="title"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-gray-500 text-xl  md:text-3xl ">
+                                  Write Blog Title Here...
+                                </FormLabel>
+                                <FormControl>
+                                  <Input
+                                    className="bg-gray-200 h-10 
+                                     file:text-2xl
+                                    focus-visible:outline-none
+                                    focus-visible:border-0
+                                    w-[90vw] md:w-[69vw]"
+                                    
+                                    {...field}
+                                  />
+                                </FormControl>
+      
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+      
+                        <div className="mb-3 mt-6">
+                          <FormField
+                            control={form.control}
+                            name="category"
+                            render={({ field }) => (
+                              <FormItem>
+                                  <div className="flex items-center md:flex-row flex-col justify-start gap-2">
+                                  <FormLabel className="text-gray-500 text-xl  md:text-2xl w-full md:w-[14vw]">
+                                  Select Category
+                                </FormLabel>
+                                <FormControl>
+                                  <Select
+                                    onValueChange={field.onChange}
+                                    defaultValue={field.value}
+                                  >
+                                    <SelectTrigger className="w-[90vw] md:w-[54vw] bg-gray-200 text-black">
+                                      <SelectValue placeholder="All Category..." />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {categoryData ? (
+                                        categoryData.category.map((category) => (
+                                          <SelectItem
+                                            key={category._id}
+                                            value={category._id}
+                                          >
+                                            {category.name}
+                                          </SelectItem>
+                                        ))
+                                      ) : (
+                                        <></>
+                                      )}
+                                    </SelectContent>
+                                  </Select>
+                                </FormControl>
+                                  </div>
+                                
+      
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
                         </div>
                       </div>
-                    )}
-                  </Dropzone>
-                </div>
-              </div>
-
-              <div className="mb-3 hidden">
-                <FormField
-                  control={form.control}
-                  name="slug"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-white text-lg">Slug</FormLabel>
-                      <FormControl>
-                        <Input
-                          className="bg-gray-300"
-                          placeholder="Enter your slug"
-                          {...field}
-                        />
-                      </FormControl>
-
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <div className="mb-3 mt-4">
-                <FormField
-                  control={form.control}
-                  name="blogcontent"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-gray-500 text-2xl">
-                        Blog Content...
-                      </FormLabel>
-                      <div className="mt-6">
-                      <FormControl>
-                        <Editor
-                        
-                        
-                          props={{
-
-                            initialData: field.value,
-                            onChange: handleEditorData,
-                          }}
-                        />
-                      </FormControl>
+                      <div className="mb-3 ">
+                      <FormLabel className="text-gray-500 text-xl w-[14vw]">
+                                  Featured Image
+                                </FormLabel>
+                        <Dropzone
+                          onDrop={(acceptedFiles) =>
+                            handleFileSlection(acceptedFiles)
+                          }
+                        >
+                          {({ getRootProps, getInputProps }) => (
+                            <div {...getRootProps()}>
+                              <input {...getInputProps()} />
+      
+                              <div className="flex justify-center items-center w-44 h-44 border-2 border-gray-500 border-dashed rounded cursor-pointer">
+                                {filePreview === undefined && <div className="flex items-center gap-2">
+                                  <p className="text-black">Upload</p>
+                                  <FaCloudUploadAlt />
+                                  </div>}
+                                <img src={filePreview} alt="" srcset="" />
+                              </div>
+                            </div>
+                          )}
+                        </Dropzone>
                       </div>
-
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    </div>
+      
+                    <div className="mb-3 hidden">
+                      <FormField
+                        control={form.control}
+                        name="slug"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-white text-lg">Slug</FormLabel>
+                            <FormControl>
+                              <Input
+                                className="bg-gray-300"
+                                placeholder="Enter your slug"
+                                {...field}
+                              />
+                            </FormControl>
+      
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+      
+                    <div className="mb-3 mt-4">
+                      <FormField
+                        control={form.control}
+                        name="blogContent"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-gray-500 text-2xl">
+                              Blog Content...
+                            </FormLabel>
+                            <div className="mt-6">
+                            <FormControl>
+                              <Editor
+                                props={{
+                                  initialData: "",
+                                  onChange: handleEditorData,
+                                }}
+                              />
+                            </FormControl>
+                            </div>
+      
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+      
+                    <div className="mt-5 text-left md:text-right">
+                      <Button type="submit" className="w-[20vw] bg-gray-700">
+                      {uploading ? "Please Wait...." : "Add Blog"}
+                      </Button>
+                    </div>
+                  </form>
+                </Form>
               </div>
-
-              <div className="mt-5 text-right">
-                <Button type="submit" className="w-[20vw] bg-gray-700">
-                {uploading ? "Please Wait...." : "Update Blog"}
-                </Button>
-              </div>
-            </form>
-          </Form>
-        </div>
-      </div>
+            </div>
       <Footer/>
     </div>
   );

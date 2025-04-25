@@ -53,6 +53,7 @@ function EditBlog() {
 
   const [filePreview, setFilePreview] = useState();
   const [file, setFile] = useState();
+    const [sidebarOpen, setSidebarOpen] = useState(false);
   const { data: categoryData } = useFetch(
     `${getEnv("VITE_API_BASE_URL")}/category/all-category`,
     {
@@ -142,7 +143,7 @@ function EditBlog() {
       };
       const formData = new FormData();
       if (file) {
-        formData.append("file", file); // Add file only if it exists
+        formData.append("file", file); 
       }
       formData.append("data", JSON.stringify(newValues));
 
@@ -193,15 +194,28 @@ function EditBlog() {
     }
   }
 
-  if (blogLoading) return <Loading />;
+  
 
   return (
     <div className="w-full flex">
-      <div className="w-[20%] h-screen fixed">
+      <div
+        className={`fixed z-50 bg-gray-800 h-screen transition-transform ${
+          sidebarOpen ? "translate-x-0 w-[65%]" : "-translate-x-full"
+        } lg:translate-x-0 lg:w-[20%]`}
+      >
         <Sidebar />
       </div>
 
-      <div className="w-[80%] absolute left-[20%] bg-gray-900 px-6 py-6">
+      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-gray-900 px-6 py-6 min-h-screen">
+         {/* Toggle Button for Mobile */}
+         <div className="lg:hidden flex justify-end mb-4">
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="text-white text-3xl focus:outline-none"
+          >
+            {sidebarOpen ? "✕" : "☰"}
+          </button>
+        </div>
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
           <div className="flex items-center justify-between w-full">
           <div>
@@ -221,7 +235,7 @@ function EditBlog() {
           <Card className="w-full bg-gray-600 p-5 mb-10">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)}>
-                <div className="flex items-center justify-between w-full">
+                <div className="flex md:flex-row flex-col md:items-center justify-between w-full">
                   <div className="flex flex-col items-start">
                     <div className="mb-3">
                       <FormField
@@ -234,7 +248,7 @@ function EditBlog() {
                             </FormLabel>
                             <FormControl>
                               <Input
-                                className="bg-gray-200 w-[60vw]"
+                                className="bg-gray-200 w-[77vw] md:w-[60vw]"
                                 placeholder="Enter blog title.."
                                 {...field}
                               />
@@ -259,7 +273,7 @@ function EditBlog() {
                                 onValueChange={field.onChange}
                                 value={field.value}
                               >
-                                <SelectTrigger className="w-[60vw] bg-gray-300 text-black">
+                                <SelectTrigger className="w-[77vw] md:w-[60vw] bg-gray-300 text-black">
                                   <SelectValue placeholder="Select Category" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -298,7 +312,7 @@ function EditBlog() {
                         <div {...getRootProps()}>
                           <input {...getInputProps()} />
 
-                          <div className="flex justify-center items-center w-44 h-44 border-2 border-dashed rounded cursor-pointer">
+                          <div className="flex justify-center items-center w-[60vw] md:w-44 h-44 border-2 border-dashed rounded cursor-pointer">
                             {filePreview && (
                               <img src={filePreview} alt="Preview" />
                             )}
@@ -381,9 +395,9 @@ function EditBlog() {
                 </div>
                 <div className="mt-5 text-right">
                 {blogData?.blog.status === "pending" ? <div className="">
-            <Button type="submit" variant="secondary" className="w-[10vw]">Publish</Button>
+            <Button type="submit" variant="secondary" className="w-[30vw] md:w-[20vw] lg:w-[10vw]">Publish</Button>
           </div> : <div className="mt-3 text-right">
-          <Button type="submit" className="w-[10vw] bg-blue-500 text-white">
+          <Button type="submit" className="w-[30vw] md:w-[20vw] lg:w-[10vw] bg-blue-500 text-white">
                     Update Blog
                   </Button>
             </div>}

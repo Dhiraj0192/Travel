@@ -9,7 +9,7 @@ const CTASection = () => {
       title: "Guest Blogging",
       description: "Share your travel experiences with our community",
       buttonText: "Submit Post",
-      url: "/guest-blogging",
+      url: "/login",
       color: "text-white",
       
       buttonColor: "bg-blue-500"
@@ -19,16 +19,16 @@ const CTASection = () => {
       title: "Travel Experiences",
       description: "Book unique adventures with local experts",
       buttonText: "Explore Tours",
-      url: "/tours",
+      url: "/login",
     //   color: "bg-blue-100",
       buttonColor: "bg-blue-600"
     },
     {
       icon: <FaPaperPlane className="text-2xl" />,
-      title: "Newsletter",
+      title: "Contact Us",
       description: "Get travel tips and offers straight to your inbox",
-      buttonText: "Subscribe Now",
-      url: "/newsletter",
+      buttonText: "Contact Now",
+      url: "/contact",
     //   color: "bg-orange-100",
       buttonColor: "bg-blue-800"
     }
@@ -45,9 +45,9 @@ const CTASection = () => {
         
       
             <div className="mb-10 flex flex-col items-center justify-start gap-4">
-            <h1 className="text-4xl font-bold">Still Have Questions?
+            <h1 className="text-3xl md:text-4xl font-bold">Still Have Questions?
             </h1>
-            <p className="text-gray-600 text-lg">
+            <p className="text-gray-600 text-lg text-center">
             Our support team is here to help you get started and succeed with your blog.
             </p>
                 

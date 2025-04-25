@@ -30,47 +30,51 @@ export const Register = async (req,res,next)=>{
         next(handleError(500,error.message))
     }
 }
-export const Login = async (req,res)=>{
-    try {
-        const {email,password} = req.body
-        const user = await User.findOne({email})
-        if(!user){
-            next(handleError(404,'Invalid login credentials.'))
-        }
-
-        const hashedPassword = user.password
-
-        const comparedPassword = bcryptjs.compare(password, hashedPassword)
-        if (!comparedPassword) {
-            next(handleError(404,'Invalid login credentials.'))
-        }
-
-        const token = jwt.sign({
-            _id: user._id,
-            name:user.name,
-            email: user.email,
-            avatar: user.avatar
-        },process.env.JWT_SECRET)
-
-        res.cookie('access_token',token,{
-            httpOnly: true,
-            secure : process.env.NODE_ENV === "production",
-            sameSite: process.env.NODE_ENV === 'production' ? 'none': 'strict',
-            path:'/'
-        })
-
-        const newuser = user.toObject({ getters: true})
-        delete newuser.password
-
-        res.status(200).json({
-            success: true,
-            user:newuser,
-            message: "Welcome to Traveller's Mirror !!."
-        })
-    } catch (error) {
-        next(handleError(500,error.message))
+export const Login = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      return next(handleError(404, "Invalid login credentials."));
     }
-}
+
+    const hashedPassword = user.password;
+
+    // Use await to handle bcryptjs.compare properly
+    const comparedPassword = await bcryptjs.compare(password, hashedPassword);
+    if (!comparedPassword) {
+      return next(handleError(404, "Invalid login credentials."));
+    }
+
+    const token = jwt.sign(
+      {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        avatar: user.avatar,
+      },
+      process.env.JWT_SECRET
+    );
+
+    res.cookie("access_token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+      path: "/",
+    });
+
+    const newuser = user.toObject({ getters: true });
+    delete newuser.password;
+
+    res.status(200).json({
+      success: true,
+      user: newuser,
+      message: "Welcome to Traveller's Mirror !!.",
+    });
+  } catch (error) {
+    next(handleError(500, error.message));
+  }
+};
 
 export const GoogleLogin = async (req,res)=>{
     try {

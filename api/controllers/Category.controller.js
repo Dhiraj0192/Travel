@@ -92,6 +92,7 @@ export const getAllCategory = async (req,res,next) =>{
 export const getBlogsByCategory = async (req, res, next) => {
     try {
         let { categoryId } = req.params;
+        
         const blogs = await Blog.find({ category: categoryId,status: 'published' })
             .populate("category", "name slug")
             .sort({ createdAt: -1 })
@@ -101,6 +102,34 @@ export const getBlogsByCategory = async (req, res, next) => {
         res.status(200).json({
             success: true,
             blogs,
+        });
+    } catch (error) {
+        next(handleError(500, error.message));
+    }
+};
+
+export const getBlogsByCategory2 = async (req, res, next) => {
+    try {
+        let { categoryId } = req.params;
+        const { page = 1, limit = 10 } = req.query;
+        const skip = (page - 1) * limit;
+        
+        const blogs = await Blog.find({ category: categoryId,status: 'published' })
+            .populate("category", "name slug")
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(parseInt(limit))
+            .lean()
+            .exec();
+
+         const total = await Blog.countDocuments({category: categoryId, status: "published" });
+
+        res.status(200).json({
+            success: true,
+            blogs,
+            total,
+            totalPages: Math.ceil(total / limit),
+            currentPage: parseInt(page),
         });
     } catch (error) {
         next(handleError(500, error.message));

@@ -18,36 +18,28 @@ function HomePage() {
   return (
     <div className="mt-0 flex flex-col items-center rounded-3xl justify-center ">
       
-      <div className=" w-full h-[85vh] overflow-hidden bg-gradient-to-b from-[#879cbf8b] to-[#1a1c208b] bg-opacity-5">
+      <div className=" w-full h-[45vh] lg:h-[78vh] overflow-hidden bg-gradient-to-b from-[#879cbf8b] to-[#1a1c208b] bg-opacity-5">
         <Image
           src="pexels-fmaderebner-238622.jpg"
-          className="opacity-100 w-full absolute top-0 -z-10 h-[95vh]"
+          className="opacity-100 w-full absolute top-0 -z-10 h-[52vh] lg:h-[95vh]"
         />
       </div>
       <div className="flex gap-4 z-20 absolute top-40 ml-10 text-center">
-        <div className="flex items-center justify-between">
-          <div className="w-[62vw] text-xl">
-            <Link to="/" className="font-bold text-white">
-              Home
-            </Link>
-            <span className="font-bold"> . </span>
-            <span className="text-blue-800 font-bold">Traveller's Mirror</span>
-          </div>
-        </div>
+        
       </div>
       {/* introduction */}
-      <div className="flex flex-col items-center justify-between z-20 absolute top-80 ml-10 ">
-        <div className=" w-[60vw]">
+      <div className="flex flex-col items-center justify-between z-20 absolute top-28 lg:top-80 lg:ml-10 ">
+        <div className="w-full px-6 lg:px-0 lg:w-[60vw]">
           <h1 className="text-white text-2xl md:text-5xl lg:text-5xl font-bold">
             Share Your Story With The World
           </h1>
-          <p className="mt-8 text-md md:text-xl font-semibold text-white">
+          <p className="mt-3 lg:mt-8 text-md md:text-xl font-semibold text-white">
             Create, publish and connect with readers on our modern blogging
             platform. Simple to use, powerful to grow your audience.
           </p>
         </div>
-        <Link to="/write-blog" className="hidden md:block relative">
-        <div className="mt-10 text-white">
+        <Link to="/write-blog" className=" md:block relative">
+        <div className="mt-3 lg:mt-10 text-white">
           
           <svg
             viewBox="0 0 200 200"
@@ -80,7 +72,7 @@ function HomePage() {
               </textPath>
             </text>
           </svg>
-          <button className="absolute top-24 ml-10 w-24 h-24 bg-blue-800 rounded-full flex items-center justify-center">
+          <button className="absolute top-16 lg:top-24 ml-10 w-24 h-24 bg-blue-800 rounded-full flex items-center justify-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -101,18 +93,19 @@ function HomePage() {
       <div className=" ">
       
 
-        <Destination />
+        {/* <Destination /> */}
 
         {/* <FeaturedPosts /> */}
 
         {/* <MainCategories /> */}
+        <PopularCategories/>
         <RecentBlogs/>
 
-        <PopularCategories/>
+        
 
         <UserSay />
 
-        <AddsSlot/>
+        
 
         <CTASection />
       </div>

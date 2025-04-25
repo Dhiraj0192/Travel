@@ -1,6 +1,6 @@
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import Image from "../components/Image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFetch } from "../hooks/userFetch";
 import { getEnv } from "../helpers/getEnv";
 import Footer from "../components/Footer";
@@ -11,6 +11,8 @@ import { decode } from "html-entities";
 import { convert } from "html-to-text";
 import AddsSlot from "../components/AddsSlot";
 import UserIcon from "../components/UserIcon";
+import { Button } from "../components/ui/button";
+import { set } from "zod";
 
 function BlogPage() {
   const user = useSelector((state) => state.user);
@@ -23,10 +25,21 @@ function BlogPage() {
   let [selectedCategoryBlogs, setSelectedCategoryBlogs] = useState();
   const [sort, setSort] = useState("-createdAt");
   const [limit, setLimit] = useState(100000);
+  const [page, setPage] = useState(1);
   const [query, setQuery] = useState();
   let [searchData , setSearchData] = useState();
+  let [bData , setBData] = useState();
+  let [categoryIdAll, setCategoryIdAll] = useState();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   const categoryId = "67f36b931b58ce135a81e9d5";
+  const navigate = useNavigate();
+
+  const handleRefresh = () => {
+    setCategoryIdAll("All Categories")
+  };
+
 
   let { data: categoryData } = useFetch(
     `${getEnv("VITE_API_BASE_URL")}/category/all-category`,
@@ -36,45 +49,78 @@ function BlogPage() {
     }
   );
 
-  let {
-    data: blogData,
-    loading,
-    error,
-  } = useFetch(`${getEnv("VITE_API_BASE_URL")}/blog/get-all`, {
-    method: "get",
-    credentials: "include",
-  });
+  useEffect(() => {
+    let isMounted = true; // Track if the component is still mounted
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `${getEnv("VITE_API_BASE_URL")}/blog/get-all2?page=${page}&limit=9`,
+          {
+            method: "get",
+            credentials: "include",
+          }
+        );
+        const data = await response.json();
+        if (isMounted && response.ok) {
+          setBData(data);
+          setTotalPages(data.totalPages || 1);
+        }
+      } catch (error) {
+        if (isMounted) {
+          console.error(error.message);
+        }
+      }
+    };
+
+    fetchData();
+
+    return () => {
+      isMounted = false; // Cleanup function to prevent state updates on unmounted components
+    };
+  }, [page]);
 
   const categories = categoryData?.category;
 
-  let { data } = useFetch(
-    `${getEnv(
-      "VITE_API_BASE_URL"
-    )}/blog/blog/category/${categoryId}?limit=${limit}&sort=${sort}`,
-    {
-      method: "get",
-      credentials: "include",
-    }
-  );
+  
 
-  const fetchBlogsByCategory = async (categoryId) => {
+  const fetchBlogsByCategory = async (categoryId, page = 1) => {
     try {
-      const response = await fetch(
-        `${getEnv("VITE_API_BASE_URL")}/category/blogs/${categoryId}`,
-        {
-          method: "GET",
-          credentials: "include",
+      
+      setCategoryIdAll(categoryId);
+      if (categoryId === "All Categories") {
+        const response = await fetch(
+          `${getEnv("VITE_API_BASE_URL")}/blog/get-all2?page=${page}&limit=9`,
+          {
+            method: "get",
+            credentials: "include",
+          }
+        );
+        const data = await response.json();
+        if (response.ok) {
+          setSelectedCategoryBlogs(data?.blog);
+          setTotalPages(data?.totalPages);
+        } else {
+          console.error(data.message);
         }
-      );
-      const data = await response.json();
-      if (response.ok) {
-        console.log(data.blogs);
-
-        setSelectedCategoryBlogs(data.blogs);
-        setSearchData(undefined);
-        
       } else {
-        console.error(data.message);
+        const response = await fetch(
+          `${getEnv("VITE_API_BASE_URL")}/category/blogs2/${categoryId}?page=${page}&limit=9`,
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
+        const data = await response.json();
+        if (response.ok) {
+          setSelectedCategoryBlogs(data.blogs);
+          
+          setTotalPages(data?.totalPages);
+          console.log(data);
+          
+          setSearchData(undefined);
+        } else {
+          console.error(data.message);
+        }
       }
     } catch (error) {
       console.error("Error fetching blogs by category:", error);
@@ -93,55 +139,86 @@ function BlogPage() {
     setQuery(e.target.value);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e, page = 1) => {
     e.preventDefault();
-    console.log(query);
-
     const response = await fetch(
-      `${getEnv("VITE_API_BASE_URL")}/blog/search/${query}`,
+      `${getEnv("VITE_API_BASE_URL")}/blog/search2/${query}?page=${page}&limit=9`,
       {
         method: "get",
         credentials: "include",
       }
     );
-
     const data = await response.json();
-    if (data?.blog.length > 0) {
-      setSearchData(data?.blog)
+    if (response.ok && data?.blog.length > 0) {
+      setSearchData(data.blog);
+      setTotalPages(data.totalPages || 1);
+    } else {
+      console.error(data.message);
     }
-    
   };
 
-  if (searchData != undefined) {
-    
-    blogData = [];
-    selectedCategoryBlogs = [];
-  }
+  const handlePageChange = (newPage) => {
+    if (newPage > 0 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
 
-  if (selectedCategoryBlogs != undefined) {
-    
-    blogData = [];
-    
-    
-  }
+  useEffect(() => {
+    if (searchData) {
+      handleSubmit({ preventDefault: () => {} }, currentPage);
+    } else if (categoryIdAll) {
+      fetchBlogsByCategory(categoryIdAll, currentPage);
+    } else {
+      setPage(currentPage);
+    }
+  }, [currentPage]);
+
+  useEffect(() => {
+    if (searchData) {
+      setBData(""); // Clear other data when searchData is present
+      setSelectedCategoryBlogs([]);
+    }
+  }, [searchData]);
+
+  useEffect(() => {
+    if (selectedCategoryBlogs) {
+      setBData(""); // Clear other data when selectedCategoryBlogs is present
+    }
+  }, [selectedCategoryBlogs]);
+
+  const renderPagination = () => {
+    const pages = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push(
+        <button
+          key={i}
+          onClick={() => handlePageChange(i)}
+          className={`px-4 py-1 rounded-md ${
+            currentPage === i
+              ? "bg-blue-600 text-white"
+              : "bg-gray-200 text-black hover:bg-gray-500 hover:text-white"
+          }`}
+        >
+          {i}
+        </button>
+      );
+    }
+    return pages;
+  };
+
   return (
     <div className=" flex flex-col ">
       <UserIcon/>
-      <div className="w-full h-[45vh] overflow-hidden bg-gradient-to-b from-[#879cbf8b] to-[#1a1c208b] bg-opacity-5">
+      <div className="w-full h-[58vh] lg:h-[45vh] overflow-hidden bg-gradient-to-b from-[#879cbf8b] to-[#1a1c208b] bg-opacity-5">
         <img
           src="/adventure.jpg"
-          className="w-full h-[56vh] absolute top-0 -z-10 bg-cover "
+          className="w-full h-[66vh] absolute top-0 -z-10 bg-cover "
         />
         {/* breadcrumb */}
-        <div className=" flex flex-col justify-center  mt-20 gap-4">
-          <div className="flex gap-4 lg:px-32 text-white ">
-            <Link to="/home" className="text-xl text-blue-200">
-              Blogs and Articles
-            </Link>
-            <span className="text-xl text-white">.</span>
-          </div>
+        <div className=" flex flex-col justify-center  md:mt-20 gap-4">
+          
           {/* introduction */}
-          <div className="lg:px-32 flex items-center gap-8">
+          <div className="lg:px-32 lg:flex-row flex-col flex items-center gap-8">
           <Link to="/write-blog" className="">
               <svg
                 viewBox="0 0 200 200"
@@ -164,7 +241,7 @@ function BlogPage() {
                 </text>
               </svg>
 
-              <button className="absolute top-64 left-40 w-24 h-24 bg-blue-800 rounded-full flex items-center justify-center">
+              <button className="absolute top-[13vh] md:left-[44vw] md:top-[20vh] lg:top-[36vh] lg:left-[11vw] left-40 w-24 h-24 bg-blue-800 rounded-full flex items-center justify-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -180,7 +257,7 @@ function BlogPage() {
               </button>
             </Link>
             <div className=" w-[60vw]">
-              <h1 className="text-white text-2xl md:text-5xl lg:text-5xl font-bold">
+              <h1 className="text-white text-2xl md:text-3xl lg:text-5xl font-bold">
                 Share your content, engage with readers, and grow audience.
               </h1>
               <p className="mt-8 text-md md:text-xl text-white">
@@ -193,10 +270,17 @@ function BlogPage() {
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-8 w-full">
-        <div className="lg:pl-32 lg:w-[20vw] h-max sticky top-10">
+      <div className="flex flex-col md:flex-row gap-8 w-full px-6 md:px-6 -mt-6 md:-mt-0">
+        <div className="lg:pl-32 lg:w-[20vw] md:h-max md:sticky md:top-10">
           <h1 className="mt-20 mb-12 text-xl font-medium">Categories </h1>
           <div className="flex flex-col gap-3 text-sm">
+          <button
+                  
+                  onClick={() => fetchBlogsByCategory("All Categories")}
+                  className="underline text-start"
+                >
+                  All Categories
+                </button>
             {categories && categories.length > 0 ? (
               categories.map((category) => (
                 <button
@@ -215,7 +299,7 @@ function BlogPage() {
 
         <div className="w-full flex flex-col">
           <div className="lg:pr-32 pt-5 pb-10 w-full">
-            <div className="hidden md:flex bg-gray-700 rounded-xl xl:rounded-full p-1 shadow-xl items-center justify-center gap-8 mt-10 w-full mb-5">
+            <div className="hidden md:flex bg-gray-400 rounded-xl xl:rounded-full p-1 shadow-xl items-center justify-center gap-8 mt-10 w-full mb-5">
               <div className="bg-gray-100 p-2 rounded-full flex items-center gap-2 w-full">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -228,14 +312,15 @@ function BlogPage() {
                   <circle cx="10.5" cy="10.5" r="7.5" />
                   <line x1="16.5" y1="16.5" x2="22" y2="22" />
                 </svg>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className="flex items-center">
                   <input
                     name="q"
                     onInput={getInput}
                     type="text"
                     placeholder="search a post..."
-                    className="bg-transparent w-[60vw] border-0 outline-none"
+                    className="bg-transparent w-[60vw] md:w-[50vw] lg:w-[60vw] border-0 outline-none"
                   />
+                  <Button onClick={handleSubmit} className="rounded-full px-8">Search</Button>
                 </form>
               </div>
             </div>
@@ -246,12 +331,15 @@ function BlogPage() {
 
                 {searchData ? searchData.map(blog =><div
                     key={blog._id}
-                    className=" rounded-xl w-[32%]  flex flex-col "
+                    className=" rounded-xl w-full md:w-[35vw] lg:w-[32%]  flex flex-col "
                   >
-                    <img
-                      src={blog.featuredimage}
-                      className="rounded-xl object-cover w-full h-[35vh]"
-                    />
+                    <Link to={`/blog/${blog.category.slug}/${blog.slug}`}>
+                          
+                          <img
+                            src={blog.featuredimage}
+                            className="rounded-xl object-cover w-full h-[35vh]"
+                          />
+                          </Link>
                     <div className="p-4 flex flex-col justify-center items-center gap-3">
                       <span className=" inline-block px-3 py-1 text-xs font-semibold text-white bg-gray-700 rounded-full">
                         {blog.category.name}
@@ -289,16 +377,19 @@ function BlogPage() {
                         </Link>
                       </div>
                     </div>
-                  </div>) :  blogData && Array.isArray(blogData?.blog)
-              ? blogData?.blog.map((blog, index) => (
+                  </div>) :  bData && Array.isArray(bData?.blog) 
+              ? bData?.blog.map((blog, index) => (
                   <div
                     key={blog._id}
-                    className=" rounded-xl w-[32%]  flex flex-col "
+                    className=" rounded-xl w-full md:w-[35vw] lg:w-[32%]  flex flex-col "
                   >
-                    <img
-                      src={blog.featuredimage}
-                      className="rounded-xl object-cover w-full h-[35vh]"
-                    />
+                    <Link to={`/blog/${blog.category.slug}/${blog.slug}`}>
+                          
+                          <img
+                            src={blog.featuredimage}
+                            className="rounded-xl object-cover w-full lg:h-[35vh] h-[20vh]"
+                          />
+                          </Link>
                     <div className="p-4 flex flex-col justify-center items-center gap-3">
                       <span className=" inline-block px-3 py-1 text-xs font-semibold text-white bg-gray-700 rounded-full">
                         {blog.category.name}
@@ -342,12 +433,15 @@ function BlogPage() {
                 selectedCategoryBlogs.map((blog, index) => (
                   <div
                     key={blog._id}
-                    className=" rounded-xl w-[32%] flex flex-col "
+                    className=" rounded-xl w-full md:w-[35vw] lg:w-[32%]  flex flex-col "
                   >
+                    <Link to={`/blog/${blog.category.slug}/${blog.slug}`}>
+                          
                     <img
                       src={blog.featuredimage}
                       className="rounded-xl object-cover w-full h-[35vh]"
                     />
+                    </Link>
                     <div className="p-4 flex flex-col justify-center items-center gap-3">
                       <span className=" inline-block px-3 py-1 text-xs font-semibold text-white bg-gray-700 rounded-full">
                         {blog.category.name}
@@ -388,12 +482,30 @@ function BlogPage() {
                   </div>
                 ))}
           </div>
+          <div className="w-full md:w-[70vw] h-[1px] bg-gray-500"></div>
+          <div className="w-full md:w-[70vw] pagination-controls flex justify-center items-center gap-4 mt-6 mb-6">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="px-4 py-2 rounded-md bg-gray-300 text-gray-900 hover:bg-gray-400 disabled:opacity-50"
+            >
+              Previous
+            </button>
+            {renderPagination()}
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="px-4 py-2 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300 disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
         </div>
         
       </div>
-      <div className="mt-10 mb-10">
-      <AddsSlot/>
-      </div>
+
+      
+      
 
       <Footer />
     </div>

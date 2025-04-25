@@ -55,6 +55,7 @@ function EditPackage() {
 
   const [filePreview, setFilePreview] = useState();
   const [file, setFile] = useState();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   
 
   const { data: packageData, loading: packageLoading } = useFetch(
@@ -204,12 +205,25 @@ function EditPackage() {
 
   return (
     <div className="w-full flex bg-transparent ">
-      <div className="w-[20%] h-screen fixed">
+      <div
+        className={`fixed z-50 bg-gray-800 h-screen transition-transform ${
+          sidebarOpen ? "translate-x-0 w-[65%]" : "-translate-x-full"
+        } lg:translate-x-0 lg:w-[20%]`}
+      >
         <Sidebar />
       </div>
 
-      <div className="w-[80%] absolute left-[20%] bg-gray-900 px-6 py-6 min-h-screen">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6  pt-[13vh] pl-[16vw]">
+      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-gray-900 px-6 py-6 min-h-screen">
+        {/* Toggle Button for Mobile */}
+        <div className="lg:hidden flex justify-end mb-4">
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="text-white text-3xl focus:outline-none"
+          >
+            {sidebarOpen ? "✕" : "☰"}
+          </button>
+        </div>
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6  lg:pt-[13vh] lg:pl-[16vw]">
          
           
           <div>
@@ -221,11 +235,11 @@ function EditPackage() {
           
         </div>
 
-        <div className="w-[50vw] ml-[16vw]">
+        <div className="lg:w-[50vw] lg:ml-[16vw]">
           <Card className="w-full bg-gray-600 p-5 mb-10">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)}>
-                <div className="flex items-center justify-between w-full">
+                <div className="flex md:flex-row flex-col md:items-center justify-between w-full">
                   <div className="flex flex-col items-start">
                     <div className="mb-3">
                       <FormField
@@ -238,7 +252,7 @@ function EditPackage() {
                             </FormLabel>
                             <FormControl>
                               <Input
-                                className="bg-gray-200 w-[34vw]"
+                                className="bg-gray-200 w-[77vw] md:w-[63vw] lg:w-[34vw]"
                                 placeholder="Enter package title.."
                                 {...field}
                               />
@@ -260,7 +274,7 @@ function EditPackage() {
                         </FormLabel>
                         <FormControl>
                           <Input
-                            className="bg-gray-300 w-[34vw]"
+                            className="bg-gray-300 w-[77vw] md:w-[63vw] lg:w-[34vw]"
                             placeholder="Enter your price"
                             {...field}
                           />
@@ -324,7 +338,7 @@ function EditPackage() {
                 
                 <div className="mt-5 text-right">
                  <div className="mt-3 text-right">
-          <Button type="submit" className="w-[10vw] bg-blue-500 text-white">
+          <Button type="submit" className="w-[35vw] md:w-[20vw] lg:w-[10vw] bg-blue-500 text-white">
                     Update Package
                   </Button>
             </div>

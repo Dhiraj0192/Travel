@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import Sidebar from "../../components/adminComponents/Sidebar";
 
@@ -16,23 +15,22 @@ import RecentUsersTable from "../../components/adminComponents/RecentUsers";
 import { useFetch } from "../../hooks/userFetch";
 import { getEnv } from "../../helpers/getEnv";
 import { Link, useNavigate } from "react-router-dom";
-import { Label } from "../../components/ui/label"
-import { Switch } from "../../components/ui/switch"
+import { Label } from "../../components/ui/label";
+import { Switch } from "../../components/ui/switch";
 import { deleteData } from "../../helpers/handleDelete";
 import { showToast } from "../../helpers/showToast";
 import { useAuth } from "@clerk/clerk-react";
 import RecentPendingBlog from "../../components/adminComponents/RecentPendingBlog";
 
 function Dashboard() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { isSignedIn } = useAuth();
   if (isSignedIn === false) {
-
-    navigate('/admin-login');
-    
+    navigate("/admin-login");
   }
   const [isChecked, setIsChecked] = useState(false);
   const [id, setId] = useState("");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const { data } = useFetch(
     `${getEnv("VITE_API_BASE_URL")}/dashboard/blog-count`,
     {
@@ -48,9 +46,13 @@ function Dashboard() {
       credentials: "include",
     }
   );
-  console.log(advertise);
 
-  
+  useEffect(() => {
+    if (advertise?.advertise.length > 0) {
+      setId(advertise ? advertise?.advertise[0]._id : "");
+    }
+  }, [advertise]);
+  // console.log(advertise?.advertise.length);
 
   const { data: commentCount } = useFetch(
     `${getEnv("VITE_API_BASE_URL")}/dashboard/comment-count`,
@@ -60,7 +62,7 @@ function Dashboard() {
     }
   );
 
-  const { data :userCount } = useFetch(
+  const { data: userCount } = useFetch(
     `${getEnv("VITE_API_BASE_URL")}/dashboard/user-count`,
     {
       method: "get",
@@ -70,65 +72,83 @@ function Dashboard() {
 
   const handleDelete = () => {
     if (advertise?.advertise.length > 0) {
-      setId(advertise ? advertise?.advertise[0]._id : "")
+      setId(advertise ? advertise?.advertise[0]._id : "");
       if (id != undefined) {
-        const respnse = deleteData(
+        const response = deleteData(
           `${getEnv("VITE_API_BASE_URL")}/advertise/delete/${id}`
         );
-        if (respnse) {
-          
+        if (response) {
           showToast("success", "Advertise deleted");
         } else {
           showToast("error", "Data not deleted.");
         }
-        
       }
+    } else {
+      return showToast("success", "Advertise Empty");
     }
-    else{
-      showToast("success", "Advertise Empty");
-      return
-    }
-    
-      
-    };
+  };
 
-    
+  useEffect(() => {
     if (isChecked === true) {
       handleDelete();
     }
-    
-    
-    
+  }, [isChecked === true]);
 
-
-  
   return (
     <div className="w-full flex">
-      <div className="w-[20%] h-screen fixed">
+      {/* Sidebar */}
+      <div
+        className={`fixed z-50 bg-gray-800 h-screen transition-transform ${
+          sidebarOpen ? "translate-x-0 w-[65%]" : "-translate-x-full"
+        } lg:translate-x-0 lg:w-[20%]`}
+      >
         <Sidebar />
       </div>
 
-      <div className="w-[80%] absolute left-[20%] bg-gray-900 px-6 py-6">
+      {/* Main Content */}
+      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-gray-900 px-6 py-6">
+        {/* Toggle Button for Mobile */}
+        <div className="lg:hidden flex justify-end mb-4">
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="text-white text-3xl focus:outline-none"
+          >
+            {sidebarOpen ? "✕" : "☰"}
+          </button>
+        </div>
         <div className="flex flex-col items-start gap-2">
           <div className="flex flex-col gap-4 w-full">
-            <div className="flex items-center justify-between">
+            <div className="flex lg:flex-row flex-col lg:items-center justify-between gap-6 lg:gap-0">
               <div className="flex flex-col items-start gap-2">
-              <h1 className="text-3xl font-bold text-white">
-              Welcome to Traveller's Mirror Dashboard
-            </h1>
-            <p className="text-gray-300 text-lg">
-              Here's an overview of your blog performance
-            </p>
-            
+                <h1 className="text-3xl font-bold text-white">
+                  Welcome to Traveller's Mirror Dashboard
+                </h1>
+                <p className="text-gray-300 text-lg">
+                  Here's an overview of your blog performance
+                </p>
               </div>
-              <Link to={`/admin-advertise/edit/${id}`} className="py-3 font-bold px-8 bg-blue-600 rounded-lg text-white -mr-20">Update Ads</Link>
+              {advertise?.advertise.length > 0 ? (
+                <Link
+                  to={`/admin-advertise/edit/${id}`}
+                  className="py-3 font-bold px-8 bg-blue-600 rounded-lg text-white -mr-20 w-[40vw] md:w-[25vw] lg:w-[11vw]"
+                >
+                  Update Ads
+                </Link>
+              ) : (
+                <></>
+              )}
+
               <div className="flex items-center space-x-2 ">
-      <Switch onCheckedChange={setIsChecked} 
-      checked={isChecked} id="airplane-mode" />
-      <Label htmlFor="airplane-mode" className="text-white">On/Off Advertise Mode</Label>
-    </div>
+                <Switch
+                  onCheckedChange={setIsChecked}
+                  checked={isChecked}
+                  id="airplane-mode"
+                />
+                <Label htmlFor="airplane-mode" className="text-white">
+                  On/Off Advertise Mode
+                </Label>
+              </div>
             </div>
-            
           </div>
           <div className="flex items-center justify-between mt-3 mb-10 w-full gap-8">
             {/* total posts */}
@@ -160,20 +180,15 @@ function Dashboard() {
                 </p>
               </div>
             </div>
-
-            
-            
           </div>
 
           <div className="">
-            <h1 className="text-3xl font-bold text-white">Approval Pending Blogs</h1>
+            <h1 className="text-3xl font-bold text-white">
+              Approval Pending Blogs
+            </h1>
           </div>
 
-          
-
-          <RecentPendingBlog/>
-
-          
+          <RecentPendingBlog />
 
           <BlogAdminDashboard />
 
@@ -191,11 +206,11 @@ function Dashboard() {
 
               <div className="flex flex-col  items-start">
                 <p className="text-gray-300 ">Total Users</p>
-                <p className="font-semibold text-white text-2xl">{userCount?.totaluser}</p>
+                <p className="font-semibold text-white text-2xl">
+                  {userCount?.totaluser}
+                </p>
               </div>
             </div>
-
-            
           </div>
 
           <RecentUsersTable />

@@ -42,6 +42,7 @@ import { toast } from "react-toastify";
 function AdminBlogShow() {
     const navigate = useNavigate()
   const { isSignedIn } = useAuth();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   if (isSignedIn === false) {
 
     navigate('/admin-login');
@@ -133,26 +134,6 @@ function AdminBlogShow() {
               return showToast("error", data.message);
             }
 
-            const message = "Hey, your blog is approved from Traveller's Mirror";
-
-            const sendNoti = await fetch(
-              `${getEnv("VITE_API_BASE_URL")}/blog/sendNoti/${message}`,
-              {
-                method: "post",
-                credentials: "include",
-                
-              }
-            );
-
-            const notdata = await sendNoti.json();
-            if (!sendNoti.ok) {
-              return showToast("error", data.message);
-            }
-            console.log(notdata);
-            
-      
-            
-      
             
             
             navigate("/admin-posts");
@@ -188,13 +169,25 @@ function AdminBlogShow() {
 
   return (
     <div className="w-full flex">
-      <div className="w-[20%] h-screen fixed">
+      <div
+        className={`fixed z-50 bg-gray-800 h-screen transition-transform ${
+          sidebarOpen ? "translate-x-0 w-[65%]" : "-translate-x-full"
+        } lg:translate-x-0 lg:w-[20%]`}
+      >
         <Sidebar />
       </div>
 
-      <div className="w-[80%] absolute left-[20%]  px-6 py-6 min-h-screen">
-
-      <div className="flex justify-center items-center gap-8">
+      <div className="w-full lg:w-[80%] absolute lg:left-[20%]  px-6 py-6 min-h-screen">
+        {/* Toggle Button for Mobile */}
+        <div className="lg:hidden flex justify-end mb-4">
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="text-black text-3xl focus:outline-none"
+          >
+            {sidebarOpen ? "✕" : "☰"}
+          </button>
+        </div>
+      <div className="flex lg:flex-row flex-col lg:justify-center lg:items-center gap-8">
           <div className=" lg:w-3/5 flex flex-col gap-8">
             <h1 className="text-xl md:text-3xl xl:text-4xl 2xl:text-5xl font-semibold">
               {singleblog?.blog.title || "Untitled Blog"}
@@ -225,7 +218,7 @@ function AdminBlogShow() {
                 
               </div>}
           </div>
-          <div className="hidden lg:block w-2/5">
+          <div className=" lg:block lg:w-2/5">
             <img
               src={singleblog?.blog.featuredimage || "/placeholder-image.jpg"}
               alt="Featured"

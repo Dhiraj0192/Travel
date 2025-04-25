@@ -1,5 +1,5 @@
 import { SignUp } from "@clerk/clerk-react";
-import React from "react";
+import React, { useState } from "react";
 import Footer from "../components/Footer";
 import { SignIn } from "@clerk/clerk-react";
 import {
@@ -28,6 +28,7 @@ import { toast } from "react-toastify";
 function RegisterPage() {
   const dispath = useDispatch()
   const navigate = useNavigate();
+  const [uploading, setUploading] = useState(false);
 
   const formSchema = z.object({
     name: z.string().min(3, "Name must be atleast 3 character long."),
@@ -51,6 +52,7 @@ function RegisterPage() {
   });
 
   async function onSubmit(values) {
+    setUploading(true)
     try {
       const response = await fetch(
         `${getEnv("VITE_API_BASE_URL")}/auth/register`,
@@ -63,8 +65,10 @@ function RegisterPage() {
 
       const data = await response.json();
       if (!response.ok) {
+        setUploading(false)
         return showToast("error", data.message);
       }
+      setUploading(false)
 
       navigate("/login");
       toast(data.message, {
@@ -80,16 +84,17 @@ function RegisterPage() {
               });
       
     } catch (error) {
+      setUploading(false)
       showToast("error", error.message);
     }
   }
   return (
     <div className="w-full h-screen">
       <div className="w-full lg:px-32">
-        <div className="flex items-center justify-between gap-0">
-          <div className="mt-0 w-[63%] h-[84vh] flex flex-col justify-end pr-10 pt-10 pb-40 pl-10 rounded-3xl ">
-            <p className="text-7xl font-bold">Share Your Story</p>
-            <span className="text-6xl font-bold text-blue-800 mt-5">
+        <div className="flex md:flex-row flex-col items-center justify-between gap-0">
+          <div className="w-full md:w-[63%] md:h-[84vh] flex justify-center flex-col lg:justify-end pr-10  lg:pb-40 pl-10 rounded-3xl pt-10 md:pt-0">
+            <p className="text-3xl md:text-5xl lg:text-7xl font-bold">Share Your Story</p>
+            <span className="text-4xl md:text-4xl lg:text-6xl font-bold text-blue-800 mt-2 md:mt-5">
               {" "}
               With The World
             </span>
@@ -98,11 +103,11 @@ function RegisterPage() {
               platform. Simple to use, powerful to grow your audience.
             </p>
 
-            <div className="w-[81vw] h-2 bg-blue-800 rounded-3xl absolute top-44 right-28"></div>
-            <div className="w-[70vw] h-2 bg-blue-800 rounded-3xl absolute top-40 right-28"></div>
-            <div className="w-[61vw] h-2 bg-blue-800 rounded-3xl absolute top-36 right-28"></div>
+            <div className="hidden md:block w-[81vw] h-2 bg-blue-800 rounded-3xl absolute top-56 right-28"></div>
+            <div className="hidden md:block w-[70vw] h-2 bg-blue-800 rounded-3xl absolute top-52 right-28"></div>
+            
           </div>
-          <div className="pt-10 pb-10 mt-20">
+          <div className="pt-12 md:pt-10 pb-10 md:mt-20">
             <Card className="w-[400px] p-5">
               <h1 className="text-2xl font-bold text-center mb-5">
                 Create Your Account
@@ -186,7 +191,8 @@ function RegisterPage() {
                   </div>
                   <div className="mt-5">
                     <Button type="submit" className="w-full bg-blue-600">
-                      Sign Up
+                      
+                      {uploading ? "Please Wait...." : "Sign Up"}
                     </Button>
                     <div className="mt-5 text-sm flex justify-center items-center gap-2">
                       <p>Already have an account?</p>

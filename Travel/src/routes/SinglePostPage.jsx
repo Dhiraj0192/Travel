@@ -1,6 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import Navbar from "./../components/Navbar";
-import React from "react";
+import React, { useEffect } from "react";
 import Comment from "../components/Comment";
 import Footer from "../components/Footer";
 import { useFetch } from "../hooks/userFetch";
@@ -13,9 +13,26 @@ import LikeCount from "../components/LikeCount";
 import { Navigate } from 'react-router-dom'
 import { useSelector } from "react-redux";
 import UserIcon from "../components/UserIcon";
+import { useLocation } from 'react-router-dom';
+import AddsSlot from "../components/AddsSlot";
+import { FaBackspace } from "react-icons/fa";
 
 function SinglePostPage() {
   const user = useSelector((state) => state.user);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    const hash = location.hash;
+    if (hash) {
+      // Remove the `#` and get the element
+      const element = document.getElementById(hash.replace('#', ''));
+      if (element) {
+        // Smooth scroll to the element
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, [location]); 
 
   
   
@@ -48,14 +65,18 @@ function SinglePostPage() {
     return <div>Blog not found.</div>;
   }
 
+  
+
   return (
-    <div className="px-4 md:px-8 lg:px-16 xl:px-0 ">
+    <div className="md:px-0 lg:px-16 xl:px-0 ">
       <Navbar />
 
-      <div className="lg:px-32 flex flex-col gap-8 mt-10">
-        <UserIcon/>
-        <div className="flex justify-center items-center gap-8">
+      <div className="lg:px-32 px-3 md:px-3 flex flex-col gap-8 mt-10">
+        
+        <div className="flex md:flex-row flex-col justify-center items-center gap-8">
           <div className=" lg:w-3/5 flex flex-col gap-8">
+
+            <Link to={-1}><FaBackspace className="w-8 h-8"/></Link>
             <h1 className="text-xl md:text-3xl xl:text-4xl 2xl:text-5xl font-semibold">
               {singleblog.blog.title || "Untitled Blog"}
             </h1>
@@ -77,11 +98,11 @@ function SinglePostPage() {
               <h2 className="font-semibold text-gray-700 text-lg">Status : </h2>
               <div className="bg-red-400 px-6 rounded-3xl ">{singleblog?.blog.status}</div>
             </div> : <div className="flex items-center justify-start gap-6">
-                <CommentCount props={{blogid: singleblog.blog._id}} />
+                
                 <LikeCount props={{blogid: singleblog.blog._id}} />
               </div>}
           </div>
-          <div className="hidden lg:block w-2/5">
+          <div className="md:w-2/5 w-full">
             <img
               src={singleblog.blog.featuredimage || "/placeholder-image.jpg"}
               alt="Featured"
@@ -100,7 +121,11 @@ function SinglePostPage() {
               }}
             ></div>
 
-            {singleblog?.blog.status === 'pending' ? <></> : <div className="border-gray-600 border-t mt-5 pt-5">
+            <div className="">
+                  <AddsSlot/>
+                  </div>
+
+            {singleblog?.blog.status === 'pending' ? <></> : <div id="comment" className="border-gray-600 border-t mt-5 pt-5">
               <Comment props={{blogid:singleblog.blog._id}} />
             </div>}
 
@@ -134,7 +159,7 @@ function SinglePostPage() {
         </div>
       </div>
 
-      <div className="-mb-5">
+      <div className="-mb-5 ">
         <Footer />
       </div>
     </div>

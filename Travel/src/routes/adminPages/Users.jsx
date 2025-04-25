@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Sidebar from "../../components/adminComponents/Sidebar";
 
 import { FaUserSecret } from "react-icons/fa";
@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 function Users() {
   const navigate = useNavigate()
   const { isSignedIn } = useAuth();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   if (isSignedIn === false) {
 
     navigate('/admin-login');
@@ -93,11 +94,24 @@ function Users() {
 
   return (
     <div className="w-full flex">
-      <div className="w-[20%] h-screen fixed">
+      <div
+        className={`fixed z-50 bg-gray-800 h-screen transition-transform ${
+          sidebarOpen ? "translate-x-0 w-[65%]" : "-translate-x-full"
+        } lg:translate-x-0 lg:w-[20%]`}
+      >
         <Sidebar />
       </div>
 
-      <div className="w-[80%] absolute left-[20%] bg-gray-900 px-6 py-6 h-screen">
+      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-gray-900 px-6 py-6 h-screen">
+        {/* Toggle Button for Mobile */}
+        <div className="lg:hidden flex justify-end mb-4">
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="text-white text-3xl focus:outline-none"
+          >
+            {sidebarOpen ? "✕" : "☰"}
+          </button>
+        </div>
         <div className="flex flex-col items-start gap-2">
           <div className="flex flex-col gap-4">
             <h1 className="text-3xl font-bold text-white">
@@ -136,7 +150,7 @@ function Users() {
                         <th className="px-6 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">
                           USER
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">
+                        <th className="px-16 lg:px-8 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">
                           EMAIL
                         </th>
                         <th className="px-6 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">
@@ -170,7 +184,7 @@ function Users() {
                                 </div>
                               </div>
                               <td
-                                className="px-6 py-4 whitespace-nowrap text-green-500"
+                                className="px-16 lg:px-8 py-4 whitespace-nowrap text-green-500"
                                 
                               >
                                 {user.email}

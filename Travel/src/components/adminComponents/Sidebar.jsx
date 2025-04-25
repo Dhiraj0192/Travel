@@ -95,16 +95,27 @@ function Sidebar() {
                     
 
                 </div>
+                <div className="ml-6 flex items-center justify-start gap-3">
+                    <FaUser className='w-5 h-5 text-white'/>
+                    <Link to="/admin-messages" ><p className="text-gray-300 text-md ">Messages</p> </Link>
+                    
+
+                </div>
             </div>
         </div>
 
 
-        <div className="ml-6 mt-16 flex flex-col gap-4">
+        <div className="ml-6 mt-10 flex flex-col gap-4">
             <p className="text-gray-400 text-md font-bold">Advertise Management</p>
             <div className="flex flex-col gap-4 items-start justify-start">
                 <div className="ml-6 flex items-center justify-start gap-3">
                     <FaUser className='w-5 h-5 text-white'/>
                     <Link to="/admin-add-advertise" ><p className="text-gray-300 text-md ">Add Advertise</p> </Link>
+
+                </div>
+                <div className="ml-6 flex items-center justify-start gap-3">
+                    <FaUser className='w-5 h-5 text-white'/>
+                    <Link to="/admin-add-hero" ><p className="text-gray-300 text-md ">Settings</p> </Link>
 
                 </div>
 

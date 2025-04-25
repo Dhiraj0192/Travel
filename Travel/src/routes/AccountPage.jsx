@@ -152,41 +152,44 @@ function AccountPage() {
       <div className="absolute top-20 right-0 -z-10"></div>
       <div className="absolute bottom-10 left-20 -z-10"></div>
       {/* breadcrumb */}
-      <div className=" w-full h-[24vh] overflow-hidden bg-gradient-to-b from-[#879cbf8b] to-[#1a1c208b] bg-opacity-5">
+      <div className=" w-full h-[28vh] lg:h-[20vh] overflow-hidden bg-gradient-to-b from-[#879cbf8b] to-[#1a1c208b] bg-opacity-5">
         <Image
           src="pexels-fmaderebner-238622.jpg"
-          className="opacity-100 w-full absolute top-0 -z-10 h-[35vh]"
+          className="opacity-100 w-full absolute top-0 -z-10 h-[35vh] lg:h-[40vh] overflow-hidden"
         />
       </div>
-      <div className="flex gap-4 z-20 absolute top-40 ml-10 text-center">
+      <div className="flex gap-4 z-20 absolute top-28 md:top-40 ml-10 text-center">
         <div className="flex items-center justify-between">
-          <div className="w-[62vw] text-xl">
-            <Link to="/" className="font-bold">
-              Account
-            </Link>
-            <span className="font-bold"> . </span>
-            <span className="text-white font-bold">Your Profile</span>
+          <div className="w-[62vw] text-2xl mt-16">
+            
+           
+            <span className="text-white font-bold">Update Your Profile Here...</span>
           </div>
         </div>
       </div>
       {/* introduction */}
 
-      <div className="w-full lg:px-52 mt-16 mb-16">
-        <div className="w-full shadow-gray-500 shadow-sm rounded-xl bg-gray-600">
+      <div className="w-full md:px-16 lg:px-32 mt-16 mb-16">
+      <div className="flex items-center gap-6 md:flex-row flex-col">
+          <img
+                src="https://images.pexels.com/photos/7190948/pexels-photo-7190948.jpeg?auto=compress&cs=tinysrgb&w=600"
+                className="md:hidden lg:block md:w-[80vw] md:h-[70vh] w-full px-4 md:px-0 h-[40vh] rounded-t-xl"
+              />
+              <div className="w-full  ">
+          
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
-              <Image
-                src="featured1.jpeg"
-                className="w-full h-52 rounded-t-xl"
-              />
-              <div className="w-32 h-32 rounded-full border-black border-x-2 border-y-2 ml-10 -mt-14 ">
+              
+              <div className="w-full  -mt-14 ">
+                
+                <div className="flex md:flex-row flex-col items-center gap-4">
                 <Dropzone
                   onDrop={(acceptedFiles) => handleFileSlection(acceptedFiles)}
                 >
                   {({ getRootProps, getInputProps }) => (
-                    <div {...getRootProps()}>
+                    <div {...getRootProps()} >
                       <input {...getInputProps()} />
-                      <Avatar className="w-32 h-32 relative group">
+                      <Avatar className="mt-16 w-36 h-36 relative group">
                         <AvatarImage
                           className=""
                           src={filePreview ? filePreview : userData?.user.avatar? userData.user.avatar : "featured1.jpeg"}
@@ -198,15 +201,14 @@ function AccountPage() {
                     </div>
                   )}
                 </Dropzone>
-              </div>
-              <div className="flex items-center justify-center gap-4 ">
-              <div className="mb-3 w-[45%] mt-5">
+                <div className="flex flex-col  gap-4 ">
+              <div className="w-[100vw] md:w-[60vw] lg:w-[29vw] md:mt-20 px-6 lg:px-0">
                 <FormField
                   control={form.control}
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-white text-lg">Full Name</FormLabel>
+                      <FormLabel className="text-black text-lg">Full Name</FormLabel>
                       <FormControl>
                         <Input
                         className="bg-gray-300"
@@ -220,13 +222,13 @@ function AccountPage() {
                   )}
                 />
               </div>
-              <div className="mb-3 w-[45%] mt-5">
+              <div className="w-[100vw] md:w-[60vw] lg:w-[29vw] mt-3 px-6 md:px-0">
                 <FormField
                   control={form.control}
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-white text-lg">Email Address</FormLabel>
+                      <FormLabel className="text-black text-lg">Email Address</FormLabel>
                       <FormControl>
                         <Input
                         className="bg-gray-300"
@@ -241,17 +243,20 @@ function AccountPage() {
                 />
               </div>
               </div>
-              <div className="mb-3 px-11">
+                </div>
+              </div>
+              
+              <div className="mb-3 mt-5 px-6 md:mt-0 md:px-0">
                 <FormField
                   control={form.control}
                   name="bio"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-white text-lg">Bio</FormLabel>
+                      <FormLabel className="text-black text-lg">Your Bio</FormLabel>
                       <FormControl>
                         <Textarea
                         
-                        className="bg-gray-300"
+                        className="bg-gray-300 w-[90vw] h-[20vh] lg:w-[40vw] md:w-[80vw] lg:h-[30vh]"
                           type="password"
                           placeholder="Enter your bio"
                           {...field}
@@ -263,7 +268,7 @@ function AccountPage() {
                   )}
                 />
               </div>
-              <div className="mb-3 px-11">
+              <div className="mb-3 px-11 hidden">
                 <FormField
                   control={form.control}
                   name="password"
@@ -284,8 +289,8 @@ function AccountPage() {
                   )}
                 />
               </div>
-              <div className="mt-10">
-                <Button type="submit" className="w-full bg-blue-600">
+              <div className="mt-10 px-6 md:px-0">
+                <Button type="submit" className="md:w-[80vw] lg:w-[40vw] bg-gray-800 h-10">
                   Save Changes
                 </Button>
                 
@@ -293,6 +298,8 @@ function AccountPage() {
             </form>
           </Form>
         </div>
+          </div>
+        
       </div>
 
       <Footer />

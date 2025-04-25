@@ -28,7 +28,7 @@ function FeaturedPosts({ lineBar = true , selectedCategoryBlogs, searchData }) {
     
   return (
     <div className=" mb-28 rounded-t-3xl">
-      {lineBar ? <div className="w-[50vw] mt-16 h-2 mb-20 "></div> : ""}
+      {lineBar ? <div className=" w-full md:w-[50vw] mt-16 h-2 mb-20 "></div> : ""}
 
       {lineBar ? (
         <h1 className="text-4xl font-bold text-center mb-16">
@@ -37,16 +37,17 @@ function FeaturedPosts({ lineBar = true , selectedCategoryBlogs, searchData }) {
       ) : (
         ""
       )}
-      <div className="lg:px-32 -mt-8 flex flex-col lg:flex-row gap-8 backdrop-blur-sm pt-10 ">
-        <div className="w-full flex flex-wrap gap-4 flex-1">
+      <div className="lg:px-32 px-3 -mt-8 flex flex-col lg:flex-row gap-8 backdrop-blur-sm pt-10 ">
+        <div className="w-full flex md:flex-row flex-col md:flex-wrap gap-4 flex-1">
 
-            {searchData ? searchData.map((blog, index) =><div key={blog._id} className="w-[40vw]">
-                  <div className="flex  justify-between gap-4 bg-white/30 backdrop-blur-sm">
-                    <img
+            {searchData ? searchData.map((blog, index) =><div key={blog._id} className="w-full md:w-[40vw]">
+                  <div className="flex  justify-between gap-4 bg-white/30 ">
+                  <Link className="rounded-xl object-cover w-1/3
+                          shadow-2xl aspect-video" to={`/blog/${blog.category.slug}/${blog.slug}`}> <img
                       src={blog.featuredimage}
-                      className="rounded-xl object-cover w-1/3
-                          shadow-2xl aspect-video"
-                    />
+                      className="rounded-xl"
+                    /></Link>
+                    <Link to={`/blog/${blog.category.slug}/${blog.slug}`}></Link>
                     <div className="w-2/3 flex flex-col gap-3">
                       <div className="flex items-center gap-4 text-sm lg:text-base ">
                         <h1 className="font-semibold">{index +1}.</h1>
@@ -56,7 +57,7 @@ function FeaturedPosts({ lineBar = true , selectedCategoryBlogs, searchData }) {
                       </div>
                       <Link
                         to={`/blog/${blog.category.slug}/${blog.slug}`}
-                        className="text-base sm:text-lg md:text-xl lg:text-xl xl:text-xl font-medium cursor-pointer"
+                        className="text-base sm:text-lg md:text-md lg:text-xl xl:text-xl font-medium cursor-pointer"
                       >
                         {blog.title}
                       </Link>
@@ -65,13 +66,13 @@ function FeaturedPosts({ lineBar = true , selectedCategoryBlogs, searchData }) {
                   </div>
                 </div>) :
               data && Array.isArray(data?.blogs) ? data?.blogs.map((blog , index) => 
-                <div key={blog._id} className="w-[40vw]">
-                  <div className="flex  justify-between gap-4 bg-white/30 backdrop-blur-sm">
-                    <img
+                <div key={blog._id} className="w-full md:w-[40vw]">
+                  <div className="flex  justify-between gap-4 bg-white/30 ">
+                  <Link className="rounded-xl object-cover w-1/3
+                          shadow-2xl aspect-video" to={`/blog/${blog.category.slug}/${blog.slug}`}> <img
                       src={blog.featuredimage}
-                      className="rounded-xl object-cover w-1/3
-                          shadow-2xl aspect-video"
-                    />
+                      className="rounded-xl"
+                    /></Link>
                     <div className="w-2/3 flex flex-col gap-3">
                       <div className="flex items-center gap-4 text-sm lg:text-base ">
                         <h1 className="font-semibold">{index +1}.</h1>
@@ -81,7 +82,7 @@ function FeaturedPosts({ lineBar = true , selectedCategoryBlogs, searchData }) {
                       </div>
                       <Link
                         to={`/blog/${blog.category?.slug}/${blog.slug}`}
-                        className="text-base sm:text-lg md:text-xl lg:text-xl xl:text-xl font-medium cursor-pointer"
+                        className="text-base sm:text-lg md:text-sm lg:text-xl xl:text-xl font-medium cursor-pointer"
                       >
                         {blog.title}
                       </Link>
@@ -93,13 +94,13 @@ function FeaturedPosts({ lineBar = true , selectedCategoryBlogs, searchData }) {
                 :
 
                 selectedCategoryBlogs && selectedCategoryBlogs.map((blog , index) => 
-                <div key={blog._id} className="w-[40vw]">
+                <div key={blog._id} className="w-full md:w-[40vw]">
                 <div className="flex  justify-between gap-4 bg-white/30 ">
-                  <img
-                    src={blog.featuredimage}
-                    className="rounded-xl object-cover w-1/3
-                        shadow-2xl aspect-video"
-                  />
+                <Link className="rounded-xl object-cover w-1/3
+                          shadow-2xl aspect-video" to={`/blog/${blog.category.slug}/${blog.slug}`}> <img
+                      src={blog.featuredimage}
+                      className="rounded-xl"
+                    /></Link>
                   <div className="w-2/3 flex flex-col gap-3">
                     <div className="flex items-center gap-4 text-sm lg:text-base ">
                       <h1 className="font-semibold">{index +1}.</h1>
@@ -109,7 +110,7 @@ function FeaturedPosts({ lineBar = true , selectedCategoryBlogs, searchData }) {
                     </div>
                     <Link
                       to={`/blog/${blog.category?.slug}/${blog.slug}`}
-                      className="text-base sm:text-lg md:text-xl lg:text-xl xl:text-xl font-medium cursor-pointer"
+                      className="text-base sm:text-lg md:text-sm lg:text-xl xl:text-xl font-medium cursor-pointer"
                     >
                       {blog.title}
                     </Link>

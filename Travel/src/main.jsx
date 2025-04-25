@@ -46,6 +46,8 @@ import TermsConditionPage from './routes/TermsConditionPage';
 import AdminBlogShow from './routes/adminPages/AdminBlogShow';
 import ContactPage from './routes/ContactPage';
 import AboutPage from './routes/AboutPage';
+import Messages from './routes/adminPages/Messages';
+import AddHeroSection from './routes/adminPages/AddHeroSection';
 
 
 
@@ -78,6 +80,10 @@ const router = createBrowserRouter([
       {
         path: "/about",
         element : <AboutPage/>
+      },
+      {
+        path: "/admin-messages",
+        element : <Messages/>
       },
       {
         path: "/blog/:category/:post",
@@ -186,6 +192,10 @@ const router = createBrowserRouter([
         element : <AddAdvertise/>
       },
       {
+        path: "/admin-add-hero",
+        element : <AddHeroSection/>
+      },
+      {
         path: "/admin-advertise/edit/:advertise_id",
         element : <EditAdvertise/>
       },
@@ -200,7 +210,7 @@ const router = createBrowserRouter([
 const CLIENT_ID = "324192363608-0p4jtq61h643ptasd9podhtrgmf3v1kr.apps.googleusercontent.com"
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+  // <StrictMode>
     <Provider store={store}>
       <PersistGate loading={<div>Loading....</div>}
       persistor={persistor}>
@@ -213,5 +223,5 @@ createRoot(document.getElementById('root')).render(
     </PersistGate>
     </Provider>
     
-  </StrictMode>,
+  // </StrictMode>,
 )

@@ -53,6 +53,7 @@ function AddAdvertise() {
   const [filePreview, setFilePreview] = useState();
   const [uploading, setUploading] = useState(false);
   const [file, setFile] = useState();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   
 
   
@@ -154,12 +155,25 @@ function AddAdvertise() {
 
   return (
     <div className="w-full flex bg-transparent">
-      <div className="w-[20%] h-screen fixed">
+      <div
+        className={`fixed z-50 bg-gray-800 h-screen transition-transform ${
+          sidebarOpen ? "translate-x-0 w-[65%]" : "-translate-x-full"
+        } lg:translate-x-0 lg:w-[20%]`}
+      >
         <Sidebar />
       </div>
 
-      <div className="w-[80%] absolute left-[20%] bg-gray-900 px-6 py-6 min-h-screen">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6 pt-[13vh] pl-[16vw]">
+      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-gray-900 px-6 py-6 min-h-screen">
+        {/* Toggle Button for Mobile */}
+        <div className="lg:hidden flex justify-end mb-4">
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="text-white text-3xl focus:outline-none"
+          >
+            {sidebarOpen ? "✕" : "☰"}
+          </button>
+        </div>
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6 lg:pt-[13vh] lg:pl-[16vw]">
           <div>
             <h1 className="text-2xl font-semibold text-white">
               Let's Add Advertise
@@ -170,7 +184,7 @@ function AddAdvertise() {
 
         {/* add categories */}
 
-        <div className=" w-[50vw] ml-[16vw]">
+        <div className="lg:w-[50vw] lg:ml-[16vw]">
           <Card className="w-full bg-gray-600 p-5 mb-10">
             <h1 className="text-white text-2xl font-bold mb-5">Add Advertise</h1>
             <Form {...form}>

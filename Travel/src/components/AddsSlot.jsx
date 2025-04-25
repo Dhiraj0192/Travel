@@ -14,7 +14,7 @@ function AddsSlot() {
           console.log(advertise);
           
   return (
-    <div className="lg:px-32 flex flex-col w-full">
+    <div className=" flex flex-col w-full">
         {advertise?.advertise && advertise?.advertise.map(advertise =><img src={`${advertise?.image}`} alt="" className='h-[30vh] w-full'/>)}
 
     </div>

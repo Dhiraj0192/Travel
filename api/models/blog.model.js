@@ -16,6 +16,10 @@ const blogSchema = new mongoose.Schema({
         type: String,
         required :true,
     },
+    authoremail:{
+        type: String,
+        
+    },
     category:{
         type: mongoose.Schema.Types.ObjectId,
         required: true,
@@ -48,16 +52,13 @@ const blogSchema = new mongoose.Schema({
         default: 'published'
         
     },
-    views: { type: Number, default: 0 },
-    likes: { type: Number, default: 0 },
-    comments: { type: Number, default: 0 },
-    shares: { type: Number, default: 0 },
+    
     isFeatured: { type: Boolean, default: false },
     
 
 },{timestamps : true})
 
-blogSchema.index({ views: 1, likes: 1, createdAt: 1 });
+
 blogSchema.index({ isFeatured: 1, createdAt: -1 });
 
 const Blog = mongoose.model('Blog', blogSchema , 'blogs')

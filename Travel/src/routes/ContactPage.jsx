@@ -6,7 +6,7 @@ import { FaArrowRight } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { useFetch } from "../hooks/userFetch";
 import { getEnv } from "../helpers/getEnv";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { MdEmail } from "react-icons/md";
 import { FaRocketchat } from "react-icons/fa";
 import { Input } from "../components/ui/input";
@@ -24,82 +24,121 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Textarea } from "../components/ui/textarea";
 import UserIcon from "../components/UserIcon";
+import { toast } from "react-toastify";
 
 function ContactPage() {
   const user = useSelector((state) => state.user);
 
-  // Protect the /single page route
-  if (!user.isLoggedIn) {
-    return <Navigate to="/login" replace />;
-  }
-
   const [sort, setSort] = useState("-createdAt");
 
-  const [query, setQuery] = useState();
-  let [searchData, setSearchData] = useState();
   const [refreshData, setRefreshData] = useState(false);
+    const navigate = useNavigate();
+      const [uploading, setUploading] = useState(false);
+
+        const {
+                  data: otherData,
+                  loading,
+                  error,
+                } = useFetch(`${getEnv("VITE_API_BASE_URL")}/other/details`, {
+                  method: "get",
+                  credentials: "include",
+                });
+            
 
   const formSchema = z.object({
+    name: z.string(),
     email: z.string().email(),
-    password: z.string().min(3, "Password field required."),
+    message: z.string().min(3, "Message field required."),
   });
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      name: "",
       email: "",
-      password: "",
+      message: "",
     },
   });
 
-  async function onSubmit(values) {
-    try {
-      // const response = await fetch(
-      //   `${getEnv("VITE_API_BASE_URL")}/auth/login`,
-      //   {
-      //     method: "post",
-      //     headers: { "Content-type": "application/json" },
-      //     credentials: "include",
-      //     body: JSON.stringify(values),
-      //   }
-      // );
-      // const data = await response.json();
-      // if (!response.ok) {
-      //   return showToast("error", data.message);
-      // }
-      // dispath(setUser(data.user))
-      // navigate("/home");
-      // toast(data.message, {
-      //   position: "top-right",
-      //   autoClose: 3000,
-      //   hideProgressBar: false,
-      //   closeOnClick: false,
-      //   pauseOnHover: true,
-      //   draggable: true,
-      //   progress: undefined,
-      //   theme: "colored",
-      //   });
-      // showToast("success", data.message);
-    } catch (error) {
-      showToast("error", error.message);
-    }
-  }
+   async function onSubmit(values) {
+       try {
+         setUploading(true);
+        
+         const response = await fetch(`${getEnv("VITE_API_BASE_URL")}/contact/add-message`, {
+          method: "post",
+          headers: { "Content-type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify(values),
+         });
+   
+         const data = await response.json();
+         if (!response.ok) {
+           setUploading(false);
+           return toast(data.message, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            
+            });
+         }
+         
+         form.reset();
+         
+         
+         setUploading(false);
+         toast(data.message, {
+           position: "top-right",
+           autoClose: 3000,
+           hideProgressBar: false,
+           closeOnClick: false,
+           pauseOnHover: true,
+           draggable: true,
+           progress: undefined,
+           theme: "colored",
+           
+           });
+         
+         
+   
+         
+       } catch (error) {
+         setUploading(false);
+         toast(error.message, {
+           position: "top-right",
+           autoClose: 3000,
+           hideProgressBar: false,
+           closeOnClick: false,
+           pauseOnHover: true,
+           draggable: true,
+           progress: undefined,
+           theme: "colored",
+           
+           });
+         
+       }
+     }
+   
 
   return (
     <div className="flex flex-col min-h-screen">
-        <UserIcon/>
+        {user.isLoggedIn && <UserIcon/>}
       <div className="w-full ">
-        <div className="overflow-hidden bg-gradient-to-b from-[#4b55678b] to-[#1a1c208b] bg-opacity-5 h-[34vh]">
+        <div className="overflow-hidden bg-gradient-to-b from-[#4b55678b] to-[#1a1c208b] bg-opacity-5 h-[25vh] lg:h-[33vh]">
           <img
             src="https://images.pexels.com/photos/12231824/pexels-photo-12231824.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-            className="w-full h-[45vh] absolute top-0 -z-10 bg-cover "
+            className="w-full h-[32vh] lg:h-[50vh] absolute top-0 -z-10 bg-cover "
           />
           {/* breadcrumb */}
           <div className="h-[20vh] flex flex-col justify-center">
             {/* introduction */}
-            <div className="lg:px-32 flex items-center justify-between">
-              <div className="mt-40 w-[60vw]">
-                <h1 className=" text-white text-xl md:text-5xl lg:text-5xl font-bold">
+            <div className="lg:px-32 px-6 flex items-center justify-between">
+              <div className="lg:mt-40 mt-20 lg:w-[60vw] w-full">
+                <h1 className=" text-white text-3xl md:text-5xl lg:text-5xl font-bold">
                   Contact
                 </h1>
                 <p className="text-gray-200 text-lg font-semibold font-serif mt-6">
@@ -114,27 +153,23 @@ function ContactPage() {
           <div className="flex flex-col items-center gap-3 ">
             <h2 className="text-3xl font-bold text-black">Get In Touch</h2>
 
-            <p className="text-gray-700 text-center text-lg w-[60vw]">
+            <p className="text-gray-700 text-center text-sm md:text-lg px-6 md:px-0 md:w-[60vw]">
               If you'd like to work with me or you have a question or comment,
               you can contact me using the form below. You can also find more
               info about me here.
             </p>
 
-            <p className="text-gray-900 text-center text-lg w-[60vw]">
+            <p className="text-gray-900 text-center text-lg px-6 md:px-0 md:w-[60vw]">
               Sometimes I'm busy traveling, but I try to respond to any
               messages!
             </p>
 
             <div className="mt-16 flex flex-wrap gap-8 w-full">
-              <div class="flex justify-content-center align-items-center">
-                {/* <!-- // SVG
-					from: https://www.freepik.com/free-vector/new-message-concept-landing-page_5777076.htm 
-  -------------------------------------------------------------
-  -- Note: need to use inline svg to manipulate its components
-  ------------------------------------------------------------> */}
+              <div class="flex md:flex-row flex-col justify-content-center align-items-center">
+                
 
                 <svg
-                  className="w-[38vw]"
+                  className="w-full px-6 md:px-0 md:w-[38vw]"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 790 563"
                   fill="none"
@@ -892,17 +927,15 @@ function ContactPage() {
                   </g>
                 </svg>
 
-                {/* <!-- // FORM
-  -------------------------------------------------------------
-  ------------------------------------------------------------> */}
+     
 
-                <div className="w-[38vw] ml-16 mt-10">
+                <div className="w-[100vw] md:w-[38vw] px-6 md:px-0 md:ml-16 mt-10">
                 <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmit)}>
                   <div className="mb-3">
                       <FormField
                         control={form.control}
-                        name="email"
+                        name="name"
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Name</FormLabel>
@@ -942,7 +975,7 @@ function ContactPage() {
                     <div className="mb-3">
                       <FormField
                         control={form.control}
-                        name="email"
+                        name="message"
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Message</FormLabel>
@@ -974,59 +1007,59 @@ function ContactPage() {
           </div>
 
           {/* need help */}
-          <div className="w-[80vw] flex items-center gap-6 mt-32 rounded-lg ml-4 bg-gray-100 shadow-md">
-            <img
-              src="https://images.pexels.com/photos/326576/pexels-photo-326576.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-              className="w-[30vw] h-[53vh] rounded-l-xl"
-              alt=""
-            />
-            <div className="flex-col items-start gap-3">
-              <h1 className="text-black text-xl font-bold">Need More Help?</h1>
-              <p className="text-gray-600 text-lg">
-                If you couldn't find the answer to your question, our customer
-                support team is ready to assist you with any inquiries about our
-                travel packages.
-              </p>
-
-              <div className=" mt-4 flex flex-col gap-3 items-start">
-                <div className="flex items-center gap-2">
-                  <div className="rounded-full w-10 h-10 items-center bg-blue-400 flex justify-center ">
-                    <IoIosCall className="items-center" />
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <p className="text-gray-600 text-sm">Call us at</p>
-                    <p className="text-black text-lg">+1 (800) 123-4567</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <div className="rounded-full w-10 h-10 items-center bg-blue-400 flex justify-center ">
-                    <MdEmail className="items-center" />
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <p className="text-gray-600 text-sm">Email us at</p>
-                    <p className="text-black text-lg">
-                      support@travelpackages.com
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <div className="rounded-full w-10 h-10 items-center bg-blue-400 flex justify-center ">
-                    <FaRocketchat className="items-center" />
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <p className="text-gray-600 text-sm">Live Chat</p>
-                    <p className="text-black text-lg">Available 24/7</p>
-                  </div>
-                </div>
-              </div>
-              <div className="mt-10 flex gap-2 items-center">
-                <h2 className="text-blue-600 text-lg font-bold">Contact Us</h2>
-                <FaArrowRight className="text-blue-600" />
-              </div>
-            </div>
-          </div>
+                    <div className="w-full lg:w-[80vw] flex md:flex-row flex-col px-6 lg:px-0 items-center gap-6 mt-32 rounded-lg lg:ml-4 bg-gray-100 shadow-md">
+                      <img
+                        src="https://images.pexels.com/photos/326576/pexels-photo-326576.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                        className="md:w-[30vw] w-full h-[35vh] md:h-[53vh] rounded-l-xl"
+                        alt=""
+                      />
+                      <div className="flex-col items-start gap-3">
+                        <h1 className="text-black text-xl font-bold">Need More Help?</h1>
+                        <p className="text-gray-600 text-lg">
+                          If you couldn't find the answer to your question, our customer
+                          support team is ready to assist you with any inquiries about our
+                          travel packages.
+                        </p>
+          
+                        <div className=" mt-4 flex flex-col gap-3 items-start">
+                          <div className="flex items-center gap-2">
+                            <div className="rounded-full w-10 h-10 items-center bg-blue-400 flex justify-center ">
+                              <IoIosCall className="items-center" />
+                            </div>
+                            <div className="flex flex-col gap-1">
+                              <p className="text-gray-600 text-sm">Call us at</p>
+                              <p className="text-black text-lg">{otherData?.number}</p>
+                            </div>
+                          </div>
+          
+                          <div className="flex items-center gap-2">
+                            <div className="rounded-full w-10 h-10 items-center bg-blue-400 flex justify-center ">
+                              <MdEmail className="items-center" />
+                            </div>
+                            <div className="flex flex-col gap-1">
+                              <p className="text-gray-600 text-sm">Email us at</p>
+                              <p className="text-black text-lg">
+                              {otherData?.email}
+                              </p>
+                            </div>
+                          </div>
+          
+                          <div className="flex items-center gap-2">
+                            <div className="rounded-full w-10 h-10 items-center bg-blue-400 flex justify-center ">
+                              <FaRocketchat className="items-center" />
+                            </div>
+                            <div className="flex flex-col gap-1">
+                              <p className="text-gray-600 text-sm">Live Chat</p>
+                              <p className="text-black text-lg">Available 24/7</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="mt-10 flex gap-2 items-center">
+                          <h2 className="text-blue-600 text-lg font-bold">Contact Us</h2>
+                          <FaArrowRight className="text-blue-600" />
+                        </div>
+                      </div>
+                    </div>
         </div>
       </div>
       <Footer />

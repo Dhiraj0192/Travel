@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import { convert } from 'html-to-text';
 
  function BlogHome() {
-  const [limit, setLimit] = useState(5)
+  const [limit, setLimit] = useState(4)
   const [sort, setSort] = useState('-createdAt'); 
   const [travelBlog , setTravelBlog] = useState();
   const categoryId  = 'Travel';
@@ -20,7 +20,7 @@ import { convert } from 'html-to-text';
   })
 
 
-  const {data: blogDataByCategory} = useFetch(`${getEnv('VITE_API_BASE_URL')}/blog/blog/travelcategory/${categoryId}?limit=${limit}&sort=${sort}`,{
+  const {data: blogDataByCategory} = useFetch(`${getEnv('VITE_API_BASE_URL')}/blog/blog/travelcategory/${categoryId}?limit=6&sort=${sort}`,{
     method : 'get',
     credentials: 'include'
 })
@@ -166,24 +166,26 @@ console.log(blogDataByCategory);
               className="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300"
             >
               <div className="h-64 bg-gray-100 overflow-hidden">
-                <img
+              <Link to={`/blog/${blog.category?.slug}/${blog.slug}`}><img
                   src={blog.featuredimage}
                   
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
+              </Link>
+                
               </div>
               <div className="p-6 bg-white">
                 <span className="inline-block px-3 py-1 text-xs font-semibold text-indigo-600 bg-indigo-50 rounded-full mb-2">
                   {blog.category?.name}
                 </span>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">{blog.title}</h3>
-                <p className="text-gray-700 text-sm w-[26vw]" >{plainText(blog.blogcontent).substring(0, 100).trim() + (plainText.length > 100 ? '...' : '')}</p>
+                <p className="text-gray-700 text-sm w-full md:w-[26vw]" >{plainText(blog.blogcontent).substring(0, 100).trim() + (plainText.length > 100 ? '...' : '')}</p>
                 <div className="flex justify-between items-center text-sm text-gray-500 mt-3">
                   <span>{moment(blog?.createdAt).format('DD-MM-YYYY')}</span>
                   
                 </div>
                 
-                <div className="mt-4 w-[10vw]">
+                <div className="mt-4 md:w-[10vw] w-[35vw]">
                                             <Link to={`/blog/${blog.category?.slug}/${blog.slug}`}><p className="text-white text-sm font-bold bg-blue-600 px-4 py-2 rounded-md"> Read More... </p>
                                            </Link>
                                         </div>
@@ -243,13 +245,13 @@ console.log(blogDataByCategory);
                 {travelblog.category?.name}
               </span>
               <h3 className="text-lg font-bold text-blue-300 mb-2">{travelblog.title}</h3>
-              <p className="text-gray-100 text-sm" >{plainText(travelblog.blogcontent).substring(0, 100).trim() + (plainText.length > 100 ? '...' : '')}</p>
+              <p className="text-gray-100 text-sm w-full" >{plainText(travelblog.blogcontent).substring(0, 100).trim() + (plainText.length > 100 ? '...' : '')}</p>
               <div className="flex text-md justify-between items-center  text-white mt-3">
                 <span className="font-bold">{moment(travelblog?.createdAt).format('DD-MM-YYYY')}</span>
                 
               </div>
 
-              <div className="mt-4 w-[10vw]">
+              <div className="mt-4 w-[35vw] md:w-[10vw]">
                                             <Link to={`/blog/${travelblog.category?.slug}/${travelblog.slug}`}><p className="text-white text-sm font-bold bg-blue-600 px-4 py-2 rounded-md"> Read More... </p>
                                            </Link>
                                         </div>

@@ -54,6 +54,8 @@ function PendingPosts() {
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
   const [query, setQuery] = useState();
   let [searchData, setSearchData] = useState();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  
 
   const {
     data: categoryData,
@@ -197,11 +199,25 @@ function PendingPosts() {
 
   return (
     <div className="w-full flex">
-      <div className="w-[20%] h-screen fixed">
+      {/* Sidebar */}
+      <div
+        className={`fixed z-50 bg-gray-800 h-screen transition-transform ${
+          sidebarOpen ? "translate-x-0 w-[65%]" : "-translate-x-full"
+        } lg:translate-x-0 lg:w-[20%]`}
+      >
         <Sidebar />
       </div>
 
-      <div className="w-[80%] absolute left-[20%] bg-gray-900 px-6 py-6 min-h-screen">
+      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-gray-900 px-6 py-6 min-h-screen">
+        {/* Toggle Button for Mobile */}
+        <div className="lg:hidden flex justify-end mb-4">
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="text-white text-3xl focus:outline-none"
+          >
+            {sidebarOpen ? "✕" : "☰"}
+          </button>
+        </div>
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
           <div>
             <h1 className="text-2xl font-semibold text-white">

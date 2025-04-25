@@ -6,10 +6,10 @@ function TermsConditionPage() {
   return (
     <div className="">
       <UserIcon/>
-      <div className="lg:px-32 mt-20 mb-20">
+      <div className="lg:px-32 px-8 mt-20 mb-20">
       <p className="text-black text-2xl ">Terms Of Use</p>
 
-<p className="text-black text-lg mt-10 ">
+<p className="text-black text-lg mt-10 text-justify">
   Introduction These terms and conditions govern your use of The World
   Travel Guy website; by using this website, you accept these terms and
   conditions in full. If you disagree with these terms and conditions or

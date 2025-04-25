@@ -40,7 +40,13 @@ function TravelBookingPage() {
     
     //   console.log(blogData);
       
-    
+     const {
+                      data: otherData,
+                      
+                    } = useFetch(`${getEnv("VITE_API_BASE_URL")}/other/details`, {
+                      method: "get",
+                      credentials: "include",
+                    });
     
      
     
@@ -84,16 +90,16 @@ function TravelBookingPage() {
     <div className="flex flex-col min-h-screen">
       <UserIcon/>
       <div className="w-full ">
-        <div className="overflow-hidden bg-gradient-to-b from-[#4b55678b] to-[#1a1c208b] bg-opacity-5 h-[54vh]">
+        <div className="overflow-hidden bg-gradient-to-b from-[#4b55678b] to-[#1a1c208b] bg-opacity-5 h-[40vh] lg:h-[54vh]">
         <img
           src="https://images.pexels.com/photos/5077049/pexels-photo-5077049.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-          className="w-full h-[65vh] absolute top-0 -z-10 bg-cover "
+          className="w-full h-[47vh] lg:h-[74vh] absolute top-0 -z-10 bg-cover "
         />
         {/* breadcrumb */}
         <div className="h-[40vh] flex flex-col justify-center">
           {/* introduction */}
           <div className="lg:px-32 flex items-center justify-between">
-            <div className="mt-40 w-[60vw]">
+            <div className="mt-10 px-6 md:px-6 lg:px-0 lg:mt-40 w-full lg:w-[60vw]">
               <h1 className=" text-white text-xl md:text-5xl lg:text-5xl font-bold">
                 Discover Your Perfect Travel Experience
               </h1>
@@ -145,19 +151,19 @@ function TravelBookingPage() {
         
         
 
-        <div className="flex flex-col lg:px-32 w-full mt-20 mb-10">
+        <div className="flex flex-col lg:px-32 w-full mt-20 mb-10 px-1">
           <div className="flex flex-col items-center gap-3 ">
             <h2 className="text-3xl font-bold text-black">Packages</h2>
 
-            <p className="text-gray-700 text-lg ">
+            <p className="text-gray-700 text-sm md:text-lg text-center ">
               Discover our handpicked travel packages for unforgettable
               experiences around the world.
             </p>
 
-            <div className="mt-6 flex flex-wrap gap-8 ">
+            <div className="mt-6 flex md:flex-row flex-col flex-wrap gap-8 ">
               
 
-              {searchData ? searchData.map(packag =><div className="rounded-lg flex flex-col items-start bg-gray-200 w-[25vw]">
+              {searchData ? searchData.map(packag =><div className="rounded-lg flex flex-col items-start bg-gray-200 w-[100vw] md:w-[45vw] lg:w-[25vw] px-6">
                 <img src={packag.packageImage} alt="" />
                 <div className="p-4 flex flex-col items-start gap-3">
                   <h2 className="text-lg font-bold text-black">
@@ -174,14 +180,14 @@ function TravelBookingPage() {
                   </div>
                 </div>
               </div> ) : packageData?.packag.map((packag, index) => (
-              <div className="rounded-lg flex flex-col items-start bg-gray-200 w-[25vw]">
+              <div className="rounded-lg flex flex-col items-start bg-gray-200  px-6 w-[100vw] md:w-[45vw] lg:w-[25vw]">
               <img src={packag.packageImage} alt="" />
               <div className="p-4 flex flex-col items-start gap-3">
                 <h2 className="text-lg font-bold text-black">
                 {packag.title}
                 </h2>
                 <div className="flex justify-between items-end">
-                  <div className="flex flex-col gap-1 w-[14vw]">
+                  <div className="flex flex-col gap-1 w-[50vw] md:w-[14vw]">
                     <p className="text-gray-700 text-sm">Price</p>
                     <h1 className="text-blue-800 text-2xl font-bold">{packag.price}</h1>
                   </div>
@@ -202,72 +208,59 @@ function TravelBookingPage() {
 
 
           {/* need help */}
-          <div className="w-[80vw] flex items-center gap-6 mt-32 rounded-lg ml-4 bg-gray-100 shadow-md">
-            <img src="https://images.pexels.com/photos/326576/pexels-photo-326576.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" className="w-[30vw] h-[53vh] rounded-l-xl" alt="" />
-            <div className="flex-col items-start gap-3">
-                <h1 className="text-black text-xl font-bold">Need More Help?</h1>
-                <p className="text-gray-600 text-lg">
-                If you couldn't find the answer to your question, our customer support team is ready to assist you with any inquiries about our travel packages.
-                </p>
-
-                <div className=" mt-4 flex flex-col gap-3 items-start">
-                    <div className="flex items-center gap-2">
-                        <div className="rounded-full w-10 h-10 items-center bg-blue-400 flex justify-center ">
-                            <IoIosCall className="items-center"/>
-
-                        </div>
-                        <div className="flex flex-col gap-1"
-                        >
-                            <p className="text-gray-600 text-sm">
-                                Call us at
-                            </p>
-                            <p className="text-black text-lg">
-                            +1 (800) 123-4567
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                        <div className="rounded-full w-10 h-10 items-center bg-blue-400 flex justify-center ">
-                            <MdEmail className="items-center"/>
-
-                        </div>
-                        <div className="flex flex-col gap-1"
-                        >
-                            <p className="text-gray-600 text-sm">
-                            Email us at
-                            </p>
-                            <p className="text-black text-lg">
-                            support@travelpackages.com
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                        <div className="rounded-full w-10 h-10 items-center bg-blue-400 flex justify-center ">
-                            <FaRocketchat className="items-center"/>
-
-                        </div>
-                        <div className="flex flex-col gap-1"
-                        >
-                            <p className="text-gray-600 text-sm">
-                            Live Chat
-                            </p>
-                            <p className="text-black text-lg">
-                            Available 24/7
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div className="mt-10 flex gap-2 items-center">
-                    <h2 className="text-blue-600 text-lg font-bold">
-                        Contact Us
-                    </h2>
-                    <FaArrowRight className="text-blue-600"/>
-
-                </div>
-            </div>
-          </div>
+                              <div className="w-full lg:w-[80vw] flex md:flex-row flex-col px-6 lg:px-0 items-center gap-6 mt-32 rounded-lg lg:ml-4 bg-gray-100 shadow-md">
+                                <img
+                                  src="https://images.pexels.com/photos/326576/pexels-photo-326576.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                                  className="md:w-[30vw] w-full h-[35vh] md:h-[53vh] rounded-l-xl"
+                                  alt=""
+                                />
+                                <div className="flex-col items-start gap-3">
+                                  <h1 className="text-black text-xl font-bold">Need More Help?</h1>
+                                  <p className="text-gray-600 text-lg">
+                                    If you couldn't find the answer to your question, our customer
+                                    support team is ready to assist you with any inquiries about our
+                                    travel packages.
+                                  </p>
+                    
+                                  <div className=" mt-4 flex flex-col gap-3 items-start">
+                                    <div className="flex items-center gap-2">
+                                      <div className="rounded-full w-10 h-10 items-center bg-blue-400 flex justify-center ">
+                                        <IoIosCall className="items-center" />
+                                      </div>
+                                      <div className="flex flex-col gap-1">
+                                        <p className="text-gray-600 text-sm">Call us at</p>
+                                        <p className="text-black text-lg">{otherData?.number}</p>
+                                      </div>
+                                    </div>
+                    
+                                    <div className="flex items-center gap-2">
+                                      <div className="rounded-full w-10 h-10 items-center bg-blue-400 flex justify-center ">
+                                        <MdEmail className="items-center" />
+                                      </div>
+                                      <div className="flex flex-col gap-1">
+                                        <p className="text-gray-600 text-sm">Email us at</p>
+                                        <p className="text-black text-lg">
+                                        {otherData?.email}
+                                        </p>
+                                      </div>
+                                    </div>
+                    
+                                    <div className="flex items-center gap-2">
+                                      <div className="rounded-full w-10 h-10 items-center bg-blue-400 flex justify-center ">
+                                        <FaRocketchat className="items-center" />
+                                      </div>
+                                      <div className="flex flex-col gap-1">
+                                        <p className="text-gray-600 text-sm">Live Chat</p>
+                                        <p className="text-black text-lg">Available 24/7</p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div className="mt-10 flex gap-2 items-center">
+                                    <h2 className="text-blue-600 text-lg font-bold">Contact Us</h2>
+                                    <FaArrowRight className="text-blue-600" />
+                                  </div>
+                                </div>
+                              </div>
         </div>
       </div>
       <Footer />

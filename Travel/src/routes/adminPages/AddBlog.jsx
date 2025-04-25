@@ -36,22 +36,22 @@ import { CKFinder } from "ckeditor5";
 import { Navigate, useNavigate } from "react-router-dom";
 import { decode } from "entities";
 import { toast } from "react-toastify";
+import { FaCloudUploadAlt } from "react-icons/fa";
 
 function AddBlog() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { isSignedIn } = useAuth();
   if (isSignedIn === false) {
-
-    navigate('/admin-login');
-    
+    navigate("/admin-login");
   }
-  const { user} = useUser();
+  const { user } = useUser();
 
   // const user = useSelector((state)=> state.user)
-  console.log("user",user);
+  console.log("user", user);
 
   const [filePreview, setFilePreview] = useState();
   const [uploading, setUploading] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [file, setFile] = useState();
   const {
     data: categoryData,
@@ -78,8 +78,8 @@ function AddBlog() {
       title: "",
       slug: "",
       blogContent: "",
-      isFeatured : false,
-      status : 'published',
+      isFeatured: false,
+      status: "published",
     },
   });
 
@@ -99,7 +99,12 @@ function AddBlog() {
   async function onSubmit(values) {
     try {
       setUploading(true);
-      const newValues = { ...values, author: user?.fullName, authorimage : user?.imageUrl || "https://www.flaticon.com/free-icon/user_9187604" };
+      const newValues = {
+        ...values,
+        author: user?.fullName,
+        authorimage:
+          user?.imageUrl || "https://www.flaticon.com/free-icon/user_9187604",
+      };
       // console.log(newValues);
 
       if (!file) {
@@ -120,43 +125,36 @@ function AddBlog() {
         setUploading(false);
         return showToast("error", data.message);
       }
-      
+
       form.reset();
-      
+
       setFile();
       setFilePreview();
       form.setValue("category", "Select Category");
       form.setValue("blogContent", "");
       setUploading(false);
       toast(data.message, {
-              position: "top-right",
-              autoClose: 3000,
-              hideProgressBar: false,
-              closeOnClick: false,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "colored",
-              
-              });
-      
-      
-
-      
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     } catch (error) {
       setUploading(false);
       toast(error.message, {
-              position: "top-right",
-              autoClose: 3000,
-              hideProgressBar: false,
-              closeOnClick: false,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "colored",
-              
-              });
-      
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     }
   }
 
@@ -169,11 +167,25 @@ function AddBlog() {
 
   return (
     <div className="w-full flex ">
-      <div className="w-[20%] h-screen fixed">
+      {/* Sidebar */}
+      <div
+        className={`fixed z-50 bg-gray-800 h-screen transition-transform ${
+          sidebarOpen ? "translate-x-0 w-[65%]" : "-translate-x-full"
+        } lg:translate-x-0 lg:w-[20%]`}
+      >
         <Sidebar />
       </div>
 
-      <div className="w-[80%] absolute left-[20%] bg-gray-900 px-6 py-6 min-h-screen">
+      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-gray-900 px-6 py-6 min-h-screen">
+        {/* Toggle Button for Mobile */}
+        <div className="lg:hidden flex justify-end mb-4">
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="text-white text-3xl focus:outline-none"
+          >
+            {sidebarOpen ? "✕" : "☰"}
+          </button>
+        </div>
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
           <div>
             <h1 className="text-2xl font-semibold text-white">
@@ -190,103 +202,107 @@ function AddBlog() {
             <h1 className="text-white text-2xl font-bold mb-5">Add Blog</h1>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)}>
-                <div className="flex items-center justify-between w-full">
+                <div className="flex md:flex-row flex-col md:items-center justify-between w-full">
                   <div className="flex flex-col items-start">
-                  <div className="mb-3">
-                    <FormField
-                      control={form.control}
-                      name="title"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-white text-lg">
-                            Title
-                          </FormLabel>
-                          <FormControl>
-                            <Input
-                              className="bg-gray-200 w-[60vw]"
-                              placeholder="Enter blog title.."
-                              {...field}
-                            />
-                          </FormControl>
+                    <div className="mb-3">
+                      <FormField
+                        control={form.control}
+                        name="title"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-white text-lg">
+                              Title
+                            </FormLabel>
+                            <FormControl>
+                              <Input
+                                className="bg-gray-200 w-[80vw] md:w-[60vw]"
+                                placeholder="Enter blog title.."
+                                {...field}
+                              />
+                            </FormControl>
 
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
 
-                  
+                    <div className="mb-3">
+                      <FormField
+                        control={form.control}
+                        name="category"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-white text-lg">
+                              Category
+                            </FormLabel>
+                            <FormControl>
+                              <Select
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
+                                <SelectTrigger className=" w-[80vw] md:w-[60vw] bg-gray-300 text-black">
+                                  <SelectValue placeholder="Select Category" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem
+                                    key="select-category"
+                                    value={`${
+                                      field.value != ""
+                                        ? field.value
+                                        : "Select Category"
+                                    }`}
+                                  >
+                                    Select Category
+                                  </SelectItem>
+                                  {categoryData ? (
+                                    categoryData.category.map((category) => (
+                                      <SelectItem
+                                        key={category._id}
+                                        value={category._id}
+                                      >
+                                        {category.name}
+                                      </SelectItem>
+                                    ))
+                                  ) : (
+                                    <></>
+                                  )}
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
 
-                  <div className="mb-3">
-                    <FormField
-                      control={form.control}
-                      name="category"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-white text-lg">
-                            Category
-                          </FormLabel>
-                          <FormControl>
-                            <Select
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                            >
-                              <SelectTrigger className="w-[60vw] bg-gray-300 text-black">
-                                <SelectValue placeholder="Select Category" />
-                              </SelectTrigger>
-                              <SelectContent>
-                              <SelectItem
-                                      key=
-                                      'select-category'
-                                      value={`${field.value != "" ? field.value : "Select Category"}`}
-                                    >
-                                      Select Category
-                                    </SelectItem>
-                                {categoryData ? (
-                                  categoryData.category.map((category) => (
-                                    <SelectItem
-                                      key={category._id}
-                                      value={category._id}
-                                    >
-                                      {category.name}
-                                    </SelectItem>
-                                  ))
-                                ) : (
-                                  <></>
-                                )}
-                              </SelectContent>
-                            </Select>
-                          </FormControl>
-
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                   </div>
                   <div className="mb-3 ">
-                  <span className="text-white pb-4 text-lg">
-                    Featured Image
-                  </span>
-                  <Dropzone
-                    onDrop={(acceptedFiles) =>
-                      handleFileSlection(acceptedFiles)
-                    }
-                  >
-                    {({ getRootProps, getInputProps }) => (
-                      <div {...getRootProps()}>
-                        <input {...getInputProps()} />
+                    <span className="text-white pb-4 text-lg">
+                      Featured Image
+                    </span>
+                    <Dropzone
+                      onDrop={(acceptedFiles) =>
+                        handleFileSlection(acceptedFiles)
+                      }
+                    >
+                      {({ getRootProps, getInputProps }) => (
+                        <div {...getRootProps()}>
+                          <input {...getInputProps()} />
 
-                        <div className="flex justify-center items-center w-44 h-44 border-2 border-dashed rounded cursor-pointer">
-                          <img src={filePreview} alt="" srcset="" />
+                          <div className="flex justify-center items-center w-44 h-44 border-2 border-dashed rounded cursor-pointer">
+                            {filePreview === undefined && (
+                              <div className="flex items-center gap-2">
+                                <p className="text-black">Upload</p>
+                                <FaCloudUploadAlt />
+                              </div>
+                            )}
+                            <img src={filePreview} alt="" srcset="" />
+                          </div>
                         </div>
-                      </div>
-                    )}
-                  </Dropzone>
-                </div>
-                  
-                  
+                      )}
+                    </Dropzone>
+                  </div>
                 </div>
 
                 <div className="mb-3 hidden">
@@ -311,7 +327,6 @@ function AddBlog() {
                     )}
                   />
                 </div>
-                
 
                 <div className="mb-3">
                   <FormField
@@ -324,7 +339,6 @@ function AddBlog() {
                         </FormLabel>
                         <FormControl>
                           <Editor
-                          
                             props={{
                               initialData: field.value,
                               onChange: handleEditorData,
@@ -364,7 +378,7 @@ function AddBlog() {
                 </div>
 
                 <div className="mt-5">
-                  <Button  type="submit" className="w-full bg-blue-500">
+                  <Button type="submit" className="w-full bg-blue-500">
                     {uploading ? "Please Wait...." : "Add Blog"}
                   </Button>
                 </div>

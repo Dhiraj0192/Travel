@@ -1,14 +1,20 @@
 import React from 'react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaUserSecret } from 'react-icons/fa';
 import { GrNotes } from 'react-icons/gr';
 import { IoLogOut } from 'react-icons/io5';
 import { useSelector } from 'react-redux';
+import { showToast } from '../helpers/showToast';
+import { getEnv } from '../helpers/getEnv';
+import { useDispatch } from 'react-redux';
+import { removeUser } from "../redux/user/user.slice";
 
 function UserIcon() {
     const user = useSelector((state) => state.user);
+    const navigate = useNavigate();
+  const dispath = useDispatch();
     const handleLogout = async()=>{
               try {
                     const response = await fetch(
@@ -46,7 +52,7 @@ function UserIcon() {
       {/* <IoMdArrowDropdownCircle className="h-7 w-7 -ml-8" /> */}
 
     </DropdownMenuTrigger>
-    <DropdownMenuContent className=" w-[18vw] min-h-[26vh] absolute bottom-0 right-10">
+    <DropdownMenuContent className=" w-[60vw] md:w-[30vw] lg:w-[18vw] min-h-[26vh] absolute bottom-0 right-10">
       <DropdownMenuLabel className="bg-gray-800 rounded-md">
           <p className="text-blue-300 ">{user.user.name}</p>
           <p className="text-sm text-white font-normal">

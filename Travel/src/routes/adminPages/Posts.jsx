@@ -44,6 +44,14 @@ function Posts() {
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
   const [query, setQuery] = useState();
     let [searchData , setSearchData] = useState();
+      let [bData , setBData] = useState();
+       const [sort, setSort] = useState("-createdAt");
+       const [limit, setLimit] = useState(100000);
+       const [page, setPage] = useState(1);
+      const [currentPage, setCurrentPage] = useState(1);
+      const [totalPages, setTotalPages] = useState(1);
+      let [categoryIdAll, setCategoryIdAll] = useState();
+      const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const {
     data: categoryData,
@@ -56,26 +64,58 @@ function Posts() {
 
   const categories = categoryData?.category;
 
-  const fetchBlogsByCategory = async (event) => {
+useEffect(() => {
+    let isMounted = true; // Track if the component is still mounted
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `${getEnv("VITE_API_BASE_URL")}/blog/get-all2?page=${page}&limit=9`,
+          {
+            method: "get",
+            credentials: "include",
+          }
+        );
+        const data = await response.json();
+        if (isMounted && response.ok) {
+          setBData(data);
+          setTotalPages(data.totalPages || 1);
+        }
+      } catch (error) {
+        if (isMounted) {
+          console.error(error.message);
+        }
+      }
+    };
+
+    fetchData();
+
+    return () => {
+      isMounted = false; // Cleanup function to prevent state updates on unmounted components
+    };
+  }, [page]);
+
+  const fetchBlogsByCategory = async (event,page = 1) => {
     try {
-      let categoryId = event.target.value;
+      let categoryId = event?.target?.value;
+      setCategoryIdAll(categoryId);
       console.log(categoryId);
 
       if (categoryId === "All Categories") {
         
-        const response = await fetch(`${getEnv("VITE_API_BASE_URL")}/blog/get-all`, {
+        const response = await fetch(`${getEnv("VITE_API_BASE_URL")}/blog/get-all2?page=${page}&limit=9`, {
           method: "get",
           credentials: "include",
         });
         const data = await response.json();
         if (response.ok) {
-          setSelectedCategoryBlogs(data.blogs);
+          setSelectedCategoryBlogs(data?.blog);
+          setTotalPages(data?.totalPages);
         } else {
           console.error(data.message);
         }
       } else {
         const response = await fetch(
-          `${getEnv("VITE_API_BASE_URL")}/category/blogs/${categoryId}`,
+          `${getEnv("VITE_API_BASE_URL")}/category/blogs2/${categoryId}?page=${page}&limit=9`,
           {
             method: "GET",
             credentials: "include",
@@ -85,6 +125,7 @@ function Posts() {
         if (response.ok) {
           setSelectedCategoryBlogs(data.blogs);
           setSearchData(undefined);
+          setTotalPages(data?.totalPages);
         } else {
           console.error(data.message);
         }
@@ -100,32 +141,93 @@ function Posts() {
       setQuery(e.target.value);
     };
   
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      console.log(query);
-  
-      const response = await fetch(
-        `${getEnv("VITE_API_BASE_URL")}/blog/search/${query}`,
-        {
-          method: "get",
-          credentials: "include",
+    const handleSubmit = async (e, page = 1) => {
+        e.preventDefault();
+        const response = await fetch(
+          `${getEnv("VITE_API_BASE_URL")}/blog/search2/${query}?page=${page}&limit=9`,
+          {
+            method: "get",
+            credentials: "include",
+          }
+        );
+        const data = await response.json();
+        if (response.ok && data?.blog.length > 0) {
+          setSearchData(data.blog);
+          setTotalPages(data.totalPages || 1);
+        } else {
+          console.error(data.message);
         }
-      );
-  
-      const data = await response.json();
-      if (data?.blog.length > 0) {
-        setSearchData(data?.blog)
+      };
+    
+      const handlePageChange = (newPage) => {
+        if (newPage > 0 && newPage <= totalPages) {
+          setCurrentPage(newPage);
+        }
+      };
+    
+      useEffect(() => {
+        if (searchData) {
+          handleSubmit({ preventDefault: () => {} }, currentPage);
+        } else if (categoryIdAll) {
+          fetchBlogsByCategory(categoryIdAll, currentPage);
+        } else {
+          setPage(currentPage);
+        }
+      }, [currentPage]);
+    
+      useEffect(() => {
+        if (searchData) {
+          setBData(""); // Clear other data when searchData is present
+          setSelectedCategoryBlogs([]);
+        }
+      }, [searchData]);
+    
+      useEffect(() => {
+        if (selectedCategoryBlogs) {
+          setBData(""); // Clear other data when selectedCategoryBlogs is present
+        }
+      }, [selectedCategoryBlogs]);
+    const renderPagination = () => {
+      const pages = [];
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(
+          <button
+            key={i}
+            onClick={() => handlePageChange(i)}
+            className={`px-4 py-1 rounded-md ${
+              currentPage === i
+                ? "bg-blue-600 text-white"
+                : "bg-gray-200 text-black hover:bg-gray-500 hover:text-white"
+            }`}
+          >
+            {i}
+          </button>
+        );
       }
-      
+      return pages;
     };
 
   return (
     <div className="w-full flex">
-      <div className="w-[20%] h-screen fixed">
+      {/* Sidebar */}
+      <div
+        className={`fixed z-50 bg-gray-800 h-screen transition-transform ${
+          sidebarOpen ? "translate-x-0 w-[65%]" : "-translate-x-full"
+        } lg:translate-x-0 lg:w-[20%]`}
+      >
         <Sidebar />
       </div>
 
-      <div className="w-[80%] absolute left-[20%] bg-gray-900 px-6 py-6 min-h-screen">
+      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-gray-900 px-6 py-6 min-h-screen">
+        {/* Toggle Button for Mobile */}
+        <div className="lg:hidden flex justify-end mb-4">
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="text-white text-3xl focus:outline-none"
+          >
+            {sidebarOpen ? "✕" : "☰"}
+          </button>
+        </div>
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
           <div>
             <h1 className="text-2xl font-semibold text-white">Manage Blogs</h1>
@@ -167,12 +269,13 @@ function Posts() {
             <div className="relative">
               <select
                 onChange={fetchBlogsByCategory}
-                className="appearance-none pl-3 pr-8 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 "
+                className=" appearance-none pl-3 pr-8 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
               >
-                <option>All Categories</option>
+                <option >All Categories</option>
                 {categories && categories.length > 0 ? (
                   categories.map((category) => (
                     <option
+                    
                       onChange={category._id}
                       key={category._id}
                       value={category._id}
@@ -184,13 +287,31 @@ function Posts() {
                   <></>
                 )}
               </select>
-              <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+              <div className="hidden md:flex absolute inset-y-0 right-0  items-center pr-2 pointer-events-none">
                 <FiChevronDown className="text-gray-400" />
               </div>
             </div>
           </div>
 
-          <AllPost selectedCategoryBlogs={selectedCategoryBlogs} searchData={searchData}/>
+          <AllPost selectedCategoryBlogs={selectedCategoryBlogs} searchData={searchData} bData={bData}/>
+          <div className="w-full h-[1px] bg-gray-500"></div>
+          <div className=" pagination-controls flex justify-center items-center gap-4 mt-6 mb-6">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="px-4 py-1 rounded-md bg-gray-300 text-gray-900 hover:bg-gray-400 disabled:opacity-50"
+            >
+              Previous
+            </button>
+            {renderPagination()}
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="px-4 py-1 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300 disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
         </div>
       </div>
     </div>

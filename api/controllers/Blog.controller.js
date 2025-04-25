@@ -2,6 +2,9 @@ import mongoose from "mongoose";
 import cloudinary from "../config/cloudinary.js";
 import { handleError } from "../helpers/handleError.js";
 import Blog from "../models/blog.model.js";
+import Notification from "../models/notification.model.js";
+import nodemailer from "nodemailer";
+
 import Category from "../models/category.model.js";
 import { encode } from "entities";
 import http from "http";
@@ -10,6 +13,7 @@ import express from "express";
 import cors from "cors";
 import { createServer } from "http";
 import WebSocket  from 'ws';
+import BlogLike from "../models/bloglike.model.js";
 
 export const addBlog = async (req, res, next) => {
   try {
@@ -41,6 +45,7 @@ export const addBlog = async (req, res, next) => {
       isFeatured: data.isFeatured,
       status: data.status,
       authorid: data.authorid || "",
+      authoremail: data.authoremail || "",
     });
 
     await post.save();
@@ -122,8 +127,6 @@ export const updateBlog = async (req, res, next) => {
 
 export const updateApprovalBlog = async (req, res, next) => {
   try {
-    const app = express();
-
     const { blogid } = req.params;
 
     const newblog = await Blog.findByIdAndUpdate(
@@ -132,29 +135,41 @@ export const updateApprovalBlog = async (req, res, next) => {
         status: "published",
       },
       { new: true }
-    );
+    ); // Ensure email is populated
     console.log(newblog);
+    
 
-    const title = newblog?.title;
-    const message = `Hey, your blog : ${title} is approved from Traveller's Mirror`;
-    const server = http.createServer(app);
-    const io = new Server(server, {
-      cors: {
-        origin: "*",
-        methhod: ["GET", "POST"],
+    if (!newblog.authoremail) {
+      return res.status(400).json({
+        success: false,
+        message: "Author email not found.",
+      });
+    }
+
+    // Send notification
+    const notification = new Notification({
+      userId: newblog.authorid,
+      message: `Your blog "${newblog.title}" has been approved.`,
+    });
+    await notification.save();
+
+    // Send email
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "yadavdhiru201@gmail.com",
+        pass: "euli iqei mbfd zvha",
       },
     });
 
-    io.emit("pushNotification", {
-      message,
-    });
+    const mailOptions = {
+      from: "yadavdhiru201@gmail.com",
+      to: newblog?.authoremail,
+      subject: "Blog Approval Notification",
+      text: `Congratulations! Your blog titled "${newblog.title}" has been approved and is now live on our platform.`,
+    };
 
-    io.on("connection", (socket) => {
-      console.log("Connevted");
-      socket.on("disconnect", () => {
-        console.log("Client disconnected");
-      });
-    });
+    await transporter.sendMail(mailOptions);
 
     res.status(200).json({
       success: true,
@@ -230,14 +245,47 @@ export const deleteBlog = async (req, res, next) => {
 
 export const showAllBlog = async (req, res, next) => {
   try {
+    
+
     const blog = await Blog.find({ status: "published" })
       .populate("category", "name slug")
       .sort({ createdAt: -1 })
+      
       .lean()
       .exec();
 
+    const total = await Blog.countDocuments({ status: "published" });
+
     res.status(200).json({
       blog,
+      total,
+      
+    });
+  } catch (error) {
+    next(handleError(500, error.message));
+  }
+};
+
+export const showAllBlog2 = async (req, res, next) => {
+  try {
+    const { page = 1, limit = 10 } = req.query;
+    const skip = (page - 1) * limit;
+
+    const blog = await Blog.find({ status: "published" })
+      .populate("category", "name slug")
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(parseInt(limit))
+      .lean()
+      .exec();
+
+    const total = await Blog.countDocuments({ status: "published" });
+
+    res.status(200).json({
+      blog,
+      total,
+      totalPages: Math.ceil(total / limit),
+      currentPage: parseInt(page),
     });
   } catch (error) {
     next(handleError(500, error.message));
@@ -262,97 +310,97 @@ export const showAllPendingBlog = async (req, res, next) => {
 
 export const getTrendingBlogs = async (req, res) => {
   try {
-    // First get all featured blog IDs
-    const featuredBlogs = await Blog.find({
-      isFeatured: true,
-      status: "published",
-    }).select("_id");
-    const featuredIds = featuredBlogs.map((blog) => blog._id);
-    const { limit = 9, timeRange = "week" } = req.query;
-
-    let dateFilter = {};
-    const now = new Date();
-
-    if (timeRange === "day") {
-      dateFilter = {
-        createdAt: { $gte: new Date(now.setDate(now.getDate() - 1)) },
-      };
-    } else if (timeRange === "week") {
-      dateFilter = {
-        createdAt: { $gte: new Date(now.setDate(now.getDate() - 7)) },
-      };
-    } else if (timeRange === "month") {
-      dateFilter = {
-        createdAt: { $gte: new Date(now.setMonth(now.getMonth() - 1)) },
-      };
-    }
-
     const trendingBlogs = await Blog.aggregate([
-      {
-        $match: {
-          ...dateFilter,
-          _id: { $nin: featuredIds }, // Exclude by ID
+        // Match only published blogs
+        { $match: { status: 'published' } },
+        
+        // Get likes data
+        {
+            $lookup: {
+                from: 'bloglikes',
+                localField: '_id',
+                foreignField: 'blogid',
+                as: 'likes'
+            }
         },
-      },
-      // Rest of your aggregation pipeline...
-      {
-        $addFields: {
-          engagementScore: {
-            $add: [
-              { $multiply: ["$views", 0.5] },
-              { $multiply: ["$likes", 1] },
-              { $multiply: ["$comments", 1.5] },
-              { $multiply: ["$shares", 2] },
-            ],
-          },
+        
+        // Get comments data
+        {
+            $lookup: {
+                from: 'comments',
+                localField: '_id',
+                foreignField: 'blogid',
+                as: 'comments'
+            }
         },
-      },
-      { $sort: { engagementScore: -1 } },
-      { $limit: parseInt(limit) },
-      {
-        $lookup: {
-          from: "categories",
-          localField: "category",
-          foreignField: "_id",
-          as: "category",
+        
+        // Add engagement metrics
+        {
+            $addFields: {
+                likesCount: { $size: "$likes" },
+                commentsCount: { $size: "$comments" },
+            }
         },
-      },
-      { $unwind: "$category" },
+        
+        // Calculate trending score (you can adjust weights as needed)
+        {
+            $addFields: {
+                trendingScore: {
+                    $add: [
+                        "$likesCount",
+                        { $multiply: ["$commentsCount", 0.8] }, // Comments weight
+                        { $cond: [{ $eq: ["$isFeatured", true] }, 15, 0] }, // Featured bonus
+                        { 
+                            $divide: [
+                                { $subtract: [new Date(), "$createdAt"] },
+                                1000 * 60 * 60 * 24 // Days since creation
+                            ]
+                        } // Recency component (lower is better)
+                    ]
+                }
+            }
+        },
+        
+        // Sort by trending score (descending), then featured, then recency
+        {
+            $sort: {
+                trendingScore: -1,
+                isFeatured: -1,
+                createdAt: -1
+            }
+        },
+        
+        // Limit results
+        { $limit: 9 },
+        
+        // Project necessary fields
+        {
+            $project: {
+                title: 1,
+                slug: 1,
+                featuredimage: 1,
+                author: 1,
+                authorimage: 1,
+                createdAt: 1,
+                likesCount: 1,
+                commentsCount: 1,
+                isFeatured: 1
+            }
+        }
     ]);
 
-    //     { $match: dateFilter,
-    //         isFeatured : false
-    //      },
-
-    //     {
-    //       $addFields: {
-    //         engagementScore: {
-    //           $add: [
-    //             { $multiply: ['$views', 0.5] },
-    //             { $multiply: ['$likes', 1] },
-    //             { $multiply: ['$comments', 1.5] },
-    //             { $multiply: ['$shares', 2] }
-    //           ]
-    //         }
-    //       }
-    //     },
-    //     { $sort: { engagementScore: -1 } },
-    //     { $limit: parseInt(limit) },
-    //     {
-    //       $lookup: {
-    //         from: 'categories',
-    //         localField: 'category',
-    //         foreignField: '_id',
-    //         as: 'category'
-    //       }
-    //     },
-    //     { $unwind: '$category' }
-    //   ]);
-
-    res.json(trendingBlogs);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
+    res.status(200).json({
+        success: true,
+        blogs: trendingBlogs
+    });
+    
+} catch (error) {
+    res.status(500).json({
+        success: false,
+        message: "Error fetching trending blogs",
+        error: error.message
+    });
+}
 };
 
 // Get all featured blogs
@@ -418,15 +466,52 @@ export const getBlog = async (req, res, next) => {
 export const getBlogsByCategory = async (req, res, next) => {
   try {
     const { categoryId } = req.params;
+    
+
     const blogs = await Blog.find({ category: categoryId, status: "published" })
       .populate("category", "name slug")
       .populate("author", "username avatar")
       .sort({ createdAt: -1 })
+      
       .lean()
       .exec();
 
+    const total = await Blog.countDocuments({ category: categoryId, status: "published" });
+
     res.status(200).json({
       blogs,
+      total,
+      
+    });
+  } catch (error) {
+    next(handleError(500, error.message));
+  }
+};
+
+export const getBlogsByCategory2 = async (req, res, next) => {
+  try {
+    const { categoryId } = req.params;
+    const { page = 1, limit = 10 } = req.query;
+    const skip = (page - 1) * limit;
+
+    const blogs = await Blog.find({ category: categoryId, status: "published" })
+      .populate("category", "name slug")
+      .populate("author", "username avatar")
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(parseInt(limit))
+      .lean()
+      .exec();
+
+    const total = await Blog.countDocuments({ category: categoryId, status: "published" });
+    console.log(total);
+    
+
+    res.status(200).json({
+      blogs,
+      total,
+      totalPages: Math.ceil(total / limit),
+      currentPage: parseInt(page),
     });
   } catch (error) {
     next(handleError(500, error.message));
@@ -436,19 +521,56 @@ export const getBlogsByCategory = async (req, res, next) => {
 export const search = async (req, res, next) => {
   try {
     const { q } = req.params;
+    
+
     const blog = await Blog.find({ title: { $regex: q, $options: "i" } })
       .populate("author", "name avatar role")
       .populate("category", "name slug")
+      
       .lean()
       .exec();
 
+    const total = await Blog.countDocuments({ title: { $regex: q, $options: "i" } });
+
     res.status(200).json({
       blog,
+      total,
+      
     });
   } catch (error) {
     next(handleError(500, error.message));
   }
 };
+
+
+
+export const search2 = async (req, res, next) => {
+  try {
+    const { q } = req.params;
+    const { page = 1, limit = 10 } = req.query;
+    const skip = (page - 1) * limit;
+
+    const blog = await Blog.find({ title: { $regex: q, $options: "i" } })
+      .populate("author", "name avatar role")
+      .populate("category", "name slug")
+      .skip(skip)
+      .limit(parseInt(limit))
+      .lean()
+      .exec();
+
+    const total = await Blog.countDocuments({ title: { $regex: q, $options: "i" } });
+
+    res.status(200).json({
+      blog,
+      total,
+      totalPages: Math.ceil(total / limit),
+      currentPage: parseInt(page),
+    });
+  } catch (error) {
+    next(handleError(500, error.message));
+  }
+};
+
 
 export const getBlogsByUserId = async (req, res, next) => {
   try {
@@ -542,59 +664,23 @@ const io = new Server(server, {
 
 export const sendNoti = async (req, res, next) => {
   try {
-    const app = express();
-    const PORT = 3001;
 
-// Create HTTP server
-const server = app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
-
-// Create WebSocket server
-const wss = new WebSocket.Server({ server });
-
-// Store connected clients
-const clients = new Set();
-
-wss.on('connection', (ws) => {
-  clients.add(ws);
-  console.log(ws);
-  
-  
-  ws.on('message', (message) => {
-    console.log('Received:', message);
-  });
-  
-  ws.on('close', () => {
-    clients.delete(ws);
-  });
-});
-
-// Function to send notification to all clients
-function sendNotificationToAll(message) {
-  const data = JSON.stringify(message);
-  clients.forEach(client => {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(data);
-    }
-  });
-}
-
-// Example route to trigger notification
-
-  const message = {
-    type: 'notification',
-    data: {
-      title: 'New Message',
-      body: 'You have a new notification!',
-      timestamp: new Date()
-    }
-  };
-  sendNotificationToAll(message);
-  res.send('Notification sent to all clients');
 
 
     
+  } catch (error) {
+    next(handleError(500, error.message));
+  }
+};
+
+export const checkSlug = async (req, res, next) => {
+  try {
+    const { slug } = req.params;
+    const existingBlog = await Blog.findOne({ slug });
+    if (existingBlog) {
+      return res.status(200).json({ exists: true });
+    }
+    return res.status(200).json({ exists: false });
   } catch (error) {
     next(handleError(500, error.message));
   }

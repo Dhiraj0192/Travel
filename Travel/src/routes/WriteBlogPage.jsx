@@ -31,6 +31,7 @@ import { useSelector } from "react-redux";
 import { showToast } from "../helpers/showToast";
 import { toast } from "react-toastify";
 import UserIcon from "../components/UserIcon";
+import { FaCloudUploadAlt } from "react-icons/fa";
 
 function WriteBlogPage() {
     const user = useSelector((state) => state.user);
@@ -80,6 +81,7 @@ function WriteBlogPage() {
   const handleEditorData = (event, editor) => {
     const data = editor.getData();
     form.setValue("blogContent", data);
+    
   };
 
   const blogTitle = form.watch("title");
@@ -93,19 +95,56 @@ function WriteBlogPage() {
   async function onSubmit(values) {
     try {
       setUploading(true);
+
+      // Check if the slug is unique
+      const slugCheckResponse = await fetch(
+        `${getEnv("VITE_API_BASE_URL")}/blog/check-slug/${values.slug}`,
+        {
+          method: "get",
+          credentials: "include",
+        }
+      );
+      const slugCheckData = await slugCheckResponse.json();
+      if (!slugCheckResponse.ok || slugCheckData.exists) {
+        setUploading(false);
+        return toast("Slug already exists. Please change the title.", {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      }
+
       const newValues = {
         ...values,
-        authorid : user?.user._id,
+        authorid: user?.user._id,
         author: user?.user.name,
-        authorimage: user?.user.avatar || "https://www.flaticon.com/free-icon/user_9187604",
-        role: user?.user.role
+        authorimage:
+          user?.user.avatar || "https://www.flaticon.com/free-icon/user_9187604",
+        authoremail: user?.user.email,
+        role: user?.user.role,
       };
-      console.log(newValues);
 
       if (!file) {
-        showToast("error", "Featured image required.");
+        toast("Featured image required.", {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+
         setUploading(false);
+        return;
       }
+
       const formData = new FormData();
       formData.append("file", file);
       formData.append("data", JSON.stringify(newValues));
@@ -125,32 +164,32 @@ function WriteBlogPage() {
       setFile();
       setFilePreview();
       setUploading(false);
-      toast("Your blog is submitted in Review Process. Please wait gently.", {
-              position: "bottom-right",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: false,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "colored",
-              
-              });
-      navigate('/your-blogs');
+      toast(
+        "Your blog is submitted in Review Process. Please wait gently.",
+        {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        }
+      );
+      navigate("/your-blogs");
     } catch (error) {
       setUploading(false);
       toast(error.message, {
-              position: "bottom-right",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: false,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "colored",
-              
-              });
-      
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     }
   }
 
@@ -163,17 +202,17 @@ function WriteBlogPage() {
   return (
     <div className="flex flex-col">
       <UserIcon/>
-      <div className="w-full h-[30vh] overflow-hidden bg-gradient-to-b from-[#879cbf8b] to-[#1a1c208b] bg-opacity-5">
+      <div className="w-full h-[25vh] lg:h-[32vh] overflow-hidden bg-gradient-to-b from-[#879cbf8b] to-[#1a1c208b] bg-opacity-5">
         <Image
           src="pexels-fmaderebner-238622.jpg"
-          className="w-full h-[40vh] absolute top-0 -z-10 bg-cover "
+          className="w-full h-[32vh] lg:h-[50vh] absolute top-0 -z-10 bg-cover "
         />
         {/* breadcrumb */}
         <div className="h-[30vh] flex flex-col justify-center">
           {/* introduction */}
           <div className="lg:px-32 flex items-center justify-between">
-            <div className=" w-[60vw]">
-              <h1 className="text-white text-xl md:text-5xl lg:text-5xl font-bold">
+            <div className=" w-full md:w-[60vw] ">
+              <h1 className="text-white text-center text-xl md:text-3xl lg:text-5xl font-bold md:text-center">
                 Write your content, engage with readers, and grow audience.
               </h1>
             </div>
@@ -181,13 +220,14 @@ function WriteBlogPage() {
         </div>
       </div>
 
-      <div className="flex flex-col lg:px-32 w-full mt-10 mb-10">
+      <div className="flex flex-col px-6 lg:px-32 w-full mt-10 mb-10">
         <h1 className="text-gray-600 font-bold text-xl">Let's Create A New Blog</h1>
 
         <div className=" mt-6">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
-              <div className="flex items-center justify-between w-full">
+              <div className="flex md:flex-row flex-col items-center justify-between w-full">
+               
                 <div className="flex flex-col items-start">
                   <div className="mb-3">
                     <FormField
@@ -195,7 +235,7 @@ function WriteBlogPage() {
                       name="title"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-gray-500 text-3xl ">
+                          <FormLabel className="text-gray-500 text-xl  md:text-3xl ">
                             Write Blog Title Here...
                           </FormLabel>
                           <FormControl>
@@ -204,7 +244,7 @@ function WriteBlogPage() {
                                file:text-2xl
                               focus-visible:outline-none
                               focus-visible:border-0
-                              w-[69vw]"
+                              w-[90vw] md:w-[69vw]"
                               
                               {...field}
                             />
@@ -222,8 +262,8 @@ function WriteBlogPage() {
                       name="category"
                       render={({ field }) => (
                         <FormItem>
-                            <div className="flex items-center justify-start gap-2">
-                            <FormLabel className="text-gray-500 text-2xl w-[14vw]">
+                            <div className="flex items-center md:flex-row flex-col justify-start gap-2">
+                            <FormLabel className="text-gray-500 text-xl  md:text-2xl w-full md:w-[14vw]">
                             Select Category
                           </FormLabel>
                           <FormControl>
@@ -231,7 +271,7 @@ function WriteBlogPage() {
                               onValueChange={field.onChange}
                               defaultValue={field.value}
                             >
-                              <SelectTrigger className="w-[54vw] bg-gray-200 text-black">
+                              <SelectTrigger className="w-[90vw] md:w-[54vw] bg-gray-200 text-black">
                                 <SelectValue placeholder="All Category..." />
                               </SelectTrigger>
                               <SelectContent>
@@ -273,6 +313,10 @@ function WriteBlogPage() {
                         <input {...getInputProps()} />
 
                         <div className="flex justify-center items-center w-44 h-44 border-2 border-gray-500 border-dashed rounded cursor-pointer">
+                          {filePreview === undefined && <div className="flex items-center gap-2">
+                            <p className="text-black">Upload</p>
+                            <FaCloudUploadAlt />
+                            </div>}
                           <img src={filePreview} alt="" srcset="" />
                         </div>
                       </div>
@@ -328,7 +372,7 @@ function WriteBlogPage() {
                 />
               </div>
 
-              <div className="mt-5 text-right">
+              <div className="mt-5 text-left md:text-right">
                 <Button type="submit" className="w-[20vw] bg-gray-700">
                 {uploading ? "Please Wait...." : "Add Blog"}
                 </Button>

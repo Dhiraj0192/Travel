@@ -1,5 +1,5 @@
 import { SignIn } from "@clerk/clerk-react";
-import React from "react";
+import React, { useState } from "react";
 import Footer from "../components/Footer";
 import {
   Form,
@@ -30,6 +30,7 @@ function LoginPage() {
   const dispath = useDispatch()
 
   const navigate = useNavigate();
+  const [uploading, setUploading] = useState(false);
   const formSchema = z.object({
     email: z.string().email(),
     password: z.string().min(3, "Password field required."),
@@ -45,6 +46,7 @@ function LoginPage() {
 
   async function onSubmit(values) {
     try {
+      setUploading(true)
       const response = await fetch(
         `${getEnv("VITE_API_BASE_URL")}/auth/login`,
         {
@@ -57,10 +59,12 @@ function LoginPage() {
 
       const data = await response.json();
       if (!response.ok) {
+        setUploading(false)
         return showToast("error", data.message);
       }
 
       dispath(setUser(data.user))
+      setUploading(false)
       navigate("/home");
       toast(data.message, {
         position: "top-right",
@@ -75,6 +79,7 @@ function LoginPage() {
         });
       // showToast("success", data.message);
     } catch (error) {
+      setUploading(false)
       showToast("error", error.message);
     }
   }
@@ -82,10 +87,10 @@ function LoginPage() {
   return (
     <div className="w-full h-screen">
       <div className="w-full lg:px-32">
-        <div className="flex items-center justify-between gap-0">
-          <div className="mt-5 w-[63%]  h-[83vh] flex flex-col justify-center pr-10 pt-10 pb-10 pl-10 rounded-3xl">
-            <p className="text-7xl font-bold">Share Your Story</p>
-            <span className="text-6xl font-bold text-blue-800 mt-5">
+        <div className="flex md:flex-row flex-col items-center justify-between gap-0">
+        <div className="w-full md:w-[63%] md:h-[84vh] flex justify-center flex-col lg:justify-end pr-10  lg:pb-40 pl-10 rounded-3xl pt-10 md:pt-0">
+            <p className="text-3xl md:text-5xl lg:text-7xl font-bold">Share Your Story</p>
+            <span className="text-4xl md:text-4xl lg:text-6xl font-bold text-blue-800 mt-2 md:mt-5">
               {" "}
               With The World
             </span>
@@ -94,8 +99,8 @@ function LoginPage() {
               platform. Simple to use, powerful to grow your audience.
             </p>
 
-            <div className="w-[81vw] h-2 bg-blue-800 rounded-3xl absolute bottom-10 right-28"></div>
-            <div className="w-[70vw] h-2 bg-blue-800 rounded-3xl absolute bottom-14 right-28"></div>
+            <div className="hidden lg:block w-[81vw] h-2 bg-blue-800 rounded-3xl absolute bottom-10 right-28 "></div>
+            <div className="hidden lg:block w-[70vw] h-2 bg-blue-800 rounded-3xl absolute bottom-14 right-28"></div>
           </div>
           <div className="">
             {/* <SignIn signUpUrl='/register'/> */}
@@ -146,7 +151,8 @@ function LoginPage() {
                   </div>
                   <div className="mt-5">
                     <Button type="submit" className="w-full bg-blue-600">
-                      Log In
+                    {uploading ? "Please Wait...." : "Log In"}
+                      
                     </Button>
                     <div className="mt-5 text-sm flex justify-center items-center gap-2">
                       <p>Don&apos;t have account?</p>

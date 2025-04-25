@@ -8,7 +8,7 @@ import { useFetch } from "../../hooks/userFetch";
 import { Link } from "react-router-dom";
 import moment from "moment/moment";
 
-const AllPost = ({ selectedCategoryBlogs ,searchData }) => {
+const AllPost = ({ selectedCategoryBlogs ,searchData,bData }) => {
   // Status badge component
   const StatusBadge = ({ status }) => {
     const statusClasses = {
@@ -26,19 +26,7 @@ const AllPost = ({ selectedCategoryBlogs ,searchData }) => {
     );
   };
 
-  const [refreshData, setRefreshData] = useState(false);
-  let {
-    data: blogData,
-    loading,
-    error,
-  } = useFetch(
-    `${getEnv("VITE_API_BASE_URL")}/blog/get-all`,
-    {
-      method: "get",
-      credentials: "include",
-    },
-    [refreshData]
-  );
+  
 
   const handleDelete = (id) => {
     const respnse = deleteData(
@@ -52,10 +40,10 @@ const AllPost = ({ selectedCategoryBlogs ,searchData }) => {
     }
   };
   if (selectedCategoryBlogs != undefined) {
-    blogData = []
+    bData = []
   }
 
-  if (loading) return <Loading />;
+  
   return (
     <div className="py-10 w-full bg-gray-600 rounded-lg shadow-sm">
       <div className="overflow-x-auto">
@@ -84,7 +72,7 @@ const AllPost = ({ selectedCategoryBlogs ,searchData }) => {
             </tr>
           </thead>
           <tbody className="bg-transparent divide-y divide-gray-200">
-            {searchData ? searchData.map(blog =><Link to={`/adminblog/${blog.category.slug}/${blog.slug}`}><tr key={blog.id}>
+            {searchData ? searchData.map(blog =><tr key={blog.id}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-50">
                       {blog.author}
@@ -99,7 +87,7 @@ const AllPost = ({ selectedCategoryBlogs ,searchData }) => {
                   </Link>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-50">
-                      {blog.category.name}
+                      {blog.category?.name}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -126,10 +114,10 @@ const AllPost = ({ selectedCategoryBlogs ,searchData }) => {
                       </button>
                     </div>
                   </td>
-                </tr></Link> ) :
+                </tr> ) :
             
-            blogData && blogData?.blog?.length > 0 ? (
-              blogData.blog.map((blog) => (
+            bData && bData?.blog?.length > 0 ? (
+              bData.blog.map((blog) => (
                <tr key={blog.id}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-50">
@@ -175,19 +163,19 @@ const AllPost = ({ selectedCategoryBlogs ,searchData }) => {
                 </tr>
               ))
             ) : 
-              selectedCategoryBlogs && selectedCategoryBlogs.map((blog , index) => <Link to={`/adminblog/${blog.category.slug}/${blog.slug}`}><tr key={blog.id}></tr><tr key={blog.id}>
+              selectedCategoryBlogs && selectedCategoryBlogs.map((blog , index) => <tr key={blog.id}>
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="text-sm font-medium text-gray-50">
                   {blog.author}
                 </div>
               </td>
               <Link to={`/adminblog/${blog.category.slug}/${blog.slug}`}>
-                  <td className="px-6 py-4 whitespace-nowrap ">
-                    <div className="text-sm font-medium text-gray-50 hover:text-black">
-                      {blog.title.substring(0, 25)}....
-                    </div>
-                  </td>
-                  </Link>
+              <td className="px-6 py-4 whitespace-nowrap ">
+                <div className="text-sm font-medium text-gray-50 hover:text-black">
+                  {blog.title.substring(0, 25)}....
+                </div>
+              </td>
+              </Link>
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="text-sm text-gray-50">
                   {blog.category?.name}
@@ -217,7 +205,7 @@ const AllPost = ({ selectedCategoryBlogs ,searchData }) => {
                   </button>
                 </div>
               </td>
-            </tr></Link>
+            </tr>
             )}
           </tbody>
         </table>
