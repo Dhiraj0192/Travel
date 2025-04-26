@@ -19,7 +19,7 @@ function RecentBlogs() {
         {
           method: "get",
           credentials: "include",
-        }
+        },[]
       );
 
       const plainText = (blogcontent) => convert(decode(blogcontent || ""), {
@@ -48,11 +48,11 @@ function RecentBlogs() {
                 <Link to={`/blog/${blog.category.slug}/${blog.slug}`}> <img src={blog.featuredimage} alt="" srcset="" className='lg:w-[26vw] lg:h-[30vh] rounded-lg'/> 
                    </Link>
 
-                <h1 className="font-bold text-black text-base hover:text-gray-600 mt-1">{blog.title}</h1>
+                <h1 className="font-bold text-center text-black text-base hover:text-gray-600 mt-1">{blog.title}</h1>
 
                 <div className="w-[10vw] h-1 bg-blue-600 rounded-full mb-2"></div>
 
-                <p className="text-gray-700 text-sm text-center mg:w-[26vw]" >{plainText(blog.blogcontent).substring(0, 100).trim() + (plainText.length > 100 ? '...' : '')}</p>
+                <p className="text-gray-900 text-sm text-center mg:w-[26vw]" >{plainText(blog.blogcontent).substring(0, 100).trim() + (plainText.length > 100 ? '...' : '')}</p>
                 
 
                 <div className="mt-4">

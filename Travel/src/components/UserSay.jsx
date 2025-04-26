@@ -20,7 +20,7 @@ function UserSay() {
                     <MdMessage className='w-10 h-10 text-green-400'/>
 
                     <p className="italic text-white">
-                    "This platform made blogging accessible to me. The Google sign-in process was seamless, and I published my first article in minutes. Now I have over 5,000 monthly readers!"
+                    "Your interactive map feature helped us plan a road trip through Costa Rica that kept our teens engaged (no small feat!). Sloth sightings and volcano hikes—thank you for the memories!"
                     </p>
                     <div className="flex items-center justify-start gap-3">
                         <div className="rounded-full">
@@ -36,9 +36,9 @@ function UserSay() {
                         </div>
 
                         <div className="flex flex-col items-start gap-1">
-                            <p className="font-bold text-white">Dhiraj Yadav</p>
+                            <p className="font-bold text-white">The Gupta Family, USA</p>
                             <p className="text-white">
-                                Travel Blogger
+                            Family Travelers
                             </p>
                         </div>
 
@@ -49,7 +49,7 @@ function UserSay() {
                     <MdMessage className='w-10 h-10 text-green-400'/>
 
                     <p className="italic text-white">
-                    "This platform made blogging accessible to me. The Google sign-in process was seamless, and I published my first article in minutes. Now I have over 5,000 monthly readers!"
+                    "The ‘Street Food Secrets of Bangkok’ post transformed our trip! We ate like locals, thanks to your vendor spotlights and allergy-safe tips. That mango sticky rice… heaven!"
                     </p>
                     <div className="flex items-center justify-start gap-3">
                         <div className="rounded-full">
@@ -65,9 +65,9 @@ function UserSay() {
                         </div>
 
                         <div className="flex flex-col items-start gap-1">
-                            <p className="font-bold text-white">Dhiraj Yadav</p>
+                            <p className="font-bold text-white">Sophie L., Food Blogger from France</p>
                             <p className="text-white">
-                                Travel Blogger
+                            Cultural & Food Enthusiasts
                             </p>
                         </div>
 

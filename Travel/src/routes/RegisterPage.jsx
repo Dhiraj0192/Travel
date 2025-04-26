@@ -98,7 +98,7 @@ function RegisterPage() {
               {" "}
               With The World
             </span>
-            <p className="mt-10 text-xl text-black font-semibold">
+            <p className="mt-10 text-md text-black ">
               Create, publish and connect with readers on our modern blogging
               platform. Simple to use, powerful to grow your audience.
             </p>
@@ -108,7 +108,7 @@ function RegisterPage() {
             
           </div>
           <div className="pt-12 md:pt-10 pb-10 md:mt-20">
-            <Card className="w-[400px] p-5">
+            <Card className="w-[400px] p-7 ">
               <h1 className="text-2xl font-bold text-center mb-5">
                 Create Your Account
               </h1>

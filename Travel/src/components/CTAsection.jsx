@@ -52,14 +52,14 @@ const CTASection = () => {
             </p>
                 
             </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 bg-gray-800 text-white rounded-2xl">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-1 bg-gray-800 text-white rounded-2xl">
             
           {ctaItems.map((item, index) => (
             <div 
               key={index}
               className={`${item.color} p-8 rounded-2xl transition-all duration-300 hover:-translate-y-2`}
             >
-              <div className="flex flex-col items-start space-y-4">
+              <div className="flex flex-col text-center items-center md:items-start space-y-4">
                 <div className="p-4 rounded-lg shadow-sm border-r-2">
                   {item.icon}
                 </div>

@@ -94,7 +94,7 @@ function LoginPage() {
               {" "}
               With The World
             </span>
-            <p className="mt-10 text-xl text-black font-semibold">
+            <p className="mt-10 text-md text-black mb-10">
               Create, publish and connect with readers on our modern blogging
               platform. Simple to use, powerful to grow your audience.
             </p>
@@ -104,7 +104,7 @@ function LoginPage() {
           </div>
           <div className="">
             {/* <SignIn signUpUrl='/register'/> */}
-            <Card className="w-[400px] p-5">
+            <Card className="w-[400px] p-7 mb-10">
               <h1 className="text-2xl font-bold text-center mb-5">
                 Login Into Account
               </h1>
