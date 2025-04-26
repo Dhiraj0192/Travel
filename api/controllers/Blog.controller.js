@@ -7,13 +7,7 @@ import nodemailer from "nodemailer";
 
 import Category from "../models/category.model.js";
 import { encode } from "entities";
-import http from "http";
-import { Server } from "socket.io";
-import express from "express";
-import cors from "cors";
-import { createServer } from "http";
-import WebSocket  from 'ws';
-import BlogLike from "../models/bloglike.model.js";
+
 
 export const addBlog = async (req, res, next) => {
   try {

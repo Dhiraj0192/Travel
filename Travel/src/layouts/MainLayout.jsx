@@ -8,7 +8,7 @@ function MainLayout() {
   const user = useSelector((state) => state.user);
 
   const hideNavbarPaths = ['/','/blogs','/write','/login','/register',
-    '/home','/account','/contact','/about','/write-blog','/your-blogs','/travel-packages','/gallery','/terms-condition'
+    '/home','/account','/contact','/about','/write-blog','/your-blogs','/travel-packages','/gallery','/terms-condition','/videos'
   ];
 
   // Protect the /home route

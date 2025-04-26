@@ -48,6 +48,9 @@ import ContactPage from './routes/ContactPage';
 import AboutPage from './routes/AboutPage';
 import Messages from './routes/adminPages/Messages';
 import AddHeroSection from './routes/adminPages/AddHeroSection';
+import VideosPage from './routes/VideosPage';
+import AddVideo from './routes/adminPages/AddVideo';
+import Videos from './routes/adminPages/Videos';
 
 
 
@@ -68,6 +71,10 @@ const router = createBrowserRouter([
       {
         path: "/blogs",
         element : <BlogPage/>
+      },
+      {
+        path: "/videos",
+        element : <VideosPage/>
       },
       {
         path: "/your-blogs",
@@ -147,6 +154,10 @@ const router = createBrowserRouter([
         element : <Posts/>
       },
       {
+        path: "/admin-videos",
+        element : <Videos/>
+      },
+      {
         path: "/admin-pending-posts",
         element : <PendingPosts/>
       },
@@ -157,6 +168,10 @@ const router = createBrowserRouter([
       {
         path: "/admin-add-blog",
         element : <AddBlog/>
+      },
+      {
+        path: "/admin-add-video",
+        element : <AddVideo/>
       },
       {
         path: "/admin-blog/edit/:blog_id",
