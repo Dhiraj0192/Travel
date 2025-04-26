@@ -209,22 +209,21 @@ function BlogPage() {
   return (
     <div className=" flex flex-col ">
       <UserIcon/>
-      <div className="w-full h-[58vh] lg:h-[45vh] overflow-hidden bg-gradient-to-b from-[#879cbf8b] to-[#1a1c208b] bg-opacity-5">
+      <div className="w-full h-[58%] lg:h-[45vh] overflow-hidden bg-gradient-to-b from-[#879cbf8b] to-[#1a1c208b] bg-opacity-5">
         <img
           src="/adventure.jpg"
-          className="w-full h-[66vh] absolute top-0 -z-10 bg-cover "
+          className="w-full h-[58%] absolute top-16 -z-10 bg-cover "
         />
         {/* breadcrumb */}
-        <div className=" flex flex-col justify-center  md:mt-20 gap-4">
+        <div className=" flex flex-col justify-center mt-10  md:mt-20 gap-4">
           
           {/* introduction */}
-          <div className="lg:px-32 lg:flex-row flex-col flex items-center gap-8">
+          <div className=" lg:px-32 lg:flex-row flex-col flex items-center gap-8">
           <Link to="/write-blog" className="">
               <svg
                 viewBox="0 0 200 200"
-                width="170"
-                height="200"
-                className="text-xl font-bold tracking-widest animate-spin animatedButton -ml-2 text"
+                
+                className="text-xl font-bold tracking-widest animate-spin animatedButton -ml-2 text w-32 h-32 md:w-44 md:h-44"
               >
                 <path
                   id="circlePath"
@@ -241,7 +240,7 @@ function BlogPage() {
                 </text>
               </svg>
 
-              <button className="absolute top-[13vh] md:left-[44vw] md:top-[20vh] lg:top-[36vh] lg:left-[11vw] left-40 w-24 h-24 bg-blue-800 rounded-full flex items-center justify-center">
+              <button className="-mt-24 ml-7 md:-mt-32 md:ml-9 w-16 h-16 md:w-24 md:h-24 bg-blue-800 rounded-full flex items-center justify-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -256,7 +255,7 @@ function BlogPage() {
                 </svg>
               </button>
             </Link>
-            <div className=" w-[60vw]">
+            <div className=" w-[80vw] text-center md:w-[60vw]">
               <h1 className="text-white text-2xl md:text-3xl lg:text-5xl font-bold">
                 Share your content, engage with readers, and grow audience.
               </h1>
@@ -270,7 +269,7 @@ function BlogPage() {
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-8 w-full px-6 md:px-6 -mt-6 md:-mt-0">
+      <div className="flex flex-col md:flex-row gap-8 w-full px-6 md:px-6  md:mt-14">
         <div className="lg:pl-32 lg:w-[20vw] md:h-max md:sticky md:top-10">
           <h1 className="mt-20 mb-12 text-xl font-medium">Categories </h1>
           <div className="flex flex-col gap-3 text-sm">
