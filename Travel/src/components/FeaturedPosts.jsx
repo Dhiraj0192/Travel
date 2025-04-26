@@ -42,7 +42,7 @@ function FeaturedPosts({ lineBar = true , selectedCategoryBlogs, searchData }) {
 
             {searchData ? searchData.map((blog, index) =><div key={blog._id} className="w-full md:w-[40vw]">
                   <div className="flex  justify-between gap-4 bg-white/30 ">
-                  <Link className="rounded-xl object-cover w-1/3
+                  <Link className="rounded-xl object-cover w-1/2
                           shadow-2xl aspect-video" to={`/blog/${blog.category.slug}/${blog.slug}`}> <img
                       src={blog.featuredimage}
                       className="rounded-xl"
@@ -68,7 +68,7 @@ function FeaturedPosts({ lineBar = true , selectedCategoryBlogs, searchData }) {
               data && Array.isArray(data?.blogs) ? data?.blogs.map((blog , index) => 
                 <div key={blog._id} className="w-full md:w-[40vw]">
                   <div className="flex  justify-between gap-4 bg-white/30 ">
-                  <Link className="rounded-xl object-cover w-1/3
+                  <Link className="rounded-xl object-cover w-1/2
                           shadow-2xl aspect-video" to={`/blog/${blog.category.slug}/${blog.slug}`}> <img
                       src={blog.featuredimage}
                       className="rounded-xl"
@@ -96,7 +96,7 @@ function FeaturedPosts({ lineBar = true , selectedCategoryBlogs, searchData }) {
                 selectedCategoryBlogs && selectedCategoryBlogs.map((blog , index) => 
                 <div key={blog._id} className="w-full md:w-[40vw]">
                 <div className="flex  justify-between gap-4 bg-white/30 ">
-                <Link className="rounded-xl object-cover w-1/3
+                <Link className="rounded-xl object-cover w-1/2
                           shadow-2xl aspect-video" to={`/blog/${blog.category.slug}/${blog.slug}`}> <img
                       src={blog.featuredimage}
                       className="rounded-xl"

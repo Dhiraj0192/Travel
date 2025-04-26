@@ -189,10 +189,10 @@ function MainPage() {
                 
               </DropdownMenuContent>
             </DropdownMenu>
-      <div className="w-full h-[50vh] md:h-[33vh] lg:h-[50vh] overflow-hidden bg-gradient-to-b from-[#3f4247b4] to-[#1a1c208b] bg-opacity-10">
+      <div className="w-full h-[50%] md:h-[33vh] lg:h-[50vh] overflow-hidden bg-gradient-to-b from-[#3f4247b4] to-[#1a1c208b] bg-opacity-10">
         <img
           src={HeroData?.heroSections.featuredImage}
-          className="w-full h-[74vh] absolute top-0 -z-10 bg-cover "
+          className="w-full h-[67%] absolute top-0 -z-10 bg-cover "
         />
         {/* breadcrumb */}
         <div className="lg:h-96 h-96 md:h-80 flex flex-col justify-center mt-10 md:mt-6 ">
@@ -221,7 +221,7 @@ function MainPage() {
               </text>
             </svg>
             
-            <button className="absolute top-[18vh] lg:top-[40vh] left-[38vw] lg:left-40 md:left-[11vw] w-24 h-24 bg-blue-800 rounded-full flex items-center justify-center">
+            <button className="absolute top-[22%] lg:top-[40vh] left-[38vw] lg:left-40 md:left-[11vw] w-24 h-24 bg-blue-800 rounded-full flex items-center justify-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -301,7 +301,7 @@ function MainPage() {
 
         <div className="backdrop-blur-sm ">
         <div className=" mb-16 flex flex-col items-center justify-center gap-6 md:px-0 px-3">
-        <h1 className="text-3xl font-bold text-blue-800">Trending Blogs</h1>
+        <h1 className="text-2xl font-bold text-blue-800">Trending Blogs</h1>
         <p className="text-gray-600 text-center">
           Discover trending content from our community of traveller's
         </p>

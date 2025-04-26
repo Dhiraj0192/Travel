@@ -105,7 +105,7 @@ function Footer() {
             </div>
         </div>
 
-        <div className="flex md:flex-row flex-col md:gap-0 gap-3 items-center justify-between mb-5 lg:px-32">
+        <div className="flex md:flex-row flex-col md:gap-0 gap-3 items-center justify-between mb-5 lg:px-32 px-3">
             <p className="text-gray-200 text-center">
             © 2025 Traveller's Mirror. All rights reserved. Designed By Dhiraj Yadav 😎
             </p>

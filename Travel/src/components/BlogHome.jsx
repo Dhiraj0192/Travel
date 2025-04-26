@@ -151,12 +151,12 @@ console.log(blogDataByCategory);
       });
 
   return (
-    <div className="max-w-7xl mx-auto px-4 mt-20 sm:px-6 lg:px-8 ">
+    <div className="max-w-7xl mx-auto px-4 mt-12 md:mt-20 sm:px-6 lg:px-8 ">
       {/* Featured Posts (Full-width cards) */}
       <section className="mb-16">
-        <div className="flex items-center gap-2 mb-12 justify-center mt-8  text-5xl">
+        <div className="flex items-center gap-2 mb-12 justify-center mt-8  text-3xl">
           <FaStar className="text-yellow-500" />
-          <h2 className="text-3xl font-bold text-gray-900">Featured Posts</h2>
+          <h2 className="text-2xl font-bold text-gray-900">Featured Posts</h2>
         </div>
 
         <div className="grid gap-8 md:grid-cols-2">
@@ -228,9 +228,9 @@ console.log(blogDataByCategory);
 
       {/* Trending Posts (List with icons) */}
       <section>
-      <div className="flex items-center gap-2 mb-8 justify-center mt-28 text-3xl">
+      <div className="flex items-center gap-2 mb-8 justify-center mt-12 md:mt-28 text-xl">
       <FaFire className="text-orange-500" />
-          <h2 className="text-3xl font-bold text-gray-900">Trending Travel Blogs</h2>
+          <h2 className="text-2xl font-bold text-gray-900">Trending Travel Blogs</h2>
         </div>
         
 
