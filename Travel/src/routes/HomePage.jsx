@@ -18,10 +18,10 @@ function HomePage() {
   return (
     <div className="mt-0 flex flex-col items-center rounded-3xl justify-center ">
       
-      <div className=" w-full h-[55vh] lg:h-[78vh] overflow-hidden bg-gradient-to-b from-[#455165eb] to-[#0101018b] bg-opacity-5">
+      <div className=" w-full h-[57vh] lg:h-[78vh] overflow-hidden bg-gradient-to-b from-[#455165eb] to-[#0101018b] bg-opacity-5">
         <Image
           src="pexels-fmaderebner-238622.jpg"
-          className="opacity-100 w-full absolute top-0 -z-10 h-[64vh] lg:h-[95vh]"
+          className="opacity-100 w-full absolute top-0 -z-10 h-[66vh] lg:h-[95vh]"
         />
       </div>
       <div className="flex gap-4 z-20 absolute top-40 ml-10 text-center">
