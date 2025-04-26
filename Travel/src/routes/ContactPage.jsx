@@ -128,10 +128,10 @@ function ContactPage() {
     <div className="flex flex-col min-h-screen">
         {user.isLoggedIn && <UserIcon/>}
       <div className="w-full ">
-        <div className="overflow-hidden bg-gradient-to-b from-[#4b55678b] to-[#1a1c208b] bg-opacity-5 h-[25vh] lg:h-[33vh]">
+        <div className="overflow-hidden bg-gradient-to-b from-[#4b55678b] to-[#1a1c208b] bg-opacity-5 h-[27vh] lg:h-[33vh]">
           <img
             src="https://images.pexels.com/photos/12231824/pexels-photo-12231824.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-            className="w-full h-[32vh] lg:h-[50vh] absolute top-0 -z-10 bg-cover "
+            className="w-full h-[36vh] lg:h-[50vh] absolute top-0 -z-10 bg-cover "
           />
           {/* breadcrumb */}
           <div className="h-[20vh] flex flex-col justify-center">

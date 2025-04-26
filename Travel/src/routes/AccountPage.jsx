@@ -152,15 +152,15 @@ function AccountPage() {
       <div className="absolute top-20 right-0 -z-10"></div>
       <div className="absolute bottom-10 left-20 -z-10"></div>
       {/* breadcrumb */}
-      <div className=" w-full h-[28vh] lg:h-[20vh] overflow-hidden bg-gradient-to-b from-[#879cbf8b] to-[#1a1c208b] bg-opacity-5">
+      <div className=" w-full h-[28vh] md:h-[20vh] lg:h-[20vh] overflow-hidden bg-gradient-to-b from-[#879cbf8b] to-[#1a1c208b] bg-opacity-5">
         <Image
           src="pexels-fmaderebner-238622.jpg"
-          className="opacity-100 w-full absolute top-0 -z-10 h-[35vh] lg:h-[40vh] overflow-hidden"
+          className="opacity-100 w-full absolute top-0 -z-10 h-[37vh] md:h-[27vh] lg:h-[40vh] overflow-hidden"
         />
       </div>
-      <div className="flex gap-4 z-20 absolute top-28 md:top-40 ml-10 text-center">
+      <div className="flex gap-4 z-20 absolute top-28 md:top-40  text-center">
         <div className="flex items-center justify-between">
-          <div className="w-[62vw] text-2xl mt-16">
+          <div className="w-[90vw] md:w-[62vw] text-2xl mt-10">
             
            
             <span className="text-white font-bold">Update Your Profile Here...</span>
