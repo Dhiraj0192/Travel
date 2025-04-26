@@ -60,7 +60,7 @@ function AboutPage() {
         <div className="overflow-hidden bg-gradient-to-b from-[#4b55678b] to-[#1a1c208b] bg-opacity-5 h-[25vh] lg:h-[33vh]">
           <img
             src="https://images.pexels.com/photos/12231824/pexels-photo-12231824.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-            className="w-full h-[32vh] lg:h-[50vh] absolute top-0 -z-10 bg-cover "
+            className="w-full h-[34vh] lg:h-[50vh] absolute top-0 -z-10 bg-cover "
           />
           {/* breadcrumb */}
           <div className="h-[20vh] flex flex-col justify-center">
@@ -90,7 +90,7 @@ function AboutPage() {
                     <div className="bg-gray-400 w-[15vw] h-[1px] "></div>
                     </div>
 
-                    <div className="flex flex-col gap-3">
+                    <div className="flex flex-col gap-8">
                         <p className="text-black font-bold text-2xl">
                         About Traveller's Mirror
                         </p>
@@ -156,8 +156,8 @@ Explore the Globe: Use our interactive map to wander virtually, or filter blogs 
                 </div>
 
                 <div className="">
-                <div className="flex flex-col md:px-6 lg:px-10 w-full mt-20 mb-10">
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className=" flex flex-col md:px-6 lg:px-10 w-full mt-20 mb-10">
+                <div className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {[
                         "https://images.pexels.com/photos/413960/pexels-photo-413960.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
                         "https://images.pexels.com/photos/450441/pexels-photo-450441.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
