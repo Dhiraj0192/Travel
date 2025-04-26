@@ -31,11 +31,11 @@ function RecentBlogs() {
   return (
     <div className='lg:px-32 flex flex-col w-full mt-20 bg-[url(public/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat pt-10 pb-10'>
         <div className="flex items-center justify-between backdrop-blur-md">
-            <div className="w-[28vw] h-1 bg-gray-300"></div>
+            <div className="w-[23vw] h-1 bg-gray-300"></div>
             <h1 className="text-2xl lg:text-4xl font-bold text-black">
                 Recent Blogs
             </h1>
-            <div className="w-[28vw] h-1 bg-gray-300"></div>
+            <div className="w-[23vw] h-1 bg-gray-300"></div>
         </div>
 
         <div className="mt-16 backdrop-blur-md">
