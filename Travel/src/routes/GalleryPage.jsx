@@ -36,13 +36,13 @@ return (
             <div className="overflow-hidden bg-gradient-to-b from-[#4b55678b] to-[#1a1c208b] bg-opacity-5 h-[25vh] lg:h-[33vh]">
                 <img
                     src="https://images.pexels.com/photos/5077049/pexels-photo-5077049.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-                    className="w-full h-[32vh] lg:h-[50vh] absolute top-0 -z-10 bg-cover "
+                    className="w-full h-[34vh] lg:h-[50vh] absolute top-0 -z-10 bg-cover "
                 />
                 {/* breadcrumb */}
                 <div className="h-[20vh] flex flex-col justify-center">
                     {/* introduction */}
                     <div className="lg:px-32 flex items-center justify-between">
-                        <div className="md:mt-40 md:px-6 px-6 md:w-[60vw]">
+                        <div className="mt-10 md:mt-40 md:px-6 px-6 md:w-[60vw]">
                             <h1 className=" text-white text-2xl md:text-4xl lg:text-5xl font-bold">
                                 Discover My Gallery Travel
                             </h1>

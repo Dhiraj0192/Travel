@@ -190,7 +190,7 @@ function UserBlogPage() {
                 viewBox="0 0 200 200"
                 width="170"
                 height="170"
-                className="text-lg tracking-widest animate-spin animatedButton mr-3 text"
+                className="text-lg tracking-widest animate-spin animatedButton mr-3 text w-32 h-32 md:w-44 md:h-44"
               >
                 <path
                   id="circlePath"
@@ -207,7 +207,7 @@ function UserBlogPage() {
                 </text>
               </svg>
 
-              <button className="absolute top-[29vh] md:top-[17vh] lg:top-[27vh] right-[40vw] md:right-[10vw] lg:right-40 w-24 h-24 bg-blue-800 rounded-full flex items-center justify-center">
+              <button className="-mt-24 ml-9 md:-mt-32 w-16 h-16 md:w-24 md:h-24 bg-blue-800 rounded-full flex items-center justify-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
