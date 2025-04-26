@@ -192,14 +192,14 @@ function MainPage() {
       <div className="w-full h-[50%] md:h-[33vh] lg:h-[50vh] overflow-hidden bg-gradient-to-b from-[#3f4247b4] to-[#1a1c208b] bg-opacity-10">
         <img
           src={HeroData?.heroSections.featuredImage}
-          className="w-full h-[67%] absolute top-16 -z-10 bg-cover "
+          className="w-full h-[60%] absolute top-16 -z-10 bg-cover "
         />
         {/* breadcrumb */}
         <div className="lg:h-96 h-96 md:h-80 flex flex-col justify-center mt-10 md:mt-6 ">
           
           {/* introduction */}
-          <div className="lg:px-32 md:px-16 flex md:flex-row flex-col items-center md:gap-10">
-          <Link to="/write-blog" className="-mt-20 md:mt-0">
+          <div className="lg:px-32 md:px-16 flex md:flex-row flex-col items-center md:gap-10 ">
+          <Link to="/write-blog" className="-mt-20 mb-10 md:mt-0 flex-col items-center justify-center">
             <svg
               viewBox="0 0 200 200"
               width="170"
@@ -208,7 +208,7 @@ function MainPage() {
             >
               <path
                 id="circlePath"
-                d="M 100, 100 m -75, 0 a 75,75 0 1, 1 150,0 a 75, 75 0 1,1 -150,0"
+                d="M 100, 100 m -75, 0 a 75,75 1 0, 1 150,0 a 75, 75 0 1,1 -150,1"
                 fill="none"
               />
               <text>
@@ -221,7 +221,7 @@ function MainPage() {
               </text>
             </svg>
             
-            <button className="absolute top-[23%] lg:top-[40vh] left-[38vw] lg:left-40 md:left-[11vw] w-24 h-24 bg-blue-800 rounded-full flex items-center justify-center">
+            <button className=" -mt-[20vh] ml-7 w-24 h-24 bg-blue-800 rounded-full flex items-center justify-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
