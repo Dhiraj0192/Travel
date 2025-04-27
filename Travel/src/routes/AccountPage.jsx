@@ -146,7 +146,7 @@ function AccountPage() {
   // if (loading) return <Loading />;
   return (
     <div className="mt-0 flex flex-col items-center rounded-3xl justify-center ">
-      <UserIcon/>
+      {user?.isLoggedIn && <UserIcon/>}
       {/* blob elements */}
       <div className="absolute top-29 left-10 z-20"></div>
       <div className="absolute top-20 right-0 -z-10"></div>

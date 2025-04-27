@@ -12,10 +12,7 @@ function VideosPage() {
   const [previewImage, setPreviewImage] = useState(null);
   const user = useSelector((state) => state.user);
 
-  // Protect the /single page route
-  if (!user.isLoggedIn) {
-    return <Navigate to="/login" replace />;
-  }
+ 
 
   let {
     data: videoData,
@@ -29,7 +26,7 @@ function VideosPage() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <UserIcon />
+     {user?.isLoggedIn && <UserIcon/>}
       <div className="w-full ">
         <div className="overflow-hidden bg-gradient-to-b from-[#4b55678b] to-[#1a1c208b] bg-opacity-5 h-[25vh] lg:h-[33vh]">
           <img

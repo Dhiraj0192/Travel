@@ -3,13 +3,13 @@ import Image from './Image'
 
 function PopularCategories() {
   return (
-    <div className='lg:px-32 w-full flex flex-col mt-4 md:mt-16 mb-16'>
+    <div className='md:px-16 lg:px-32 w-full flex flex-col mt-4 md:mt-16 mb-16'>
         <div className="mt-10 flex  items-center justify-between">
-            <div className="md:w-[28vw] h-1 bg-gray-300"></div>
-            <h1 className=" text-xl md:text-3xl lg:text-4xl font-bold text-black">
+            <div className="w-[23vw] h-1 bg-gray-300"></div>
+            <h1 className=" text-xl md:text-2xl lg:text-3xl font-bold text-black">
                 Popular Categories
             </h1>
-            <div className="w-[28vw] h-1 bg-gray-300"></div>
+            <div className="w-[23vw] h-1 bg-gray-300"></div>
         </div>
 
         <div className="mt-10">

@@ -8,7 +8,7 @@ const CTASection = () => {
       icon: <FaPen className="text-2xl" />,
       title: "Guest Blogging",
       description: "Share your travel experiences with our community",
-      buttonText: "Submit Post",
+      buttonText: "Submit",
       url: "/login",
       color: "text-white",
       
@@ -18,7 +18,7 @@ const CTASection = () => {
       icon: <MdOutlineTravelExplore className="text-2xl" />,
       title: "Travel Experiences",
       description: "Book unique adventures with local experts",
-      buttonText: "Explore Tours",
+      buttonText: "Explore",
       url: "/login",
     //   color: "bg-blue-100",
       buttonColor: "bg-blue-600"
@@ -27,7 +27,7 @@ const CTASection = () => {
       icon: <FaPaperPlane className="text-2xl" />,
       title: "Contact Us",
       description: "Get travel tips and offers straight to your inbox",
-      buttonText: "Contact Now",
+      buttonText: "Contact",
       url: "/contact",
     //   color: "bg-orange-100",
       buttonColor: "bg-blue-800"
@@ -63,8 +63,8 @@ const CTASection = () => {
                 <div className="p-4 rounded-lg shadow-sm border-r-2">
                   {item.icon}
                 </div>
-                <h3 className="text-2xl font-bold text-white">{item.title}</h3>
-                <p className="text-gray-200">{item.description}</p>
+                <h3 className="text-xl md:text-xl font-bold text-white">{item.title}</h3>
+                <p className="md:hidden lg:block text-gray-200">{item.description}</p>
                 <a
                   href={item.url}
                   className={`${item.buttonColor} text-white px-6 py-3 rounded-lg font-medium hover:opacity-90 transition-opacity flex items-center gap-2`}

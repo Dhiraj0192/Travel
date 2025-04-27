@@ -13,14 +13,12 @@ import AddsSlot from "../components/AddsSlot";
 import UserIcon from "../components/UserIcon";
 import { Button } from "../components/ui/button";
 import { set } from "zod";
+import { InteractiveHoverButton } from "../components/magicui/interactive-hover-button";
 
 function BlogPage() {
   const user = useSelector((state) => state.user);
 
-  // Protect the /single page route
-  if (!user.isLoggedIn) {
-    return <Navigate to="/login" replace />;
-  }
+  
 
   let [selectedCategoryBlogs, setSelectedCategoryBlogs] = useState();
   const [sort, setSort] = useState("-createdAt");
@@ -208,53 +206,18 @@ function BlogPage() {
 
   return (
     <div className=" flex flex-col ">
-      <UserIcon/>
-      <div className="w-full h-[58%] lg:h-[45vh] overflow-hidden bg-gradient-to-b from-[#879cbf8b] to-[#1a1c208b] bg-opacity-5">
+      {user?.isLoggedIn && <UserIcon/>}
+      <div className="w-full h-[50%] md:h-[35%] lg:h-[45vh] overflow-hidden bg-gradient-to-b from-[#879cbf8b] to-[#1a1c208b] bg-opacity-5">
         <img
           src="/adventure.jpg"
-          className="w-full h-[58%] absolute top-16 -z-10 bg-cover "
+          className="w-full h-[50%] md:h-[35%] lg:h-[55%] absolute top-16 -z-10 bg-cover "
         />
         {/* breadcrumb */}
         <div className=" flex flex-col justify-center mt-10  md:mt-20 gap-4">
           
           {/* introduction */}
-          <div className=" lg:px-32 lg:flex-row flex-col flex items-center gap-8">
-          <Link to="/write-blog" className="">
-              <svg
-                viewBox="0 0 200 200"
-                
-                className="text-xl font-bold tracking-widest animate-spin animatedButton -ml-2 text w-32 h-32 md:w-44 md:h-44"
-              >
-                <path
-                  id="circlePath"
-                  d="M 100, 100 m -75, 0 a 75,75 0 1, 1 150,0 a 75, 75 0 1,1 -150,0"
-                  fill="none"
-                />
-                <text>
-                  <textPath fill="white" href="#circlePath" startOffset="0%">
-                    Write your story .
-                  </textPath>
-                  <textPath fill="white" href="#circlePath" startOffset="50%">
-                    Share your idea .
-                  </textPath>
-                </text>
-              </svg>
-
-              <button className="-mt-24 ml-7 md:-mt-32 md:ml-9 w-16 h-16 md:w-24 md:h-24 bg-blue-800 rounded-full flex items-center justify-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  width="50"
-                  height="50"
-                  fill="none"
-                  stroke="white"
-                  strokeWidth="2"
-                >
-                  <line x1="6" y1="18" x2="18" y2="6" />
-                  <polyline points="9 6 18 6 18 15" />
-                </svg>
-              </button>
-            </Link>
+          <div className=" lg:px-32 flex-col flex items-center gap-3">
+         
             <div className=" w-[80vw] text-center md:w-[60vw]">
               <h1 className="text-white text-2xl md:text-3xl lg:text-5xl font-bold">
                 Share your content, engage with readers, and grow audience.
@@ -263,7 +226,17 @@ function BlogPage() {
                 Our intuitive editor makes it easy to express yourself with
                 text, images, and multimedia.
               </p>
+
+              
             </div>
+            <div className=" mt-4 md:mt-0 flex flex-col md:flex-row gap-4">
+                                    <Link to="/write-blog"><InteractiveHoverButton className="px-10 py-2">Write a blog?</InteractiveHoverButton></Link>
+                          
+                                    
+                                  
+                                  
+                                  
+                                  </div>
             
           </div>
         </div>

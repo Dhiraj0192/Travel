@@ -15,8 +15,8 @@ function UserSay() {
             <p className="text-gray-600 text-sm md:text-lg md:px-0 px-8 text-center">
             Real stories from bloggers who transformed their online presence
             </p>
-            <div className="mt-5 flex md:flex-row flex-col items-center justify-between gap-4 md:px-0 px-6">
-                <div className="md:w-[33%] full rounded-2xl p-6 bg-gray-600 flex flex-col items-start gap-5">
+            <div className="mt-5 flex lg:flex-row flex-col items-center justify-between gap-4 md:px-0 px-6">
+                <div className="mx-0 md:mx-32 lg:mx-0 lg:w-[33%] full rounded-2xl p-6 bg-gray-600 flex flex-col items-start gap-5">
                     <MdMessage className='w-10 h-10 text-green-400'/>
 
                     <p className="italic text-white">
@@ -45,7 +45,7 @@ function UserSay() {
                     </div>
                 </div>
 
-                <div className="md:w-[33%] full rounded-2xl p-6 bg-gray-600 flex flex-col items-start gap-5">
+                <div className="mx-0 md:mx-32 lg:mx-0 lg:w-[33%] full rounded-2xl p-6 bg-gray-600 flex flex-col items-start gap-5">
                     <MdMessage className='w-10 h-10 text-green-400'/>
 
                     <p className="italic text-white">
@@ -74,7 +74,7 @@ function UserSay() {
                     </div>
                 </div>
 
-                <div className="md:w-[33%] full rounded-2xl p-6 bg-gray-600 flex flex-col items-start gap-5">
+                <div className="mx-0 md:mx-32 lg:mx-0 lg:w-[33%] full rounded-2xl p-6 bg-gray-600 flex flex-col items-start gap-5">
                     <MdMessage className='w-10 h-10 text-green-400'/>
 
                     <p className="italic text-white">

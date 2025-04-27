@@ -1010,7 +1010,7 @@ function ContactPage() {
                     <div className="w-full lg:w-[80vw] flex md:flex-row flex-col px-6 lg:px-0 items-center gap-6 mt-32 rounded-lg lg:ml-4 bg-gray-100 shadow-md">
                       <img
                         src="https://images.pexels.com/photos/326576/pexels-photo-326576.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-                        className="md:w-[30vw] w-full h-[35vh] md:h-[53vh] rounded-l-xl"
+                        className="md:w-[40vw] lg:w-[60vh] w-full h-[35vh] md:h-[40vh] lg:h-[50vh] rounded-l-xl"
                         alt=""
                       />
                       <div className="flex-col items-start gap-3">

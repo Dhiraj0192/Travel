@@ -65,7 +65,7 @@ function Footer() {
   };
 
   return (
-    <div className='w-full bg-gray-800 text-white'>
+    <div className='md:px-8 lg:px-0 w-full bg-gray-800 text-white'>
         <div className="flex md:flex-row flex-col mt-10  justify-between gap-10 pt-4 pb-8 mb-8 lg:px-32">
             <div className="flex flex-col justify-start w-full md:px-0 px-8 md:w-[33%] gap-1">
                 <p className="font-bold text-lg text-white">Traveller's Mirror</p>
@@ -96,7 +96,7 @@ function Footer() {
             <p className="font-bold text-lg text-white">Stay Updated</p>
             <p className="font-bold text-gray-200">Subscribe to our newsletter for the latest updates and blogging tips.</p>
             <button
-              className='py-2 px-20 rounded-3xl bg-blue-800 text-white'
+              className='py-2 px-6 lg:px-20 rounded-3xl bg-blue-800 text-white'
               onClick={handleSubscribe}
               disabled={isSubscribed}
             >

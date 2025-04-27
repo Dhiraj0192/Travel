@@ -177,7 +177,7 @@ function UserBlogPage() {
         <div className=" flex flex-col justify-center gap-4">
           
           {/* introduction */}
-          <div className="md:px-6 lg:px-32 flex md:flex-row flex-col items-center justify-between mt-16 md:mt-16 lg:mt-7">
+          <div className="md:px-6 lg:px-32 flex flex-col items-center justify-center mt-16 md:mt-16 lg:mt-16">
             <div className=" w-[60vw]">
               
               <p className=" text-md md:text-2xl text-white font-bold text-center">
@@ -185,43 +185,7 @@ function UserBlogPage() {
                 text, images, and multimedia.
               </p>
             </div>
-            <Link to="/write-blog" className="">
-              <svg
-                viewBox="0 0 200 200"
-                width="170"
-                height="170"
-                className="text-lg tracking-widest animate-spin animatedButton mr-3 text w-32 h-32 md:w-44 md:h-44"
-              >
-                <path
-                  id="circlePath"
-                  d="M 100, 100 m -75, 0 a 75,75 0 1, 1 150,0 a 75, 75 0 1,1 -150,0"
-                  fill="none"
-                />
-                <text>
-                  <textPath fill="white" href="#circlePath" startOffset="0%">
-                    Write your story .
-                  </textPath>
-                  <textPath fill="white" href="#circlePath" startOffset="50%">
-                    Share your idea .
-                  </textPath>
-                </text>
-              </svg>
-
-              <button className="-mt-24 ml-9 md:-mt-32 w-16 h-16 md:w-24 md:h-24 bg-blue-800 rounded-full flex items-center justify-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  width="50"
-                  height="50"
-                  fill="none"
-                  stroke="white"
-                  strokeWidth="2"
-                >
-                  <line x1="6" y1="18" x2="18" y2="6" />
-                  <polyline points="9 6 18 6 18 15" />
-                </svg>
-              </button>
-            </Link>
+            
           </div>
         </div>
       </div>

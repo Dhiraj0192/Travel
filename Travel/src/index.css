@@ -7,7 +7,7 @@ body {
     width: 100vw;
     overflow-x: hidden;
     font-family: "Montserrat", sans-serif;
-    
+
 }
 
 .animatedButton{
@@ -17,9 +17,6 @@ body {
 .text{
     color: white;
 }
-
-
-
 
 #envelope {
   animation: float 2s ease-in-out infinite;
@@ -58,9 +55,6 @@ body {
   }
 }
 
-
-
-
 @layer base {
   :root {
         --background: 0 0% 100%;
@@ -88,7 +82,7 @@ body {
         --chart-4: 43 74% 66%;
         --chart-5: 27 87% 67%;
         --radius: 0.5rem;
-    
+
     }
   .dark {
         --background: 0 0% 3.9%;
@@ -115,21 +109,38 @@ body {
         --chart-3: 30 80% 55%;
         --chart-4: 280 65% 60%;
         --chart-5: 340 75% 55%;
-    
+
     }
-    
+  .theme {
+        --animate-pulse: pulse var(--duration) ease-out infinite;
+
+    }
+
 }
-
-
 
 @layer base {
   * {
     @apply border-border;
-    
+
     }
   body {
     @apply bg-background text-foreground;
-    
+
     }
-    
+
+}
+
+@theme inline {
+  @keyframes pulse {
+  0%, 100% {
+    boxShadow: 0 0 0 0 var(--pulse-color);
+
+        }
+  50% {
+    boxShadow: 0 0 0 8px var(--pulse-color);
+
+        }
+
+    }
+
 }

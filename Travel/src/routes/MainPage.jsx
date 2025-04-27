@@ -30,6 +30,7 @@ import { useEffect } from "react";
 import { showToast } from "../helpers/showToast";
 import { useDispatch } from "react-redux";
 import { removeUser } from "../redux/user/user.slice";
+import { InteractiveHoverButton } from "../components/magicui/interactive-hover-button";
 
 function MainPage() {
   const user = useSelector((state) => state.user);
@@ -164,7 +165,7 @@ function MainPage() {
 
           {/* <IoMdArrowDropdownCircle className="h-7 w-7 -ml-8" /> */}
         </DropdownMenuTrigger>
-        <DropdownMenuContent className=" w-[60vw] min-h-[26vh] absolute bottom-0 right-10">
+        <DropdownMenuContent className=" w-[60vw] min-h-[26vh] md:w-[20vw] absolute bottom-0 right-10">
           <DropdownMenuLabel className="bg-gray-800 rounded-md">
             <p className="text-blue-300 ">{user.user.name}</p>
             <p className="text-sm text-white font-normal">{user.user.email}</p>
@@ -209,52 +210,21 @@ function MainPage() {
         {/* breadcrumb */}
         <div className="lg:h-96 h-96 md:h-80 flex flex-col justify-center mt-10 md:mt-6 ">
           {/* introduction */}
-          <div className="lg:px-32 md:px-16 flex md:flex-row flex-col items-center md:gap-10 ">
-            <Link
-              to="/write-blog"
-              className="-mt-20 mb-10 md:mt-0 flex-col items-center justify-center"
-            >
-              <svg
-                viewBox="0 0 200 200"
-                width="170"
-                height="200"
-                className="text-xl font-bold tracking-widest animate-spin animatedButton -ml-3 text"
-              >
-                <path
-                  id="circlePath"
-                  d="M 100, 100 m -75, 0 a 75,75 1 0, 1 150,0 a 75, 75 0 1,1 -150,1"
-                  fill="none"
-                />
-                <text>
-                  <textPath fill="white" href="#circlePath" startOffset="0%">
-                    Write your story .
-                  </textPath>
-                  <textPath fill="white" href="#circlePath" startOffset="50%">
-                    Share your idea .
-                  </textPath>
-                </text>
-              </svg>
-
-              <button className=" -mt-[20vh] ml-7 w-24 h-24 bg-blue-800 rounded-full flex items-center justify-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  width="50"
-                  height="50"
-                  fill="none"
-                  stroke="white"
-                  strokeWidth="2"
-                >
-                  <line x1="6" y1="18" x2="18" y2="6" />
-                  <polyline points="9 6 18 6 18 15" />
-                </svg>
-              </button>
-            </Link>
+          <div className="lg:px-32 md:px-16 flex flex-col  items-center md:gap-10 ">
+            
             <div className=" w-full md:px-0 px-8 md:w-[60vw]">
               <h1 className="text-white text-xl md:text-4xl lg:text-5xl font-bold text-center">
                 {HeroData?.heroSections.title}
               </h1>
             </div>
+            <div className=" mt-4 md:mt-0 flex flex-col md:flex-row gap-4">
+                      <Link to="/write-blog"><InteractiveHoverButton className="px-10 py-3">Write a blog?</InteractiveHoverButton></Link>
+            
+                      
+                    
+                    
+                    
+                    </div>
           </div>
         </div>
       </div>

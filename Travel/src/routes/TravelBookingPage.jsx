@@ -16,10 +16,7 @@ function TravelBookingPage() {
     
     
   
-    // Protect the /single page route
-    if (!user.isLoggedIn) {
-      return <Navigate to="/login" replace />;
-    }
+    
 
      const [sort, setSort] = useState("-createdAt");
       
@@ -88,7 +85,7 @@ function TravelBookingPage() {
       
   return (
     <div className="flex flex-col min-h-screen">
-      <UserIcon/>
+      {user?.isLoggedIn && <UserIcon/>}
       <div className="w-full ">
         <div className="overflow-hidden bg-gradient-to-b from-[#4b55678b] to-[#1a1c208b] bg-opacity-5 h-[40vh] lg:h-[54vh]">
         <img
@@ -109,8 +106,8 @@ function TravelBookingPage() {
               </p>
               <div className="w-full flex flex-col">
                 <div className="lg:pr-32 -mt-4 pb-10 w-[30vw]">
-                  <div className="hidden md:flex bg-gray-700 rounded-xl p-1 shadow-xl items-center justify-center gap-8 mt-10 w-[50vw] mb-5">
-                    <div className="bg-gray-100 p-8 rounded-xl h-30 flex flex-col items-start gap-2 w-full">
+                  <div className="hidden lg:flex bg-gray-700 rounded-xl p-1 shadow-xl items-center justify-center gap-8 mt-10 w-[50vw] mb-5">
+                    <div className=" bg-gray-100 p-8 rounded-xl h-30 flex flex-col items-start gap-2 w-full">
                       <p className="text-gray-700 text-sm mb-1 text-left ml-8">
                         Packages name
                       </p>
@@ -211,7 +208,7 @@ function TravelBookingPage() {
                               <div className="w-full lg:w-[80vw] flex md:flex-row flex-col px-6 lg:px-0 items-center gap-6 mt-32 rounded-lg lg:ml-4 bg-gray-100 shadow-md">
                                 <img
                                   src="https://images.pexels.com/photos/326576/pexels-photo-326576.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-                                  className="md:w-[30vw] w-full h-[35vh] md:h-[53vh] rounded-l-xl"
+                                  className="md:w-[40vw] lg:w-[60vh] w-full h-[35vh] md:h-[40vh] lg:h-[50vh] rounded-l-xl"
                                   alt=""
                                 />
                                 <div className="flex-col items-start gap-3">

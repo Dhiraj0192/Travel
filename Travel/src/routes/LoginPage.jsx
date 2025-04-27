@@ -60,7 +60,17 @@ function LoginPage() {
       const data = await response.json();
       if (!response.ok) {
         setUploading(false)
-        return showToast("error", data.message);
+        return toast(data.message, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          
+          });
       }
 
       dispath(setUser(data.user))
@@ -68,7 +78,7 @@ function LoginPage() {
       navigate("/home");
       toast(data.message, {
         position: "top-right",
-        autoClose: 3000,
+        autoClose: 1000,
         hideProgressBar: false,
         closeOnClick: false,
         pauseOnHover: true,
@@ -80,7 +90,17 @@ function LoginPage() {
       // showToast("success", data.message);
     } catch (error) {
       setUploading(false)
-      showToast("error", error.message);
+      toast(error.message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        
+        });
     }
   }
 
@@ -195,9 +215,29 @@ function LoginPage() {
 
                             dispath(setUser(data.user))
                             navigate("/home");
-                            showToast("success", data.message);
+                            toast(data.message, {
+                              position: "top-right",
+                              autoClose: 1000,
+                              hideProgressBar: false,
+                              closeOnClick: false,
+                              pauseOnHover: true,
+                              draggable: true,
+                              progress: undefined,
+                              theme: "colored",
+                              
+                              });
                           } catch (error) {
-                            showToast("error", error.message);
+                            toast(error.message, {
+                              position: "top-right",
+                              autoClose: 3000,
+                              hideProgressBar: false,
+                              closeOnClick: false,
+                              pauseOnHover: true,
+                              draggable: true,
+                              progress: undefined,
+                              theme: "colored",
+                              
+                              });
                           }
 
                         }}
