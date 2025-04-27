@@ -146,25 +146,25 @@ const CommentsDashboard = () => {
         <Sidebar />
       </div>
 
-      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-gray-900 px-6 py-6 min-h-screen">
+      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(public/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat px-6 py-6 min-h-screen">
         {/* Toggle Button for Mobile */}
         <div className="lg:hidden flex justify-end mb-4">
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="text-white text-3xl focus:outline-none"
+            className="text-black text-3xl focus:outline-none"
           >
             {sidebarOpen ? "✕" : "☰"}
           </button>
         </div>
         <div>
-          <h1 className="text-2xl font-semibold text-white">Comments</h1>
-          <p className="text-gray-300 mt-3">
+          <h1 className="text-2xl font-semibold text-black">Comments</h1>
+          <p className="text-gray-800 mt-3">
             Organize comments with statistics and recent activities
           </p>
         </div>
         <div className="w-full pt-6 space-y-8">
           {/* Comments Table Section */}
-          <div className="bg-gray-600 rounded-lg shadow-sm p-6">
+          <div className="bg-gray-800 rounded-lg shadow-sm p-6">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
               <div className="relative w-full">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">

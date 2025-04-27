@@ -102,22 +102,22 @@ function Users() {
         <Sidebar />
       </div>
 
-      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-gray-900 px-6 py-6 h-screen">
+      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(public/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat px-6 py-6 h-screen">
         {/* Toggle Button for Mobile */}
         <div className="lg:hidden flex justify-end mb-4">
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="text-white text-3xl focus:outline-none"
+            className="text-black text-3xl focus:outline-none"
           >
             {sidebarOpen ? "✕" : "☰"}
           </button>
         </div>
         <div className="flex flex-col items-start gap-2">
           <div className="flex flex-col gap-4">
-            <h1 className="text-3xl font-bold text-white">
+            <h1 className="text-3xl font-bold text-black">
               Welcome to Traveller's Mirror Dashboard
             </h1>
-            <p className="text-gray-300 text-lg">
+            <p className="text-gray-800 text-lg">
               Here's an overview of your Users
             </p>
           </div>
@@ -126,7 +126,7 @@ function Users() {
           <div className="flex items-center justify-between mt-3 mb-10 w-full">
             {/* total posts */}
 
-            <div className="rounded-lg bg-gray-600 w-full p-4 flex items-center justify-start gap-4">
+            <div className="rounded-lg bg-gray-800 w-full p-4 flex items-center justify-start gap-4">
               <div className="w-10 h-10 rounded-full bg-green-700 flex justify-center items-center">
                 <FaUserSecret className="w-5 h-5 text-green-400" />
               </div>
@@ -140,7 +140,7 @@ function Users() {
             
           </div>
 
-          <div className="w-full p-6 bg-gray-600 rounded-lg shadow-sm">
+          <div className="w-full p-6 bg-gray-800 rounded-lg shadow-sm">
                
           
                 <div className="overflow-x-auto">

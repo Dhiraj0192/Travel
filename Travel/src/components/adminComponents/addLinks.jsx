@@ -122,7 +122,7 @@ function AddLinks() {
       <div className="">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
           <div>
-            <h1 className="text-2xl font-semibold text-white">
+            <h1 className="text-2xl font-semibold text-black">
               Add other contact details
             </h1>
           </div>
@@ -131,7 +131,7 @@ function AddLinks() {
         {/* add categories */}
 
         <div className="">
-          <Card className="w-full bg-gray-600 p-5 mb-10">
+          <Card className="w-full bg-gray-800 p-5 mb-10">
             
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)}>

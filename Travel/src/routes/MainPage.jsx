@@ -232,24 +232,7 @@ function MainPage() {
       <div className=" bg-[url(public/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat pb-20 ">
         <div className="lg:px-32 pt-5 pb-10 px-1 md:px-0">
           <div className=" md:flex bg-gray-400 rounded-3xl xl:rounded-full p-4 shadow-xl items-center justify-center gap-8 mt-10">
-            <div className="flex-1 flex items-center justify-between flex-wrap">
-              {categories && categories.length > 0 ? (
-                categories.map((category) => (
-                  <button
-                    key={category._id}
-                    onClick={() => fetchBlogsByCategory(category._id)}
-                    className="bg-gray-700 hover:bg-white hover:text-black text-white rounded-full px-4 py-2 mb-3 lg:mb-0"
-                  >
-                    {category.name}
-                  </button>
-                ))
-              ) : (
-                <></>
-              )}
-            </div>
-            <span className="hidden md:block text-xl font-medium">|</span>
-
-            <div className="hidden md:flex bg-gray-100 p-2 rounded-full  items-center gap-2">
+          <div className="hidden md:flex bg-gray-100 p-2 rounded-full  items-center gap-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -271,6 +254,25 @@ function MainPage() {
                 />
               </form>
             </div>
+            <span className="hidden md:block text-xl font-medium">|</span>
+            <div className="flex-1 flex items-center justify-between flex-wrap">
+              {categories && categories.length > 0 ? (
+                categories.map((category) => (
+                  <button
+                    key={category._id}
+                    onClick={() => fetchBlogsByCategory(category._id)}
+                    className="bg-gray-700 hover:bg-white hover:text-black text-white rounded-full px-4 py-2 mb-3 lg:mb-0"
+                  >
+                    {category.name}
+                  </button>
+                ))
+              ) : (
+                <></>
+              )}
+            </div>
+            
+
+            
           </div>
         </div>
 

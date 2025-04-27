@@ -148,25 +148,25 @@ const Messages = () => {
         <Sidebar />
       </div>
 
-      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-gray-900 px-6 py-6 min-h-screen">
+      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(public/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat px-6 py-6 min-h-screen">
         {/* Toggle Button for Mobile */}
         <div className="lg:hidden flex justify-end mb-4">
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="text-white text-3xl focus:outline-none"
+            className="text-black text-3xl focus:outline-none"
           >
             {sidebarOpen ? "✕" : "☰"}
           </button>
         </div>
         <div>
-          <h1 className="text-2xl font-semibold text-white">Contact Messages</h1>
-          <p className="text-gray-300 mt-3">
+          <h1 className="text-2xl font-semibold text-black">Contact Messages</h1>
+          <p className="text-gray-800 mt-3">
             Organize contact messages with recent activities
           </p>
         </div>
         <div className="w-full pt-6 space-y-8">
           {/* Comments Table Section */}
-          <div className="bg-gray-600 rounded-lg shadow-sm p-6">
+          <div className="bg-gray-800 rounded-lg shadow-sm p-6">
             
 
             <div className="overflow-x-auto">

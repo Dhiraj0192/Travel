@@ -25,12 +25,12 @@ function Sidebar() {
   // }
 
 return (
-    <div className='h-screen flex flex-col bg-gray-800'>
-        <div className="text-center">
+    <div className='h-screen flex flex-col '>
+        <div className="text-center bg-gray-800">
             <h1 className="font-bold text-blue-500 text-xl pt-5 pb-5 border-b-2 border-gray-700">Traveller's Mirror </h1>
         </div>
 
-        <div className="flex-1 overflow-y-auto"> 
+        <div className="flex-1 overflow-y-auto bg-gray-800">
             {/* Sidebar content */}
             <div className="ml-6 mt-6 flex flex-col gap-4">
                 <p className="text-gray-400 text-md font-bold">DASHBOARD</p>
@@ -135,7 +135,7 @@ return (
 
             
         </div>
-        <div className="w-full pt-4 border-t-2 border-gray-500 flex items-center pl-6 justify-between">
+        <div className="bg-gray-800 w-full pt-4 border-t-2 border-gray-500 flex items-center pl-6 justify-between">
                 <div className="flex items-center justify-between gap-3">
                     <div className="flex flex-col ">
                         <p className="text-white font-bold text-sm">Dhiraj Yadav</p>

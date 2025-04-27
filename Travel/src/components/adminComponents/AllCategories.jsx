@@ -67,7 +67,7 @@ const CategoriesManagement = ({editClicked, setEditClicked}) => {
   
   if(loading) return <Loading/>
   return (
-    <div className="p-6 bg-gray-600 rounded-lg shadow-sm">
+    <div className="p-6 bg-gray-800 rounded-lg shadow-sm">
       <div className="mb-6">
         <h1 className="text-2xl font-semibold text-white">All Categories</h1>
         

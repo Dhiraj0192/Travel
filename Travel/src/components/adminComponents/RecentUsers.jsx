@@ -44,7 +44,7 @@ const RecentUsersTable = () => {
   };
 
   return (
-    <div className="w-full p-6 bg-gray-600 rounded-lg shadow-sm">
+    <div className="w-full p-6 bg-gray-800 rounded-lg shadow-sm">
       <h1 className="text-2xl font-semibold text-white mb-6">Recent Users</h1>
 
       <div className="overflow-x-auto">

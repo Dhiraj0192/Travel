@@ -218,20 +218,20 @@ useEffect(() => {
         <Sidebar />
       </div>
 
-      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-gray-900 px-6 py-6 min-h-screen">
+      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(public/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat px-6 py-6 min-h-screen">
         {/* Toggle Button for Mobile */}
         <div className="lg:hidden flex justify-end mb-4">
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="text-white text-3xl focus:outline-none"
+            className="text-black text-3xl focus:outline-none"
           >
             {sidebarOpen ? "✕" : "☰"}
           </button>
         </div>
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
           <div>
-            <h1 className="text-2xl font-semibold text-white">Manage Blogs</h1>
-            <p className="text-gray-300 mt-3">
+            <h1 className="text-2xl font-semibold text-black">Manage Blogs</h1>
+            <p className="text-gray-800 mt-3">
               Create, edit, and manage your blog posts
             </p>
           </div>
@@ -242,10 +242,10 @@ useEffect(() => {
           </button>
         </div>
 
-        <div className="p-6 bg-gray-600 rounded-lg shadow-sm">
+        <div className="p-6 bg-gray-800 rounded-lg shadow-sm">
           <div className="flex flex-col md:flex-row gap-4 ">
             {/* Search Input */}
-            <div className="relative flex-1 bg-gray-500">
+            <div className="relative flex-1 bg-gray-800">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <FiSearch className="text-green-400" />
               </div>
@@ -294,7 +294,7 @@ useEffect(() => {
           </div>
 
           <AllPost selectedCategoryBlogs={selectedCategoryBlogs} searchData={searchData} bData={bData}/>
-          <div className="w-full h-[1px] bg-gray-500"></div>
+          <div className="w-full h-[1px] bg-gray-800"></div>
           <div className=" pagination-controls flex justify-center items-center gap-4 mt-6 mb-6">
             <button
               onClick={() => handlePageChange(currentPage - 1)}

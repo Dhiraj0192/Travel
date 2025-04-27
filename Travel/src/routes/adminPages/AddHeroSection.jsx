@@ -66,12 +66,12 @@ function AddHeroSection() {
         <Sidebar />
       </div>
 
-      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-gray-900 px-6 py-6 min-h-screen">
+      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(public/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat px-6 py-6 min-h-screen">
         {/* Toggle Button for Mobile */}
         <div className="lg:hidden flex justify-end mb-4">
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="text-white text-3xl focus:outline-none"
+            className="text-black text-3xl focus:outline-none"
           >
             {sidebarOpen ? "✕" : "☰"}
           </button>

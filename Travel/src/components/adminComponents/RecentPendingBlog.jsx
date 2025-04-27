@@ -49,7 +49,7 @@ const RecentPendingBlog = () => {
   };
 
   return (
-    <div className="p-6 w-full bg-gray-600 rounded-lg shadow-sm mt-6 mb-6">
+    <div className="p-6 w-full bg-gray-800 rounded-lg shadow-sm mt-6 mb-6">
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-xl font-semibold text-white">Recent Pending Blogs</h2>
         <div className="flex justify-end">

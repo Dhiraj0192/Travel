@@ -166,19 +166,19 @@ function AddPackage() {
         <Sidebar />
       </div>
 
-      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-gray-900 px-6 py-6 min-h-screen">
+      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(public/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat px-6 py-6 min-h-screen">
         {/* Toggle Button for Mobile */}
         <div className="lg:hidden flex justify-end mb-4">
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="text-white text-3xl focus:outline-none"
+            className="text-black text-3xl focus:outline-none"
           >
             {sidebarOpen ? "✕" : "☰"}
           </button>
         </div>
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6 lg:pt-[13vh] lg:pl-[16vw]">
           <div>
-            <h1 className="text-2xl font-semibold text-white">
+            <h1 className="text-2xl font-semibold text-black">
               Let's Add Package
             </h1>
             
@@ -188,7 +188,7 @@ function AddPackage() {
         {/* add categories */}
 
         <div className=" lg:w-[50vw] lg:ml-[16vw]">
-          <Card className="w-full bg-gray-600 p-5 mb-10">
+          <Card className="w-full bg-gray-800 p-5 mb-10">
             <h1 className="text-white text-2xl font-bold mb-5">Add Package</h1>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)}>

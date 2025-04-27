@@ -143,20 +143,20 @@ function Categories() {
       >
         <Sidebar />
       </div>
-      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-gray-900 px-6 py-6">
+      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(public/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat px-6 py-6">
         {/* Toggle Button for Mobile */}
         <div className="lg:hidden flex justify-end mb-4">
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="text-white text-3xl focus:outline-none"
+            className="text-black text-3xl focus:outline-none"
           >
             {sidebarOpen ? "✕" : "☰"}
           </button>
         </div>
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
           <div>
-            <h1 className="text-2xl font-semibold text-white">Categories</h1>
-            <p className="text-gray-300 mt-3">
+            <h1 className="text-2xl font-semibold text-black">Categories</h1>
+            <p className="text-gray-800 mt-3">
               Organize your content with categories
             </p>
           </div>
@@ -169,7 +169,7 @@ function Categories() {
         <div className="flex items-center gap-3 mt-3 mb-10 w-full">
           {/* total posts */}
 
-          <div className="rounded-lg bg-gray-600 w-1/2 p-4 flex items-center justify-start gap-4">
+          <div className="rounded-lg bg-gray-800 w-1/2 p-4 flex items-center justify-start gap-4">
             <div className="w-10 h-10 rounded-full bg-green-700 flex justify-center items-center">
               <BsFileEarmarkPostFill className="w-5 h-5 text-green-400" />
             </div>
@@ -182,7 +182,7 @@ function Categories() {
 
           {/* total comments */}
 
-          <div className="rounded-lg bg-gray-600 w-1/2 p-4 flex items-center justify-start gap-4">
+          <div className="rounded-lg bg-gray-800 w-1/2 p-4 flex items-center justify-start gap-4">
             <div className="w-10 h-10 rounded-full bg-purple-700 flex justify-center items-center">
               <MdMessage className="w-5 h-5 text-purple-400" />
             </div>
@@ -201,7 +201,7 @@ function Categories() {
         {/* add categories */}
 
         {!editClicked ? <div className="">
-          <Card className="w-full bg-gray-600 p-5 mb-10">
+          <Card className="w-full bg-gray-800 p-5 mb-10">
             <h1 className="text-white text-2xl font-bold mb-5">Add Category</h1>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)}>

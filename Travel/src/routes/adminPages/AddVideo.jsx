@@ -152,29 +152,29 @@ function AddVideo() {
         <Sidebar />
       </div>
 
-      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-gray-900 px-6 py-6 min-h-screen">
+      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(public/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat px-6 py-6 min-h-screen">
         {/* Toggle Button for Mobile */}
         <div className="lg:hidden flex justify-end mb-4">
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="text-white text-3xl focus:outline-none"
+            className="text-black text-3xl focus:outline-none"
           >
             {sidebarOpen ? "✕" : "☰"}
           </button>
         </div>
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
           <div>
-            <h1 className="text-2xl font-semibold text-white">
+            <h1 className="text-2xl font-semibold text-black">
               Let's Add Video
             </h1>
-            <p className="text-gray-300 mt-3">Create your video blog posts</p>
+            <p className="text-gray-800 mt-3">Create your video blog posts</p>
           </div>
         </div>
 
         {/* add categories */}
 
         <div className="">
-          <Card className="w-full bg-gray-600 p-5 mb-10">
+          <Card className="w-full bg-gray-800 p-5 mb-10">
             <h1 className="text-white text-2xl font-bold mb-5">Add Video</h1>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -219,8 +219,8 @@ function AddVideo() {
                           <div className="flex justify-center items-center w-44 h-44 border-2 border-dashed rounded cursor-pointer">
                             {filePreview === undefined && (
                               <div className="flex items-center gap-2">
-                                <p className="text-black">Upload</p>
-                                <FaCloudUploadAlt />
+                                <p className="text-white">Upload</p>
+                                <FaCloudUploadAlt className="text-white"/>
                               </div>
                             )}
                             <img src={filePreview} alt="" srcset="" />

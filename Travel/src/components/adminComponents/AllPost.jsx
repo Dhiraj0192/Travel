@@ -45,7 +45,7 @@ const AllPost = ({ selectedCategoryBlogs ,searchData,bData }) => {
 
   
   return (
-    <div className="py-10 w-full bg-gray-600 rounded-lg shadow-sm">
+    <div className="py-10 w-full bg-gray-800 rounded-lg shadow-sm">
       <div className="overflow-x-auto">
         <table className="rounded-lg min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-500 rounded-lg">

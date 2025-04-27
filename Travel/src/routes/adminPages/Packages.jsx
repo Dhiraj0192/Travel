@@ -106,20 +106,20 @@ function Packages() {
         <Sidebar />
       </div>
 
-      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-gray-900 px-6 py-6 min-h-screen">
+      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(public/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat px-6 py-6 min-h-screen">
         {/* Toggle Button for Mobile */}
         <div className="lg:hidden flex justify-end mb-4">
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="text-white text-3xl focus:outline-none"
+            className="text-black text-3xl focus:outline-none"
           >
             {sidebarOpen ? "✕" : "☰"}
           </button>
         </div>
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
           <div>
-            <h1 className="text-2xl font-semibold text-white">Manage Packages</h1>
-            <p className="text-gray-300 mt-3">
+            <h1 className="text-2xl font-semibold text-black">Manage Packages</h1>
+            <p className="text-gray-800 mt-3">
               Create, edit, and manage your packages...
             </p>
           </div>
@@ -130,7 +130,7 @@ function Packages() {
           </button>
         </div>
 
-        <div className="p-6 bg-gray-600 rounded-lg shadow-sm">
+        <div className="p-6 bg-gray-800 rounded-lg shadow-sm">
           <div className="flex flex-col md:flex-row gap-4 ">
             {/* Search Input */}
             <div className="relative flex-1 bg-gray-500">
@@ -158,7 +158,7 @@ function Packages() {
 {/* 
           <AllPost selectedCategoryBlogs={selectedCategoryBlogs} searchData={searchData}/> */}
 
-          <div className="py-10 w-full bg-gray-600 rounded-lg shadow-sm">
+          <div className="py-10 w-full bg-gray-800 rounded-lg shadow-sm">
                 <div className="overflow-x-auto">
                   <table className="rounded-lg min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-500 rounded-lg">

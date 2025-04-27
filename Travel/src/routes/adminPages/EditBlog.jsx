@@ -206,12 +206,12 @@ function EditBlog() {
         <Sidebar />
       </div>
 
-      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-gray-900 px-6 py-6 min-h-screen">
+      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(public/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat px-6 py-6 min-h-screen">
          {/* Toggle Button for Mobile */}
          <div className="lg:hidden flex justify-end mb-4">
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="text-white text-3xl focus:outline-none"
+            className="text-black text-3xl focus:outline-none"
           >
             {sidebarOpen ? "✕" : "☰"}
           </button>
@@ -219,10 +219,10 @@ function EditBlog() {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
           <div className="flex items-center justify-between w-full">
           <div>
-            <h1 className="text-2xl font-semibold text-white">
+            <h1 className="text-2xl font-semibold text-black">
               Edit your blog...
             </h1>
-            <p className="text-gray-300 mt-3">Manage your blog posts</p>
+            <p className="text-gray-800 mt-3">Manage your blog posts</p>
           </div>
 
           
@@ -232,7 +232,7 @@ function EditBlog() {
         </div>
 
         <div className="">
-          <Card className="w-full bg-gray-600 p-5 mb-10">
+          <Card className="w-full bg-gray-800 p-5 mb-10">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)}>
                 <div className="flex md:flex-row flex-col md:items-center justify-between w-full">
