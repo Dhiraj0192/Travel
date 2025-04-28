@@ -1,28 +1,31 @@
-import React from "react";
-import { Link, Links } from "react-router-dom";
-import MainCategories from "../components/MainCategories";
-import FeaturedPosts from "../components/FeaturedPosts";
-import Features from "../components/Features";
-import ReadyBlog from "../components/ReadyBlog";
-import Footer from "../components/Footer";
-import Destination from "../components/Destination";
-import PostList from "../components/PostList";
+import React, { useState, useEffect } from "react";
+import Skeleton from "../components/Skeleton";
+import { Link } from "react-router-dom";
+import { InteractiveHoverButton } from "../components/magicui/interactive-hover-button";
 import UserSay from "../components/UserSay";
 import CTASection from "../components/CTAsection";
-import Image from "../components/Image";
+import Footer from "../components/Footer";
 import PopularCategories from "../components/PopularCategories";
 import RecentBlogs from "../components/RecentBlogs";
-import AddsSlot from "../components/AddsSlot";
-import { PulsatingButton } from "../components/magicui/pulsating-button";
-import { InteractiveHoverButton } from "../components/magicui/interactive-hover-button";
+
 
 function HomePage() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1000); // Simulate loading delay
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <div className="mt-0 flex flex-col items-center rounded-3xl justify-center ">
       
       <div className=" w-full h-[57vh] md:h-[40vh] lg:h-[78vh] overflow-hidden bg-gradient-to-b from-[#455165eb] to-[#0101018b] bg-opacity-5">
-        <Image
-          src="pexels-fmaderebner-238622.jpg"
+        <img
+          src="/pexels-fmaderebner-238622.jpg" // Ensure the path is correct
+          alt="Background"
+          layout="fill"
+          objectFit="cover"
           className="opacity-100 w-full absolute top-0 -z-10 h-[66vh] md:h-[46vh] lg:h-[95vh]"
         />
       </div>
@@ -53,17 +56,15 @@ function HomePage() {
       </div>
 
       <div className=" ">
-      
+       
+          <PopularCategories />
+       
 
-        {/* <Destination /> */}
-
-        {/* <FeaturedPosts /> */}
-
-        {/* <MainCategories /> */}
-        <PopularCategories/>
-        <RecentBlogs/>
-
-        
+        {loading ? (
+          <Skeleton type="recentBlogs" />
+        ) : (
+          <RecentBlogs />
+        )}
 
         <UserSay />
 

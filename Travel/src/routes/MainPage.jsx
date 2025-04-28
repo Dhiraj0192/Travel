@@ -31,6 +31,7 @@ import { showToast } from "../helpers/showToast";
 import { useDispatch } from "react-redux";
 import { removeUser } from "../redux/user/user.slice";
 import { InteractiveHoverButton } from "../components/magicui/interactive-hover-button";
+import AddsSlot from "../components/AddsSlot";
 
 function MainPage() {
   const user = useSelector((state) => state.user);
@@ -282,7 +283,15 @@ function MainPage() {
             selectedCategoryBlogs={selectedCategoryBlogs}
             searchData={searchData}
           />
+
+          
         </div>
+
+        <div className="lg:px-32 mt-6 mb-6">
+        <AddsSlot/>
+        </div>
+
+        
 
         <div className="backdrop-blur-sm ">
           <div className=" mb-16 flex flex-col items-center justify-center gap-6 md:px-0 px-3">
@@ -333,6 +342,8 @@ function MainPage() {
               <></>
             )}
           </div>
+
+          
 
           <BlogHome />
         </div>

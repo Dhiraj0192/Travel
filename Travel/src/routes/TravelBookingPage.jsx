@@ -10,6 +10,7 @@ import { Link, Navigate } from "react-router-dom";
 import { MdEmail } from "react-icons/md";
 import { FaRocketchat } from "react-icons/fa";
 import UserIcon from "../components/UserIcon";
+import AddsSlot from "../components/AddsSlot";
 
 function TravelBookingPage() {
     const user = useSelector((state) => state.user);
@@ -202,6 +203,10 @@ function TravelBookingPage() {
               
             </div>
           </div>
+
+          <div className=" mt-12 -mb-6">
+        <AddsSlot/>
+        </div>
 
 
           {/* need help */}

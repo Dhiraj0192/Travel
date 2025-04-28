@@ -38,7 +38,7 @@ function Comment({ props }) {
       if (user.isLoggedIn === false) {
         return toast("Please Login to Comment!", {
                                 position: "top-left",
-                                autoClose: 5000,
+                                autoClose: 3000,
                                 hideProgressBar: false,
                                 closeOnClick: false,
                                 pauseOnHover: true,
@@ -70,10 +70,30 @@ function Comment({ props }) {
         setNewComment(data.comment);
         form.reset();
   
-        showToast("success", data.message);
+        toast(data.message, {
+          position: "top-left",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          
+          });
       }
     } catch (error) {
-      showToast("error", error.message);
+      toast(error.message, {
+        position: "top-left",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        
+        });
     }
   }
   return (

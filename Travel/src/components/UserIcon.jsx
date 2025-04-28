@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Link, useNavigate } from 'react-router-dom';
@@ -13,6 +13,7 @@ import { removeUser } from "../redux/user/user.slice";
 
 function UserIcon() {
     const user = useSelector((state) => state.user);
+    const [open, setOpen] = useState(true);
     const navigate = useNavigate();
   const dispath = useDispatch();
     const handleLogout = async()=>{
@@ -44,7 +45,8 @@ function UserIcon() {
               
             
     <DropdownMenuTrigger className="fixed bottom-10 right-10 z-50 flex">
-    <Avatar className="w-16 h-16 border-gray-800 border-2">
+    
+    <Avatar className=" w-16 h-16 border-gray-800 border-2">
         <AvatarImage src={user.user.avatar} />
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
