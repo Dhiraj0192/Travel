@@ -21,7 +21,7 @@ function AdminLoginPage() {
         {/* logo */}
         <Link to={`${isSignedIn ? '/home' : '/'}`} className="flex items-center gap-4 text-xl md:text-2xl font-bold">
             <Image src="logo.png" alt="logo" w={32} h={32}/>
-            <span className='text-white'>Traveller's Mirror Admin</span>
+            <span className='text-white'>Traveler's Mirror Admin</span>
         </Link>
         
         

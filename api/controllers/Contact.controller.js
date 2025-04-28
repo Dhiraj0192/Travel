@@ -48,8 +48,8 @@ export const showAllContacts = async (req,res,next)=>{
 
 export const deleteContact = async (req,res,next)=>{
     try {
-        const {messageid} = req.params
-        await Contact.findByIdAndDelete(messageid)
+        const {contactid} = req.params
+        await Contact.findByIdAndDelete(contactid)
         res.status(200).json({
             success : true,
             message: 'Message Deleted Successfully.'

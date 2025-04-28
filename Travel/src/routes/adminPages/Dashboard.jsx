@@ -121,7 +121,7 @@ function Dashboard() {
             <div className="flex lg:flex-row flex-col lg:items-center justify-between gap-6 lg:gap-0">
               <div className="flex flex-col items-start gap-2">
                 <h1 className="text-3xl font-bold text-black">
-                  Welcome to Traveller's Mirror Dashboard
+                  Welcome to Traveler's Mirror Dashboard
                 </h1>
                 <p className="text-gray-800 text-lg">
                   Here's an overview of your blog performance

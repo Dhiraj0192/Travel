@@ -52,6 +52,7 @@ function Videos() {
       const [totalPages, setTotalPages] = useState(1);
      
       const [sidebarOpen, setSidebarOpen] = useState(false);
+      const [refreshData, setRefreshData] = useState(false);
 
   
 
@@ -64,7 +65,7 @@ useEffect(() => {
           {
             method: "get",
             credentials: "include",
-          }
+          },[refreshData]
         );
         const data = await response.json();
         console.log(data);

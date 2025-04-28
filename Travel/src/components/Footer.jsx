@@ -68,7 +68,7 @@ function Footer() {
     <div className='md:px-8 lg:px-0 w-full bg-gray-800 text-white'>
         <div className="flex md:flex-row flex-col mt-10  justify-between gap-10 pt-4 pb-8 mb-8 lg:px-32">
             <div className="flex flex-col justify-start w-full md:px-0 px-8 md:w-[33%] gap-1">
-                <p className="font-bold text-lg text-white">Traveller's Mirror</p>
+                <p className="font-bold text-lg text-white">Traveler's Mirror</p>
                 <p className="text-gray-200">Modern publishing platform for bloggers of all levels.</p>
 
                 <div className="flex gap-4 items-center">
@@ -107,7 +107,7 @@ function Footer() {
 
         <div className="flex md:flex-row flex-col md:gap-0 gap-3 items-center justify-between mb-5 lg:px-32 px-3">
             <p className="text-gray-200 text-center">
-            © 2025 Traveller's Mirror. All rights reserved. Designed By Dhiraj Yadav 😎
+            © 2025 Traveler's Mirror. All rights reserved. Designed By Dhiraj Yadav 😎
             </p>
             <div className="flex items-center justify-between gap-4">
                 <Link to="/terms-condition">Terms of Service</Link>

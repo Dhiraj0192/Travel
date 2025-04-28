@@ -51,6 +51,7 @@ import AddHeroSection from './routes/adminPages/AddHeroSection';
 import VideosPage from './routes/VideosPage';
 import AddVideo from './routes/adminPages/AddVideo';
 import Videos from './routes/adminPages/Videos';
+import EditVideo from './routes/adminPages/EditVideo';
 
 
 
@@ -157,6 +158,7 @@ const router = createBrowserRouter([
         path: "/admin-videos",
         element : <Videos/>
       },
+      
       {
         path: "/admin-pending-posts",
         element : <PendingPosts/>
@@ -176,6 +178,10 @@ const router = createBrowserRouter([
       {
         path: "/admin-blog/edit/:blog_id",
         element : <EditBlog/>
+      },
+      {
+        path: "/admin-video/edit/:video_id",
+        element : <EditVideo/>
       },
       {
         path: "/admin-package/edit/:package_id",

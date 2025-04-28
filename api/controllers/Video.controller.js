@@ -43,6 +43,70 @@ export const addVideo = async (req, res, next) => {
     }
   };
 
+  export const editVideo = async (req, res, next) => {
+    try {
+      const { videoid } = req.params;
+  
+      const video = await Video.findById(videoid);
+      if (!video) {
+        next(handleError(404, "Data not found."));
+      }
+  
+      res.status(200).json({
+        video,
+      });
+    } catch (error) {
+      next(handleError(500, error.message));
+    }
+  };
+
+  export const updateVideo = async (req, res, next) => {
+    try {
+      const { videoid } = req.params;
+      console.log(videoid);
+  
+      const data = JSON.parse(req.body.data);
+  
+      const video = await Video.findById(videoid);
+  
+  
+      let videofile = video.video;
+  
+      if (req.file) {
+        // Upload an image
+        const uploadResult = await cloudinary.uploader
+          .upload(req.file.path, { folder: "travel-blog", resource_type: "auto" })
+          .catch((error) => {
+            next(handleError(500, error.message));
+          });
+  
+          videofile = uploadResult.secure_url;
+      }
+  
+      const newvideo = await Video.findByIdAndUpdate(
+        videoid,
+        {
+          author: data.author,
+          authorimage : data.authorimage,
+          title: data.title,
+          videolink: data.link,
+         
+          video: videofile,
+         
+        },
+        { new: true }
+      );
+  
+      res.status(200).json({
+        success: true,
+        message: "Video Updated Successfully.",
+        newvideo,
+      });
+    } catch (error) {
+      next(handleError(500, error.message));
+    }
+  };
+
   export const showAllVideo2 = async (req, res, next) => {
     try {
       const { page = 1, limit = 10 } = req.query;
@@ -92,3 +156,16 @@ export const addVideo = async (req, res, next) => {
     }
   };
   
+
+  export const deleteVideo = async (req, res, next) => {
+    try {
+      const { videoid } = req.params;
+      await Video.findByIdAndDelete(videoid);
+      res.status(200).json({
+        success: true,
+        message: "Video Deleted Successfully.",
+      });
+    } catch (error) {
+      next(handleError(500, error.message));
+    }
+  };

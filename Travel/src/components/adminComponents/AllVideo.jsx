@@ -5,12 +5,14 @@ import { getEnv } from "../../helpers/getEnv";
 import { deleteData } from "../../helpers/handleDelete";
 import { useState } from "react";
 import { useFetch } from "../../hooks/userFetch";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import moment from "moment/moment";
 
 const AllVideos = ({ searchData,bData }) => {
 
     console.log(bData);
+
+    const navigate = useNavigate();
     
   // Status badge component
   const StatusBadge = ({ status }) => {
@@ -37,6 +39,7 @@ const AllVideos = ({ searchData,bData }) => {
     );
     if (respnse) {
       setRefreshData(!refreshData);
+      navigate("/admin-videos");
       showToast("success", "Data deleted");
     } else {
       showToast("error", "Data not deleted.");
@@ -130,7 +133,7 @@ const AllVideos = ({ searchData,bData }) => {
                   </td>
                   </Link>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-50">
+                    <div className="text-sm text-gray-50 w-[30vw] overflow-hidden">
                       {video.videolink}
                     </div>
                   </td>
@@ -144,7 +147,7 @@ const AllVideos = ({ searchData,bData }) => {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex space-x-2">
                       <button className="text-green-500 hover:text-white">
-                        <Link >
+                        <Link to={`/admin-video/edit/${video._id}`}>
                           <FiEdit2 className="h-5 w-5" />
                         </Link>
                       </button>

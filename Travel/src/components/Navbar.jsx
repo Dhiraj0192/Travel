@@ -157,7 +157,7 @@ function Navbar() {
             className="lg:w-10 lg:h-10"
           />
           <span className="text-black text-lg lg:text-xl font-bold">
-            Traveller's Mirror
+            Traveler's Mirror
           </span>
         </Link>
 
