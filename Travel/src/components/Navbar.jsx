@@ -20,7 +20,7 @@ import {
 } from "../components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 import { FaUserSecret } from "react-icons/fa6";
-import { IoMdAdd } from "react-icons/io";
+import { IoLogoYoutube, IoMdAdd } from "react-icons/io";
 import { IoLogOut } from "react-icons/io5";
 import { MdEmail, MdOutlineSubscriptions } from "react-icons/md";
 import { removeUser } from "../redux/user/user.slice";
@@ -36,6 +36,7 @@ import { Facebook, MapIcon, PhoneCall } from "lucide-react";
 import { SiFacebook } from "react-icons/si";
 import { FaLinkedin, FaTwitter, FaCheck } from "react-icons/fa";
 import { useFetch } from "../hooks/userFetch";
+import { AiFillTikTok } from "react-icons/ai";
 
 
 
@@ -127,10 +128,15 @@ function Navbar() {
         </div>
 
         <div className="flex gap-4 items-center text-white">
-          <FaTwitter className="w-5 h-5 hover:text-blue-400 cursor-pointer" />
-          <SiFacebook className="w-5 h-5 hover:text-blue-600 cursor-pointer" />
+          <Link to="https://www.tiktok.com/@travelersmirror?_t=ZS-8vsDauBKb3f&_r=1"><AiFillTikTok className="w-7 h-7 hover:text-red-400 cursor-pointer" /></Link>
+          <Link to="https://www.facebook.com/share/16Tyh7JMcB/?mibextid=wwXIfr"><SiFacebook className="w-5 h-5 hover:text-blue-600 cursor-pointer" /></Link>
+          <Link to="https://www.instagram.com/travelersmirror?igsh=MXY1OHpoaXR2bWM1Mw%3D%3D&utm_source=qr">
           <GrInstagram className="w-5 h-5 hover:text-pink-500 cursor-pointer" />
-          <FaLinkedin className="w-5 h-5 hover:text-blue-700 cursor-pointer" />
+          
+          </Link>
+         
+          <Link to="https://youtube.com/@travelersmirror8848?si=pvk2n6NFItoOpVYI"><IoLogoYoutube className="w-7 h-7 hover:text-red-700 cursor-pointer" /></Link>
+          
         </div>
 
         <div className="flex items-center gap-3">

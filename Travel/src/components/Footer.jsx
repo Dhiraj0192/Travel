@@ -5,6 +5,8 @@ import { GrInstagram } from "react-icons/gr";
 import { FaLinkedin } from "react-icons/fa6";
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from "react-redux";
+import { AiFillTikTok } from 'react-icons/ai';
+import { IoLogoYoutube } from 'react-icons/io';
 
 function Footer() {
   const navigate = useNavigate();
@@ -72,10 +74,14 @@ function Footer() {
                 <p className="text-gray-200">Modern publishing platform for bloggers of all levels.</p>
 
                 <div className="flex gap-4 items-center">
-                <FaTwitter className="w-6 h-6" />
-                <SiFacebook className="w-6 h-6"/>
-                <GrInstagram className="w-6 h-6"/>
-                <FaLinkedin className="w-6 h-6"/>
+                <Link to="https://www.tiktok.com/@travelersmirror?_t=ZS-8vsDauBKb3f&_r=1"><AiFillTikTok className="w-7 h-7 hover:text-red-400 cursor-pointer" /></Link>
+                          <Link to="https://www.facebook.com/share/16Tyh7JMcB/?mibextid=wwXIfr"><SiFacebook className="w-5 h-5 hover:text-blue-600 cursor-pointer" /></Link>
+                          <Link to="https://www.instagram.com/travelersmirror?igsh=MXY1OHpoaXR2bWM1Mw%3D%3D&utm_source=qr">
+                          <GrInstagram className="w-5 h-5 hover:text-pink-500 cursor-pointer" />
+                          
+                          </Link>
+                         
+                          <Link to="https://youtube.com/@travelersmirror8848?si=pvk2n6NFItoOpVYI"><IoLogoYoutube className="w-7 h-7 hover:text-red-700 cursor-pointer" /></Link>
                 </div>
 
 
