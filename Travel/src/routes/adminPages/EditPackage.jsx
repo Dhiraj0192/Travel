@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FiSearch, FiPlus, FiFilter, FiChevronDown } from "react-icons/fi";
 import Sidebar from "../../components/adminComponents/Sidebar";
 import AllPost from "../../components/adminComponents/AllPost";
-import { showToast } from "../..//helpers/showToast";
+import { showToast } from "../../helpers/showToast";
 import { Card } from "../../components/ui/card";
 import {
   Form,
@@ -31,7 +31,7 @@ import Dropzone from "react-dropzone";
 import Editor from "../../components/Editor";
 import { useSelector } from "react-redux";
 import { useAuth, useUser } from "@clerk/clerk-react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 import { decode } from "entities";
 import Loading from "../../components/Loading";
@@ -40,18 +40,17 @@ import { toast } from "react-toastify";
 
 function EditPackage() {
   const navigate = useNavigate()
-    const { isSignedIn } = useAuth();
-    if (isSignedIn === false) {
-  
-      navigate('/admin-login');
-      
-    }
-  
-  const packageid = useParams();
-  console.log(packageid);
+  const user = useSelector((state) => state.user);
+  // console.log(user);
   
 
-  const { user } = useUser();
+  // Protect the /single page route
+  if (!user.isAdminLoggedIn) {
+    return <Navigate to="/admin-login" replace />;
+  }
+  
+  const packageid = useParams();
+  
 
   const [filePreview, setFilePreview] = useState();
   const [file, setFile] = useState();
@@ -67,7 +66,7 @@ function EditPackage() {
     [packageid?.blog_id]
   );
 
-  console.log(packageData);
+
   
   
   
@@ -89,7 +88,7 @@ function EditPackage() {
       
     },
   });
-  console.log(packageData);
+ 
   
 
   useEffect(() => {
@@ -213,7 +212,7 @@ function EditPackage() {
         <Sidebar />
       </div>
 
-      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(public/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat px-6 py-6 min-h-screen">
+      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat px-6 py-6 min-h-screen">
         {/* Toggle Button for Mobile */}
         <div className="lg:hidden flex justify-end mb-4">
           <button

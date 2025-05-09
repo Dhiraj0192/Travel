@@ -7,6 +7,7 @@ import nodemailer from "nodemailer";
 
 import Category from "../models/category.model.js";
 import { encode } from "entities";
+import SubCategory from "../models/subcategory.model.js";
 
 
 export const addBlog = async (req, res, next) => {
@@ -31,15 +32,17 @@ export const addBlog = async (req, res, next) => {
     const post = new Blog({
       author: data.author,
       authorimage: data.authorimage,
-      category: data.category,
+      subcategory: data.subcategory,
       title: data.title,
       slug: data.slug ? data.slug : "",
       featuredimage: featuredImage,
       blogcontent: encode(data.blogContent),
       isFeatured: data.isFeatured,
+      isFlashNesw: data.isFlashNews,
       status: data.status,
       authorid: data.authorid || "",
       authoremail: data.authoremail || "",
+      location: data.location,
     });
 
     await post.save();
@@ -57,7 +60,14 @@ export const editBlog = async (req, res, next) => {
   try {
     const { blogid } = req.params;
 
-    const blog = await Blog.findById(blogid).populate("category", "name");
+    const blog = await Blog.findById(blogid).populate({
+      path: "subcategory",
+      select: "name slug parentCategory",
+      populate: {
+        path: "parentCategory",
+        select: "name slug",
+      },
+    });
     if (!blog) {
       next(handleError(404, "Data not found."));
     }
@@ -78,8 +88,11 @@ export const updateBlog = async (req, res, next) => {
     const data = JSON.parse(req.body.data);
 
     const blog = await Blog.findById(blogid);
+    console.log("sub cat : ",data.subcategory.replace(" ",""));
+    
 
-    const objectId = new mongoose.Types.ObjectId(data.category);
+    const objectId = new mongoose.Types.ObjectId(data.subcategory.replace(" ",""));
+    
 
     let featuredImage = blog.featuredimage;
 
@@ -93,18 +106,21 @@ export const updateBlog = async (req, res, next) => {
 
       featuredImage = uploadResult.secure_url;
     }
+    
 
     const newblog = await Blog.findByIdAndUpdate(
       blogid,
       {
         author: data.author,
-        category: objectId,
+        subcategory: objectId,
         title: data.title,
         slug: data.slug,
-        blogcontent: data.blogcontent,
+        blogcontent: data.blogContent,
         featuredimage: featuredImage,
         isFeatured: data.isFeatured,
+        isFlashNesw: data.isFlashNews,
         status: data.status,
+        location: data.location,
       },
       { new: true }
     );
@@ -184,7 +200,7 @@ export const updateUserBlog = async (req, res, next) => {
 
     const blog = await Blog.findById(blogid);
 
-    const objectId = new mongoose.Types.ObjectId(data.category);
+    const objectId = new mongoose.Types.ObjectId(data.subcategory);
 
     let featuredImage = blog.featuredimage;
 
@@ -203,13 +219,14 @@ export const updateUserBlog = async (req, res, next) => {
       blogid,
       {
         author: data.author,
-        category: objectId,
+        subcategory: objectId,
         title: data.title,
         slug: data.slug,
         blogcontent: data.blogcontent,
         featuredimage: featuredImage,
         authorid: data.authorid,
         authorimage: data.authorimage,
+        location: data.location,
       },
       { new: true }
     );
@@ -242,13 +259,45 @@ export const showAllBlog = async (req, res, next) => {
     
 
     const blog = await Blog.find({ status: "published" })
-      .populate("category", "name slug")
+      .populate({
+        path: "subcategory",
+        select: "name slug parentCategory",
+        populate: {
+          path: "parentCategory",
+          select: "name slug",
+        },
+      })
+      .sort({ createdAt: -1 })
+      .lean()
+      .exec();
+
+      console.log(blog);
+      
+
+    const total = await Blog.countDocuments({ status: "published" });
+
+    res.status(200).json({
+      blog,
+      total,
+      
+    });
+  } catch (error) {
+    next(handleError(500, error.message));
+  }
+};
+
+export const showAllFlashNewsBlog = async (req, res, next) => {
+  try {
+    
+
+    const blog = await Blog.find({ status: "published",isFlashNesw : true })
+      .populate("subcategory", "name slug")
       .sort({ createdAt: -1 })
       
       .lean()
       .exec();
 
-    const total = await Blog.countDocuments({ status: "published" });
+    const total = await Blog.countDocuments({ status: "published",isFlashNesw : true });
 
     res.status(200).json({
       blog,
@@ -266,12 +315,15 @@ export const showAllBlog2 = async (req, res, next) => {
     const skip = (page - 1) * limit;
 
     const blog = await Blog.find({ status: "published" })
-      .populate("category", "name slug")
+      .populate("subcategory", "name slug ")
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(parseInt(limit))
       .lean()
       .exec();
+
+      console.log("blog : ",blog);
+      
 
     const total = await Blog.countDocuments({ status: "published" });
 
@@ -289,7 +341,7 @@ export const showAllBlog2 = async (req, res, next) => {
 export const showAllPendingBlog = async (req, res, next) => {
   try {
     const blog = await Blog.find({ status: "pending" })
-      .populate("category", "name slug")
+      .populate("subcategory", "name slug")
       .sort({ createdAt: -1 })
       .lean()
       .exec();
@@ -408,7 +460,7 @@ export const getFeaturedBlogs = async (req, res) => {
     })
       .sort({ createdAt: -1 })
       .limit(parseInt(limit))
-      .populate("category");
+      .populate("subcategory");
 
     res.json(featuredBlogs);
   } catch (error) {
@@ -445,7 +497,7 @@ export const getBlog = async (req, res, next) => {
   try {
     const { slug } = req.params;
     const blog = await Blog.findOne({ slug })
-      .populate("category", "name slug")
+      .populate("subcategory", "name slug")
       .lean()
       .exec();
 
@@ -463,7 +515,7 @@ export const getBlogsByCategory = async (req, res, next) => {
     
 
     const blogs = await Blog.find({ category: categoryId, status: "published" })
-      .populate("category", "name slug")
+      .populate("subcategory", "name slug")
       .populate("author", "username avatar")
       .sort({ createdAt: -1 })
       
@@ -489,7 +541,7 @@ export const getBlogsByCategory2 = async (req, res, next) => {
     const skip = (page - 1) * limit;
 
     const blogs = await Blog.find({ category: categoryId, status: "published" })
-      .populate("category", "name slug")
+      .populate("subcategory", "name slug")
       .populate("author", "username avatar")
       .sort({ createdAt: -1 })
       .skip(skip)
@@ -519,7 +571,7 @@ export const search = async (req, res, next) => {
 
     const blog = await Blog.find({ title: { $regex: q, $options: "i" } })
       .populate("author", "name avatar role")
-      .populate("category", "name slug")
+      .populate("subcategory", "name slug")
       
       .lean()
       .exec();
@@ -546,7 +598,7 @@ export const search2 = async (req, res, next) => {
 
     const blog = await Blog.find({ title: { $regex: q, $options: "i" } })
       .populate("author", "name avatar role")
-      .populate("category", "name slug")
+      .populate("subcategory", "name slug")
       .skip(skip)
       .limit(parseInt(limit))
       .lean()
@@ -573,7 +625,7 @@ export const getBlogsByUserId = async (req, res, next) => {
     const blogs = await Blog.find({
       authorid: userid,
     })
-      .populate("category", "name slug")
+      .populate("subcategory", "name slug")
       .populate("author", "name _id")
       .sort({ createdAt: -1 })
       .lean()
@@ -591,8 +643,8 @@ export const getBlogsByUserId = async (req, res, next) => {
 export const getUserBlogsByCategory = async (req, res, next) => {
   try {
     let { categoryId, userid } = req.params;
-    const blogs = await Blog.find({ category: categoryId, authorid: userid })
-      .populate("category", "name slug")
+    const blogs = await Blog.find({ subcategory: categoryId, authorid: userid })
+      .populate("subcategory", "name slug")
       .populate("author", "name _id")
       .sort({ createdAt: -1 })
       .lean()
@@ -613,7 +665,7 @@ export const userSearch = async (req, res, next) => {
 
     const blog = await Blog.find({ authorid: userid, title: { $regex: q } })
       .populate("author", "name avatar role")
-      .populate("category", "name slug");
+      .populate("subcategory", "name slug");
 
     res.status(200).json({
       blog,
@@ -626,13 +678,15 @@ export const userSearch = async (req, res, next) => {
 export const getBlogsByTravelCategorys = async (req, res, next) => {
   try {
     const { categoryId } = req.params;
-    const catName = await Category.findOne({ name: categoryId }).lean().exec();
+    console.log(categoryId);
+    
+    const catName = await SubCategory.findOne({ name: categoryId }).lean().exec();
 
     const blogs = await Blog.find({
-      category: catName?._id.toString(),
+      subcategory: catName?._id.toString(),
       status: "published",
     })
-      .populate("category", "name slug")
+      .populate("subcategory", "name slug")
       .populate("author", "username avatar")
       .sort({ createdAt: -1 })
       .lean()
@@ -666,6 +720,36 @@ export const checkSlug = async (req, res, next) => {
       return res.status(200).json({ exists: true });
     }
     return res.status(200).json({ exists: false });
+  } catch (error) {
+    next(handleError(500, error.message));
+  }
+};
+
+export const getAllUniqueLocations = async (req, res, next) => {
+  try {
+    const locations = await Blog.distinct("location");
+    res.status(200).json({
+      success: true,
+      locations,
+    });
+  } catch (error) {
+    next(handleError(500, error.message));
+  }
+};
+
+export const getBlogsByLocation = async (req, res, next) => {
+  try {
+    const { location } = req.params;
+    const blogs = await Blog.find({ location:location, status: "published" })
+      .populate("subcategory", "name slug")
+      .sort({ createdAt: -1 })
+      .lean()
+      .exec();
+
+    res.status(200).json({
+      success: true,
+      blogs,
+    });
   } catch (error) {
     next(handleError(500, error.message));
   }

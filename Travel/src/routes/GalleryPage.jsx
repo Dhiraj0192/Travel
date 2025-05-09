@@ -24,7 +24,7 @@ function GalleryPage() {
         method: "get",
         credentials: "include",
     });
-    console.log(blogData);
+    
     
 return (
     <div className="flex flex-col min-h-screen">
@@ -33,7 +33,7 @@ return (
             <div className="overflow-hidden bg-gradient-to-b from-[#4b55678b] to-[#1a1c208b] bg-opacity-5 h-[25vh] lg:h-[33vh]">
                 <img
                     src="https://images.pexels.com/photos/5077049/pexels-photo-5077049.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-                    className="w-full h-[34vh] lg:h-[50vh] absolute top-0 -z-10 bg-cover "
+                    className="w-full h-[37vh] lg:h-[54vh] absolute top-0 -z-10 bg-cover "
                 />
                 {/* breadcrumb */}
                 <div className="h-[20vh] flex flex-col justify-center">
@@ -57,9 +57,9 @@ return (
                         <div
                             key={index}
                             className="overflow-hidden rounded-lg shadow-lg cursor-pointer"
-                            onClick={() => setPreviewImage(src)}
+                            
                         >
-                             <Link to={`/blog/${blog.category.slug}/${blog.slug}`}>
+                             <Link to={`/blog/${blog.subcategory.slug}/${blog.slug}`}>
                             <img
                                 src={blog.featuredimage}
                                 alt={`Gallery Image ${index + 1}`}

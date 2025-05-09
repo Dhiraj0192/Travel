@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FiSearch, FiPlus, FiFilter, FiChevronDown } from "react-icons/fi";
 import Sidebar from "../../components/adminComponents/Sidebar";
 import AllPost from "../../components/adminComponents/AllPost";
-import { showToast } from "../..//helpers/showToast";
+import { showToast } from "../../helpers/showToast";
 import { Card } from "../../components/ui/card";
 import {
   Form,
@@ -29,16 +29,19 @@ import {
 import { useFetch } from "../../hooks/userFetch";
 import Dropzone from "react-dropzone";
 import Editor from "../../components/Editor";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
+import { useSelector } from "react-redux";
 
 function Posts() {
   const navigate = useNavigate()
-  const { isSignedIn } = useAuth();
-  if (isSignedIn === false) {
+  const user = useSelector((state) => state.user);
+  console.log(user);
+  
 
-    navigate('/admin-login');
-    
+  // Protect the /single page route
+  if (!user.isAdminLoggedIn) {
+    return <Navigate to="/admin-login" replace />;
   }
   const [selectedCategoryBlogs, setSelectedCategoryBlogs] = useState();
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
@@ -52,6 +55,8 @@ function Posts() {
       const [totalPages, setTotalPages] = useState(1);
       let [categoryIdAll, setCategoryIdAll] = useState();
       const [sidebarOpen, setSidebarOpen] = useState(false);
+      const [category, setCategory] = useState([]);
+      const [subcategories, setSubcategories] = useState([]);
 
   const {
     data: categoryData,
@@ -61,6 +66,30 @@ function Posts() {
     method: "get",
     credentials: "include",
   });
+
+  useEffect(() => {
+      const fetchCategories = async () => {
+        try {
+          const response = await fetch(
+            `${getEnv("VITE_API_BASE_URL")}/category/subcategories/${categoryId}`,
+            {
+              method: "get",
+              credentials: "include",
+            }
+          );
+          const data = await response.json();
+          if (response.ok) {
+            setSubcategories(data.subcategories || []);
+          } else {
+            console.error("Failed to fetch categories", data.message);
+          }
+        } catch (error) {
+          console.error("Error fetching categories:", error);
+        }
+      };
+  
+      fetchCategories();
+    }, []);
 
   const categories = categoryData?.category;
 
@@ -76,6 +105,8 @@ useEffect(() => {
           }
         );
         const data = await response.json();
+        
+        
         if (isMounted && response.ok) {
           setBData(data);
           setTotalPages(data.totalPages || 1);
@@ -98,7 +129,7 @@ useEffect(() => {
     try {
       let categoryId = event?.target?.value;
       setCategoryIdAll(categoryId);
-      console.log(categoryId);
+      
 
       if (categoryId === "All Categories") {
         
@@ -122,6 +153,8 @@ useEffect(() => {
           }
         );
         const data = await response.json();
+        
+        
         if (response.ok) {
           setSelectedCategoryBlogs(data.blogs);
           setSearchData(undefined);
@@ -207,6 +240,31 @@ useEffect(() => {
       return pages;
     };
 
+    const handleCategoryChange = async (event) => {
+      
+      
+        const categoryId = event.target.value;
+        try {
+          const response = await fetch(
+            `${getEnv("VITE_API_BASE_URL")}/category/subcategories/${categoryId}`,
+            {
+              method: "get",
+              credentials: "include",
+            }
+          );
+          const data = await response.json();
+          if (response.ok) {
+            setSubcategories(data.subcategories || []);
+          } else {
+            console.error(data.message);
+            setSubcategories([]);
+          }
+        } catch (error) {
+          console.error("Error fetching subcategories:", error);
+          setSubcategories([]);
+        }
+      };
+
   return (
     <div className="w-full flex">
       {/* Sidebar */}
@@ -218,7 +276,7 @@ useEffect(() => {
         <Sidebar />
       </div>
 
-      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(public/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat px-6 py-6 min-h-screen">
+      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat px-6 py-6 min-h-screen">
         {/* Toggle Button for Mobile */}
         <div className="lg:hidden flex justify-end mb-4">
           <button
@@ -268,10 +326,10 @@ useEffect(() => {
             {/* Category Dropdown */}
             <div className="relative">
               <select
-                onChange={fetchBlogsByCategory}
+                onChange={(e)=>handleCategoryChange(e)}
                 className=" appearance-none pl-3 pr-8 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
               >
-                <option >All Categories</option>
+                <option >Select Category</option>
                 {categories && categories.length > 0 ? (
                   categories.map((category) => (
                     <option
@@ -281,6 +339,31 @@ useEffect(() => {
                       value={category._id}
                     >
                       {category.name}
+                    </option>
+                  ))
+                ) : (
+                  <></>
+                )}
+              </select>
+              <div className="hidden md:flex absolute inset-y-0 right-0  items-center pr-2 pointer-events-none">
+                <FiChevronDown className="text-gray-400" />
+              </div>
+            </div>
+            <div className="relative">
+              <select
+                onChange={fetchBlogsByCategory}
+                className=" appearance-none pl-3 pr-8 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+              >
+                
+                {subcategories.length > 0 ? (
+                    subcategories.map((subcategory) => (
+                    <option
+                    
+                      onChange={subcategory._id}
+                      key={subcategory._id}
+                      value={subcategory._id}
+                    >
+                      {subcategory.name}
                     </option>
                   ))
                 ) : (

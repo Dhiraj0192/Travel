@@ -36,6 +36,7 @@ function AccountPage() {
   const dispath = useDispatch();
   const [filePreview, setFilePreview] = useState();
   const [file, setFile] = useState();
+  const [uploading, setUploading] = useState(false);
   const user = useSelector((state) => state.user);
 
   const navigate = useNavigate();
@@ -48,7 +49,7 @@ function AccountPage() {
       { method: "get", credentials: "include" }
     );
 
-    console.log(userData);
+   
     
 
   const formSchema = z.object({
@@ -80,6 +81,7 @@ function AccountPage() {
 
   async function onSubmit(values) {
     try {
+      setUploading(true);
       const formData = new FormData();
       formData.append("file", file);
       formData.append("data", JSON.stringify(values));
@@ -94,6 +96,7 @@ function AccountPage() {
 
       const data = await response.json();
       if (!response.ok) {
+        setUploading(false);
         return toast(data.message, {
           position: "bottom-right",
           autoClose: 5000,
@@ -107,7 +110,7 @@ function AccountPage() {
           });
         
       }
-
+      setUploading(false);
       dispath(setUser(data.user));
       toast(data.message, {
                             position: "bottom-right",
@@ -123,6 +126,7 @@ function AccountPage() {
 
       
     } catch (error) {
+      setUploading(false);
       toast(error.message, {
         position: "bottom-right",
         autoClose: 5000,
@@ -291,7 +295,7 @@ function AccountPage() {
               </div>
               <div className="mt-10 px-6 md:px-0">
                 <Button type="submit" className="md:w-[80vw] lg:w-[40vw] bg-gray-800 h-10">
-                  Save Changes
+                {uploading ? "Please Wait...." : "Save Changes"}
                 </Button>
                 
               </div>

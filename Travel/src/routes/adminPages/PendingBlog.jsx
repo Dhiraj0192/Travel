@@ -9,7 +9,7 @@ import {
 } from "react-icons/fi";
 import Sidebar from "../../components/adminComponents/Sidebar";
 import AllPost from "../../components/adminComponents/AllPost";
-import { showToast } from "../..//helpers/showToast";
+import { showToast } from "../../helpers/showToast";
 import { Card } from "../../components/ui/card";
 import {
   Form,
@@ -36,20 +36,23 @@ import {
 import { useFetch } from "../../hooks/userFetch";
 import Dropzone from "react-dropzone";
 import Editor from "../../components/Editor";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import moment from "moment/moment";
 import { deleteData } from "../../helpers/handleDelete";
 import { useAuth } from "@clerk/clerk-react";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 function PendingPosts() {
   const navigate = useNavigate()
-  const { isSignedIn } = useAuth();
-  if (isSignedIn === false) {
-
-    navigate('/admin-login');
+  const user = useSelector((state) => state.user);
+    console.log(user);
     
-  }
+  
+    // Protect the /single page route
+    if (!user.isAdminLoggedIn) {
+      return <Navigate to="/admin-login" replace />;
+    }
   const [selectedCategoryBlogs, setSelectedCategoryBlogs] = useState();
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
   const [query, setQuery] = useState();
@@ -81,7 +84,7 @@ function PendingPosts() {
   const fetchBlogsByCategory = async (event) => {
     try {
       let categoryId = event.target.value;
-      console.log(categoryId);
+      
 
       if (categoryId === "All Categories") {
         const response = await fetch(
@@ -92,7 +95,7 @@ function PendingPosts() {
           }
         );
         const data = await response.json();
-        console.log(data);
+        
 
         if (response.ok) {
           setSelectedCategoryBlogs(data.blogs);
@@ -181,7 +184,7 @@ function PendingPosts() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(query);
+    
 
     const response = await fetch(
       `${getEnv("VITE_API_BASE_URL")}/blog/search/${query}`,
@@ -208,7 +211,7 @@ function PendingPosts() {
         <Sidebar />
       </div>
 
-      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(public/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat px-6 py-6 min-h-screen">
+      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat px-6 py-6 min-h-screen">
         {/* Toggle Button for Mobile */}
         <div className="lg:hidden flex justify-end mb-4">
           <button
@@ -255,7 +258,7 @@ function PendingPosts() {
       </button> */}
 
             {/* Category Dropdown */}
-            <div className="relative">
+            {/* <div className="relative">
               <select
                 onChange={fetchBlogsByCategory}
                 className="appearance-none pl-3 pr-8 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 "
@@ -278,7 +281,7 @@ function PendingPosts() {
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                 <FiChevronDown className="text-gray-400" />
               </div>
-            </div>
+            </div> */}
           </div>
 
           <div className="py-10 w-full bg-gray-800 rounded-lg shadow-sm">
@@ -316,7 +319,7 @@ function PendingPosts() {
                               {blog.author}
                             </div>
                           </td>
-                          <Link to={`/adminblog/${blog.category.slug}/${blog.slug}`}>
+                          <Link to={`/adminblog/${blog.subcategory.slug}/${blog.slug}`}>
                   <td className="px-6 py-4 whitespace-nowrap ">
                     <div className="text-sm font-medium text-gray-50 hover:text-black">
                       {blog.title.substring(0, 25)}....
@@ -325,7 +328,7 @@ function PendingPosts() {
                   </Link>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="text-sm text-gray-50">
-                              {blog.category.name}
+                              {blog.subcategory.name}
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
@@ -362,7 +365,7 @@ function PendingPosts() {
                               {blog.author}
                             </div>
                           </td>
-                          <Link to={`/adminblog/${blog.category.slug}/${blog.slug}`}>
+                          <Link to={`/adminblog/${blog.subcategory.slug}/${blog.slug}`}>
                   <td className="px-6 py-4 whitespace-nowrap ">
                     <div className="text-sm font-medium text-gray-50 hover:text-black">
                       {blog.title.substring(0, 25)}....
@@ -371,7 +374,7 @@ function PendingPosts() {
                   </Link>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="text-sm text-gray-50">
-                              {blog.category.name}
+                              {blog.subcategory.name}
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
@@ -408,7 +411,7 @@ function PendingPosts() {
                               {blog.author}
                             </div>
                           </td>
-                          <Link to={`/adminblog/${blog.category.slug}/${blog.slug}`}>
+                          <Link to={`/adminblog/${blog.subcategory.slug}/${blog.slug}`}>
                   <td className="px-6 py-4 whitespace-nowrap ">
                     <div className="text-sm font-medium text-gray-50 hover:text-black">
                       {blog.title.substring(0, 25)}....
@@ -417,7 +420,7 @@ function PendingPosts() {
                   </Link>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="text-sm text-gray-50">
-                              {blog.category.name}
+                              {blog.subcategory.name}
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">

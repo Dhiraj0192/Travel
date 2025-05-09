@@ -10,7 +10,7 @@ import moment from "moment/moment";
 
 const AllVideos = ({ searchData,bData }) => {
 
-    console.log(bData);
+    
 
     const navigate = useNavigate();
     

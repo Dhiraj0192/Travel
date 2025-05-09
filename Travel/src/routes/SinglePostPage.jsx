@@ -16,6 +16,10 @@ import UserIcon from "../components/UserIcon";
 import { useLocation } from 'react-router-dom';
 import AddsSlot from "../components/AddsSlot";
 import { FaBackspace } from "react-icons/fa";
+import { IoMdArrowRoundBack } from "react-icons/io";
+import { IoArrowBackCircleSharp } from "react-icons/io5";
+import Loading from "../components/Loading";
+import SinglePostAddsSlot from "../components/SinglePostAddsSlot";
 
 function SinglePostPage() {
   const user = useSelector((state) => state.user);
@@ -58,7 +62,7 @@ function SinglePostPage() {
   
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading/>;
   }
 
   if (!singleblog || !singleblog.blog) {
@@ -76,7 +80,7 @@ function SinglePostPage() {
         <div className="flex md:flex-row flex-col justify-center items-center gap-8">
           <div className=" lg:w-3/5 flex flex-col gap-8">
 
-            <Link to={-1}><FaBackspace className="w-8 h-8"/></Link>
+            <Link to={-1}><IoArrowBackCircleSharp className="w-8 h-8"/></Link>
             <h1 className="text-xl md:text-3xl xl:text-4xl 2xl:text-5xl font-semibold">
               {singleblog.blog.title || "Untitled Blog"}
             </h1>
@@ -87,7 +91,7 @@ function SinglePostPage() {
               </Link>
               <span>on</span>
               <Link className="text-blue-800 font-semibold">
-                {singleblog.blog.category?.name || "Uncategorized"}
+                {singleblog.blog.subcategory?.name || "Uncategorized"}
               </Link>
               <span>
                 {moment(singleblog.blog.createdAt).format("DD-MM-YYYY") || "N/A"} ago
@@ -122,7 +126,7 @@ function SinglePostPage() {
             ></div>
 
             <div className="">
-                  <AddsSlot/>
+                  <SinglePostAddsSlot/>
                   </div>
 
             {singleblog?.blog.status === 'pending' ? <></> : <div id="comment" className="border-gray-600 border-t mt-5 pt-5">

@@ -2,25 +2,28 @@ import React, { useEffect, useState } from "react";
 import { FiSearch, FiPlus, FiFilter, FiChevronDown, FiEdit2, FiTrash2 } from "react-icons/fi";
 import Sidebar from "../../components/adminComponents/Sidebar";
 
-import { showToast } from "../..//helpers/showToast";
+import { showToast } from "../../helpers/showToast";
 
 import { getEnv } from "../../helpers/getEnv";
 
 import { useFetch } from "../../hooks/userFetch";
 
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import moment from "moment/moment";
 import { deleteData } from "../../helpers/handleDelete";
 import { useAuth } from "@clerk/clerk-react";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 function Packages() {
   const navigate = useNavigate()
-  const { isSignedIn } = useAuth();
-  if (isSignedIn === false) {
+  const user = useSelector((state) => state.user);
+  console.log(user);
+  
 
-    navigate('/admin-login');
-    
+  // Protect the /single page route
+  if (!user.isAdminLoggedIn) {
+    return <Navigate to="/admin-login" replace />;
   }
   
   const [query, setQuery] = useState();
@@ -45,7 +48,7 @@ function Packages() {
   
     const handleSubmit = async (e) => {
       e.preventDefault();
-      console.log(query);
+      
   
       const response = await fetch(
         `${getEnv("VITE_API_BASE_URL")}/package/search/${query}`,
@@ -106,7 +109,7 @@ function Packages() {
         <Sidebar />
       </div>
 
-      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(public/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat px-6 py-6 min-h-screen">
+      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat px-6 py-6 min-h-screen">
         {/* Toggle Button for Mobile */}
         <div className="lg:hidden flex justify-end mb-4">
           <button

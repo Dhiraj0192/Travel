@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FiSearch, FiPlus, FiFilter, FiChevronDown } from "react-icons/fi";
 import Sidebar from "../../components/adminComponents/Sidebar";
 import AllPost from "../../components/adminComponents/AllPost";
-import { showToast } from "../..//helpers/showToast";
+import { showToast } from "../../helpers/showToast";
 import { Card } from "../../components/ui/card";
 import {
   Form,
@@ -29,30 +29,34 @@ import {
 import { useFetch } from "../../hooks/userFetch";
 import Dropzone from "react-dropzone";
 import Editor from "../../components/Editor";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import moment from "moment/moment";
 import CommentCount from "../../components/CommentCount";
 import { decode } from "entities";
 import { deleteData } from "../../helpers/handleDelete";
 import { useAuth } from "@clerk/clerk-react";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 
 
 function AdminBlogShow() {
     const navigate = useNavigate()
-  const { isSignedIn } = useAuth();
+  
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  if (isSignedIn === false) {
+  const user = useSelector((state) => state.user);
+  // console.log(user);
+  
 
-    navigate('/admin-login');
-    
+  // Protect the /single page route
+  if (!user.isAdminLoggedIn) {
+    return <Navigate to="/admin-login" replace />;
   }
     
     
     const blogid = useParams();
   
-    console.log(blogid);
+    
     
   
     const { post } = useParams();
@@ -65,7 +69,7 @@ function AdminBlogShow() {
         credentials: "include",
       }
     );
-    console.log(singleblog);
+    
 
     const handleDelete = (id) => {
         const respnse = deleteData(
@@ -199,7 +203,7 @@ function AdminBlogShow() {
               </Link>
               <span>on</span>
               <Link className="text-blue-800 font-semibold">
-                {singleblog?.blog.category?.name || "Uncategorized"}
+                {singleblog?.blog.subcategory?.name || "Uncategorized"}
               </Link>
               <span>
                 {moment(singleblog?.blog.createdAt).format("DD-MM-YYYY") || "N/A"} ago

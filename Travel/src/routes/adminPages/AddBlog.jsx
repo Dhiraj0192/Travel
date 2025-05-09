@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FiSearch, FiPlus, FiFilter, FiChevronDown } from "react-icons/fi";
 import Sidebar from "../../components/adminComponents/Sidebar";
 import AllPost from "../../components/adminComponents/AllPost";
-import { showToast } from "../..//helpers/showToast";
+import { showToast } from "../../helpers/showToast";
 import { Card } from "../../components/ui/card";
 import {
   Form,
@@ -40,19 +40,25 @@ import { FaCloudUploadAlt } from "react-icons/fa";
 
 function AddBlog() {
   const navigate = useNavigate();
-  const { isSignedIn } = useAuth();
-  if (isSignedIn === false) {
-    navigate("/admin-login");
-  }
-  const { user } = useUser();
+  const user = useSelector((state) => state.user);
+    // console.log(user);
+    
+  
+    // Protect the /single page route
+    if (!user.isAdminLoggedIn) {
+      return <Navigate to="/admin-login" replace />;
+    }
+  // const { user } = useUser();
 
   // const user = useSelector((state)=> state.user)
-  console.log("user", user);
+ 
 
   const [filePreview, setFilePreview] = useState();
   const [uploading, setUploading] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [file, setFile] = useState();
+  const [subcategories, setSubcategories] = useState([]);
+
   const {
     data: categoryData,
     loading,
@@ -63,22 +69,26 @@ function AddBlog() {
   });
 
   const formSchema = z.object({
-    category: z.string().min(3, "Category field must be selected."),
+    subcategory: z.string().min(3, "Category field must be selected."),
     title: z.string().min(3, "Title must be at least 3 character long."),
     slug: z.string().min(3, "slug must be 3 character long."),
     blogContent: z.string().min(3, "Blog content must be 3 character long."),
     isFeatured: z.boolean(),
+    isFlashNews: z.boolean(),
+    location: z.string().min(3, "Location must be at least 3 character long."),
     status: z.string(),
   });
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      category: "",
+      subcategory: "",
       title: "",
       slug: "",
       blogContent: "",
       isFeatured: false,
+      isFlashNews: false,
+      location: "",
       status: "published",
     },
   });
@@ -101,11 +111,11 @@ function AddBlog() {
       setUploading(true);
       const newValues = {
         ...values,
-        author: user?.fullName,
+        author: user?.adminuser?.fullName,
         authorimage:
           user?.imageUrl || "https://www.flaticon.com/free-icon/user_9187604",
       };
-      // console.log(newValues);
+     
 
       if (!file) {
         setUploading(false);
@@ -165,6 +175,29 @@ function AddBlog() {
     setFilePreview(preview);
   };
 
+  const handleCategoryChange = async (categoryId) => {
+    form.setValue("category", categoryId);
+    try {
+      const response = await fetch(
+        `${getEnv("VITE_API_BASE_URL")}/category/subcategories/${categoryId}`,
+        {
+          method: "get",
+          credentials: "include",
+        }
+      );
+      const data = await response.json();
+      if (response.ok) {
+        setSubcategories(data.subcategories || []);
+      } else {
+        console.error(data.message);
+        setSubcategories([]);
+      }
+    } catch (error) {
+      console.error("Error fetching subcategories:", error);
+      setSubcategories([]);
+    }
+  };
+
   return (
     <div className="w-full flex ">
       {/* Sidebar */}
@@ -176,7 +209,7 @@ function AddBlog() {
         <Sidebar />
       </div>
 
-      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(public/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat px-6 py-6 min-h-screen">
+      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat px-6 py-6 min-h-screen">
         {/* Toggle Button for Mobile */}
         <div className="lg:hidden flex justify-end mb-4">
           <button
@@ -238,23 +271,14 @@ function AddBlog() {
                             </FormLabel>
                             <FormControl>
                               <Select
-                                onValueChange={field.onChange}
+                                onValueChange={(value) => handleCategoryChange(value)}
                                 defaultValue={field.value}
                               >
                                 <SelectTrigger className=" w-[80vw] md:w-[60vw] bg-gray-300 text-black">
                                   <SelectValue placeholder="Select Category" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                  <SelectItem
-                                    key="select-category"
-                                    value={`${
-                                      field.value != ""
-                                        ? field.value
-                                        : "Select Category"
-                                    }`}
-                                  >
-                                    Select Category
-                                  </SelectItem>
+                                  <SelectItem key="select-category" value="placeholder">Select Category</SelectItem>
                                   {categoryData ? (
                                     categoryData.category.map((category) => (
                                       <SelectItem
@@ -276,7 +300,72 @@ function AddBlog() {
                         )}
                       />
                     </div>
+
+                    <div className="mb-3">
+                      <FormField
+                        control={form.control}
+                        name="subcategory"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-white text-lg">
+                              Subcategory
+                            </FormLabel>
+                            <FormControl>
+                              <Select
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
+                                <SelectTrigger className=" w-[80vw] md:w-[60vw] bg-gray-300 text-black">
+                                  <SelectValue placeholder="Select Subcategory" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {subcategories.length > 0 ? (
+                                    subcategories.map((subcategory) => (
+                                      <SelectItem
+                                        key={subcategory._id}
+                                        value={subcategory._id}
+                                      >
+                                        {subcategory.name}
+                                      </SelectItem>
+                                    ))
+                                  ) : (
+                                    <SelectItem value="no-subcategories">No Subcategories</SelectItem>
+                                  )}
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <div className="mb-3">
+                      <FormField
+                        control={form.control}
+                        name="location"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-white text-lg">
+                              Location
+                            </FormLabel>
+                            <FormControl>
+                              <Input
+                                className="bg-gray-200 w-[80vw] md:w-[60vw]"
+                                placeholder="Enter location.."
+                                {...field}
+                              />
+                            </FormControl>
+
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
                   </div>
+
                   <div className="mb-3 ">
                     <span className="text-white pb-4 text-lg">
                       Featured Image
@@ -363,10 +452,37 @@ function AddBlog() {
                             <Checkbox
                               checked={field.value}
                               onCheckedChange={field.onChange}
+                              className="bg-white"
                             />
 
                             <FormLabel className="text-white text-lg ">
                               Is this a Featured Blog ?
+                            </FormLabel>
+                          </div>
+                        </FormControl>
+
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <FormField
+                    control={form.control}
+                    name="isFlashNews"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <div className="flex items-center justify-start gap-3">
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                              className="bg-white"
+                            />
+
+                            <FormLabel className="text-white text-lg ">
+                              Is this a Flsh News ?
                             </FormLabel>
                           </div>
                         </FormControl>

@@ -227,9 +227,7 @@ function RegisterPage() {
                       <GoogleLogin
                         onSuccess={async (credentialResponse) => {
                           try {
-                            console.log(
-                              jwtDecode(credentialResponse.credential)
-                            );
+                            
                             const user = jwtDecode(
                               credentialResponse.credential
                             );
@@ -257,17 +255,17 @@ function RegisterPage() {
 
                             dispath(setUser(data.user))
                             navigate("/home");
-                            toast(data.message, {
-                                    position: "top-right",
-                                    autoClose: 1000,
-                                    hideProgressBar: false,
-                                    closeOnClick: false,
-                                    pauseOnHover: true,
-                                    draggable: true,
-                                    progress: undefined,
-                                    theme: "colored",
+                            // toast(data.message, {
+                            //         position: "top-right",
+                            //         autoClose: 1000,
+                            //         hideProgressBar: false,
+                            //         closeOnClick: false,
+                            //         pauseOnHover: true,
+                            //         draggable: true,
+                            //         progress: undefined,
+                            //         theme: "colored",
                                     
-                                    });
+                            //         });
                           } catch (error) {
                             toast(error.message, {
                                     position: "top-right",

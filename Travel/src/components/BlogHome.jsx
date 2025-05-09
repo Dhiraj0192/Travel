@@ -12,7 +12,7 @@ import { convert } from 'html-to-text';
   const [limit, setLimit] = useState(4)
   const [sort, setSort] = useState('-createdAt'); 
   const [travelBlog , setTravelBlog] = useState();
-  const categoryId  = 'Travel';
+  const categoryId  = 'Solo Adventure';
 
   const {data: blogData} = useFetch(`${getEnv('VITE_API_BASE_URL')}/blog/featured?limit=${limit}`,{
         method : 'get',
@@ -25,7 +25,7 @@ import { convert } from 'html-to-text';
     credentials: 'include'
 })
 
-console.log(blogDataByCategory);
+
 
   const featuredPosts = [
     {
@@ -176,7 +176,7 @@ console.log(blogDataByCategory);
               </div>
               <div className="p-6 bg-white">
                 <span className="inline-block px-3 py-1 text-xs font-semibold text-indigo-600 bg-indigo-50 rounded-full mb-2">
-                  {blog.category?.name}
+                  {blog.subcategory?.name}
                 </span>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">{blog.title}</h3>
                 <p className="text-gray-700 text-sm w-full md:w-[26vw]" >{plainText(blog.blogcontent).substring(0, 100).trim() + (plainText.length > 100 ? '...' : '')}</p>

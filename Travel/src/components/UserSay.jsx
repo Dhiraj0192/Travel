@@ -4,7 +4,7 @@ import Image from './Image';
 
 function UserSay() {
   return (
-    <div className='bg-[url(public/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat pb-10 pt-10 '>
+    <div className='bg-[url(/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat pb-10 pt-10 '>
         
 
         <div className="lg:px-32 mt-10 mb-10">

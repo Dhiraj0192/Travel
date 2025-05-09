@@ -4,10 +4,38 @@
 
 body {
     background-color: white;
+    
     width: 100vw;
     overflow-x: hidden;
     font-family: "Montserrat", sans-serif;
 
+}
+
+.category-tree {
+  padding: 20px;
+  
+}
+
+.category-node {
+  margin-bottom: 15px;
+}
+
+.category-name {
+  
+  
+  color: black;
+}
+
+.subcategories-list {
+  margin-left: 25px;
+  border-left: 2px solid #bdc3c7;
+  padding-left: 15px;
+}
+
+.subcategory-node {
+  margin: 8px 0;
+  color: #1a1b1c;
+  
 }
 
 .animatedButton{
@@ -113,6 +141,8 @@ body {
     }
   .theme {
         --animate-pulse: pulse var(--duration) ease-out infinite;
+        --animate-marquee: marquee var(--duration) infinite linear;
+        --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
 
     }
 
@@ -138,6 +168,50 @@ body {
         }
   50% {
     boxShadow: 0 0 0 8px var(--pulse-color);
+
+        }
+
+    }
+  @keyframes marquee {
+  from {
+    transform: translateX(0);
+
+        }
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
+
+        }
+
+    }
+  @keyframes marquee-vertical {
+  from {
+    transform: translateY(0);
+
+        }
+  to {
+    transform: translateY(calc(-100% - var(--gap)));
+
+        }
+
+    }
+  @keyframes marquee {
+  from {
+    transform: translateX(0);
+
+        }
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
+
+        }
+
+    }
+  @keyframes marquee-vertical {
+  from {
+    transform: translateY(0);
+
+        }
+  to {
+    transform: translateY(calc(-100% - var(--gap)));
 
         }
 

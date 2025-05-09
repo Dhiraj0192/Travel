@@ -28,7 +28,7 @@ function EditHero() {
         },
         
     );
-    console.log(HeroData);
+    
     
 
     const formSchema = z.object({
@@ -56,12 +56,12 @@ function EditHero() {
         try {
           setUploading(true);
     
-          // console.log(newValues);
+          
     
           const newValues = {
             ...values,
           };
-          // console.log(newValues);
+          
     
           
           const formData = new FormData();

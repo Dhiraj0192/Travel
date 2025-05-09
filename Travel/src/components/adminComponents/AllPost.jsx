@@ -78,7 +78,7 @@ const AllPost = ({ selectedCategoryBlogs ,searchData,bData }) => {
                       {blog.author}
                     </div>
                   </td>
-                  <Link to={`/adminblog/${blog.category.slug}/${blog.slug}`}>
+                  <Link to={`/adminblog/${blog.subcategory.slug}/${blog.slug}`}>
                   <td className="px-6 py-4 whitespace-nowrap ">
                     <div className="text-sm font-medium text-gray-50 hover:text-black">
                       {blog.title.substring(0, 25)}....
@@ -87,7 +87,7 @@ const AllPost = ({ selectedCategoryBlogs ,searchData,bData }) => {
                   </Link>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-50">
-                      {blog.category?.name}
+                      {blog.subcategory?.name}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -124,7 +124,7 @@ const AllPost = ({ selectedCategoryBlogs ,searchData,bData }) => {
                       {blog.author}
                     </div>
                   </td>
-                  <Link to={`/adminblog/${blog.category.slug}/${blog.slug}`}>
+                  <Link to={`/adminblog/${blog.subcategory.slug}/${blog.slug}`}>
                   <td className="px-6 py-4 whitespace-nowrap ">
                     <div className="text-sm font-medium text-gray-50 hover:text-black">
                       {blog.title.substring(0, 25)}....
@@ -133,7 +133,7 @@ const AllPost = ({ selectedCategoryBlogs ,searchData,bData }) => {
                   </Link>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-50">
-                      {blog.category?.name}
+                      {blog.subcategory?.name}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -169,7 +169,7 @@ const AllPost = ({ selectedCategoryBlogs ,searchData,bData }) => {
                   {blog.author}
                 </div>
               </td>
-              <Link to={`/adminblog/${blog.category.slug}/${blog.slug}`}>
+              <Link to={`/adminblog/${blog.subcategory.slug}/${blog.slug}`}>
               <td className="px-6 py-4 whitespace-nowrap ">
                 <div className="text-sm font-medium text-gray-50 hover:text-black">
                   {blog.title.substring(0, 25)}....
@@ -178,7 +178,7 @@ const AllPost = ({ selectedCategoryBlogs ,searchData,bData }) => {
               </Link>
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="text-sm text-gray-50">
-                  {blog.category?.name}
+                  {blog.subcategory?.name}
                 </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">

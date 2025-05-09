@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Card } from '../ui/card'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
 import { Input } from '../ui/input'
@@ -15,6 +15,7 @@ import slugify from 'slugify'
 function EditCategory() {
     const navigate = useNavigate();
     const {category_id} = useParams()
+    const [uploading, setUploading] = useState(false);
 
     const {data: categoryData, loading, error} = useFetch(`${getEnv('VITE_API_BASE_URL')}/category/show/${category_id}`,{
       method : 'get',
@@ -55,6 +56,7 @@ function EditCategory() {
       },[categoryData]);
     
       async function onSubmit(values) {
+        setUploading(true)
         try {
           const response = await fetch(
             `${getEnv("VITE_API_BASE_URL")}/category/update/${category_id}`,
@@ -68,12 +70,14 @@ function EditCategory() {
     
           const data = await response.json();
           if (!response.ok) {
+            setUploading(fales);
             return showToast("error", data.message);
           }
-          
+          setUploading(fales);
           navigate("/admin-categories");
           showToast("success", data.message);
         } catch (error) {
+          setUploading(false);
           showToast("error", error.message);
         }
       }
@@ -130,7 +134,8 @@ function EditCategory() {
                 </div>
                 <div className="mt-5">
                   <Button type="submit" className="w-full bg-blue-500">
-                    Save Changes
+                  {uploading ? "Please Wait...." : "Save Changes"}
+                    
                   </Button>
                 </div>
               </form>

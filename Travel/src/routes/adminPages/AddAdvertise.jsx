@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FiSearch, FiPlus, FiFilter, FiChevronDown } from "react-icons/fi";
 import Sidebar from "../../components/adminComponents/Sidebar";
 import AllPost from "../../components/adminComponents/AllPost";
-import { showToast } from "../..//helpers/showToast";
+import { showToast } from "../../helpers/showToast";
 import { Card } from "../../components/ui/card";
 import {
   Form,
@@ -39,16 +39,18 @@ import { toast } from "react-toastify";
 
 function AddAdvertise() {
   const navigate = useNavigate()
-  const { isSignedIn } = useAuth();
-  if (isSignedIn === false) {
-
-    navigate('/admin-login');
+  const user = useSelector((state) => state.user);
+    console.log(user);
     
-  }
+  
+    // Protect the /single page route
+    if (!user.isAdminLoggedIn) {
+      return <Navigate to="/admin-login" replace />;
+    }
   
 
   // const user = useSelector((state)=> state.user)
-  // console.log(userId);
+  
 
   const [filePreview, setFilePreview] = useState();
   const [uploading, setUploading] = useState(false);
@@ -154,18 +156,8 @@ function AddAdvertise() {
   };
 
   return (
-    <div className="w-full flex bg-transparent">
-      <div
-        className={`fixed z-50 bg-gray-800 h-screen transition-transform ${
-          sidebarOpen ? "translate-x-0 w-[65%]" : "-translate-x-full"
-        } lg:translate-x-0 lg:w-[20%]`}
-      >
-        <Sidebar />
-      </div>
-
-      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(public/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat px-6 py-6 min-h-screen">
-        {/* Toggle Button for Mobile */}
-        <div className="lg:hidden flex justify-end mb-4">
+    <div className="">
+      <div className="lg:hidden flex justify-end mb-4">
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
             className="text-black text-3xl focus:outline-none"
@@ -173,10 +165,10 @@ function AddAdvertise() {
             {sidebarOpen ? "✕" : "☰"}
           </button>
         </div>
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6 lg:pt-[13vh] lg:pl-[16vw]">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6  lg:pl-[16vw]">
           <div>
             <h1 className="text-2xl font-semibold text-black">
-              Let's Add Advertise
+              Below Hero Section Advertise
             </h1>
             
           </div>
@@ -193,7 +185,10 @@ function AddAdvertise() {
                   
                   <div className="mb-3 ">
                   <span className="text-white pb-4 text-lg">
-                    Advertise Image
+                    Advertise Image or GIF
+                  </span>
+                  <span className="text-red-600 pb-4 text-sm ml-2">
+                    (only banner adds is allowed)
                   </span>
                   <Dropzone
                     onDrop={(acceptedFiles) =>
@@ -204,7 +199,7 @@ function AddAdvertise() {
                       <div {...getRootProps()}>
                         <input {...getInputProps()} />
 
-                        <div className="flex justify-center items-center w-44 h-44 border-2 border-dashed rounded cursor-pointer">
+                        <div className="flex justify-center items-center w-[47vw] h-44 border-2 border-dashed rounded cursor-pointer">
                           <img src={filePreview} alt="" srcset="" />
                         </div>
                       </div>
@@ -229,7 +224,6 @@ function AddAdvertise() {
             </Form>
           </Card>
         </div>
-      </div>
     </div>
   );
 }

@@ -7,6 +7,7 @@ import CTASection from "../components/CTAsection";
 import Footer from "../components/Footer";
 import PopularCategories from "../components/PopularCategories";
 import RecentBlogs from "../components/RecentBlogs";
+import Partners from "../components/Partners";
 
 
 function HomePage() {
@@ -26,7 +27,7 @@ function HomePage() {
           alt="Background"
           layout="fill"
           objectFit="cover"
-          className="opacity-100 w-full absolute top-0 -z-10 h-[66vh] md:h-[46vh] lg:h-[95vh]"
+          className="opacity-100 w-full absolute top-0 -z-10 h-[69vh] md:h-[46vh] lg:h-[98vh]"
         />
       </div>
       <div className="flex gap-4 z-20 absolute top-40 ml-10 text-center">
@@ -65,6 +66,8 @@ function HomePage() {
         ) : (
           <RecentBlogs />
         )}
+
+        <Partners/>
 
         <UserSay />
 

@@ -14,19 +14,23 @@ import TopPostsDashboard from "../../components/adminComponents/TopPost";
 import RecentUsersTable from "../../components/adminComponents/RecentUsers";
 import { useFetch } from "../../hooks/userFetch";
 import { getEnv } from "../../helpers/getEnv";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { Label } from "../../components/ui/label";
 import { Switch } from "../../components/ui/switch";
 import { deleteData } from "../../helpers/handleDelete";
 import { showToast } from "../../helpers/showToast";
 import { useAuth } from "@clerk/clerk-react";
 import RecentPendingBlog from "../../components/adminComponents/RecentPendingBlog";
+import { useSelector } from "react-redux";
 
 function Dashboard() {
-  const navigate = useNavigate();
-  const { isSignedIn } = useAuth();
-  if (isSignedIn === false) {
-    navigate("/admin-login");
+  const user = useSelector((state) => state.user);
+  console.log(user);
+  
+
+  // Protect the /single page route
+  if (!user.isAdminLoggedIn) {
+    return <Navigate to="/admin-login" replace />;
   }
   const [isChecked, setIsChecked] = useState(false);
   const [id, setId] = useState("");
@@ -52,7 +56,7 @@ function Dashboard() {
       setId(advertise ? advertise?.advertise[0]._id : "");
     }
   }, [advertise]);
-  // console.log(advertise?.advertise.length);
+
 
   const { data: commentCount } = useFetch(
     `${getEnv("VITE_API_BASE_URL")}/dashboard/comment-count`,
@@ -106,7 +110,7 @@ function Dashboard() {
       </div>
 
       {/* Main Content */}
-      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(public/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat text-black px-6 py-6">
+      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat text-black px-6 py-6">
         {/* Toggle Button for Mobile */}
         <div className="lg:hidden flex justify-end mb-4">
           <button
@@ -127,16 +131,7 @@ function Dashboard() {
                   Here's an overview of your blog performance
                 </p>
               </div>
-              {advertise?.advertise.length > 0 ? (
-                <Link
-                  to={`/admin-advertise/edit/${id}`}
-                  className="py-3 font-bold px-8 bg-blue-600 rounded-lg text-white -mr-20 w-[40vw] md:w-[25vw] lg:w-[11vw]"
-                >
-                  Update Ads
-                </Link>
-              ) : (
-                <></>
-              )}
+              
 
               <div className="flex items-center space-x-2 ">
                 <Switch
@@ -144,7 +139,7 @@ function Dashboard() {
                   checked={isChecked}
                   id="airplane-mode"
                 />
-                <Label htmlFor="airplane-mode" className="text-white">
+                <Label htmlFor="airplane-mode" className="text-black">
                   On/Off Advertise Mode
                 </Label>
               </div>

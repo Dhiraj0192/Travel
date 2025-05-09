@@ -14,17 +14,20 @@ import moment from "moment/moment";
 import { useEffect, useState } from "react";
 import { deleteData } from "../../helpers/handleDelete";
 import { showToast } from "../../helpers/showToast";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 const Messages = () => {
   const navigate = useNavigate()
-  const { isSignedIn } = useAuth();
-  if (isSignedIn === false) {
+  const user = useSelector((state) => state.user);
+  console.log(user);
+  
 
-    navigate('/admin-login');
-    
+  // Protect the /single page route
+  if (!user.isAdminLoggedIn) {
+    return <Navigate to="/admin-login" replace />;
   }
   const [refreshData, setRefreshData] = useState(false);
   const [query, setQuery] = useState();
@@ -43,7 +46,7 @@ const Messages = () => {
       }
       ,[refreshData]
     );
-    console.log(contactData);
+    
     
 
     // useEffect(()=>{
@@ -148,7 +151,7 @@ const Messages = () => {
         <Sidebar />
       </div>
 
-      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(public/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat px-6 py-6 min-h-screen">
+      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat px-6 py-6 min-h-screen">
         {/* Toggle Button for Mobile */}
         <div className="lg:hidden flex justify-end mb-4">
           <button

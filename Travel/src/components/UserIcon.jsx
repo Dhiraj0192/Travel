@@ -44,7 +44,7 @@ function UserIcon() {
     <DropdownMenu>
               
             
-    <DropdownMenuTrigger className="fixed bottom-10 right-10 z-50 flex">
+    <DropdownMenuTrigger className="hidden lg:flex fixed bottom-10 right-10 z-50">
     
     <Avatar className=" w-16 h-16 border-gray-800 border-2">
         <AvatarImage src={user.user.avatar} />

@@ -11,6 +11,7 @@ function fileFilter(req, file, cb) {
     "image/png",
     "image/jpg",
     "image/jpeg",
+    "image/gif",
     "image/webp",
     "video/mp4",
     "video/webm",

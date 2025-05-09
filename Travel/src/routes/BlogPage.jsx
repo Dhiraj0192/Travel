@@ -30,6 +30,7 @@ function BlogPage() {
   let [categoryIdAll, setCategoryIdAll] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [category, setCategory] = useState([]);
 
   const categoryId = "67f36b931b58ce135a81e9d5";
   const navigate = useNavigate();
@@ -46,6 +47,30 @@ function BlogPage() {
       credentials: "include",
     }
   );
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch(
+          `${getEnv("VITE_API_BASE_URL")}/category/tree`,
+          {
+            method: "get",
+            credentials: "include",
+          }
+        );
+        const data = await response.json();
+        if (response.ok) {
+          setCategory(data);
+        } else {
+          console.error("Failed to fetch categories", data.message);
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     let isMounted = true; // Track if the component is still mounted
@@ -113,7 +138,7 @@ function BlogPage() {
           setSelectedCategoryBlogs(data.blogs);
           
           setTotalPages(data?.totalPages);
-          console.log(data);
+          
           
           setSearchData(undefined);
         } else {
@@ -210,7 +235,7 @@ function BlogPage() {
       <div className="w-full h-[50%] md:h-[35%] lg:h-[45vh] overflow-hidden bg-gradient-to-b from-[#879cbf8b] to-[#1a1c208b] bg-opacity-5">
         <img
           src="/adventure.jpg"
-          className="w-full h-[50%] md:h-[35%] lg:h-[55%] absolute top-16 -z-10 bg-cover "
+          className="w-full h-[50%] md:h-[35%] lg:h-[57%] absolute top-16 -z-10 bg-cover "
         />
         {/* breadcrumb */}
         <div className=" flex flex-col justify-center mt-10  md:mt-20 gap-4">
@@ -242,31 +267,33 @@ function BlogPage() {
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-8 w-full px-6 md:px-6  md:mt-14">
-        <div className="lg:pl-32 lg:w-[20vw] md:h-max md:sticky md:top-10">
+      <div className="flex flex-col md:flex-row w-full px-6 md:px-6  md:mt-14">
+        <div className="lg:pl-28 lg:w-[45vw] md:h-max md:sticky md:top-10">
           <h1 className="mt-20 mb-12 text-xl font-medium">Categories </h1>
-          <div className="flex flex-col gap-3 text-sm">
-          <button
-                  
-                  onClick={() => fetchBlogsByCategory("All Categories")}
-                  className="underline text-start"
-                >
-                  All Categories
-                </button>
-            {categories && categories.length > 0 ? (
-              categories.map((category) => (
-                <button
-                  key={category._id}
-                  onClick={() => fetchBlogsByCategory(category._id)}
-                  className="underline text-start"
-                >
-                  {category.name}
-                </button>
-              ))
-            ) : (
-              <></>
-            )}
-          </div>
+          <div className="category-tree">
+            {category.map((category) => (
+                <div key={category._id} className="category-node">
+                    <div className="category-name text-md">
+                        📁 {category.name}
+                    </div>
+                    {category.subCategories.length > 0 && (
+                        <div className="subcategories-list">
+                            {category.subCategories.map((sub) => (
+                              <button
+                              key={sub._id}
+                              onClick={() => fetchBlogsByCategory(sub._id)}
+                             className="subcategory-node text-sm"
+                            >
+                              {sub.name}
+                            </button>
+                                
+                            ))}
+                        </div>
+                    )}
+                </div>
+            ))}
+        </div>
+          
         </div>
 
         <div className="w-full flex flex-col">
@@ -290,7 +317,7 @@ function BlogPage() {
                     onInput={getInput}
                     type="text"
                     placeholder="search a post..."
-                    className="bg-transparent w-[60vw] md:w-[50vw] lg:w-[60vw] border-0 outline-none"
+                    className="bg-transparent w-[60vw] md:w-[50vw] lg:w-[50vw] border-0 outline-none"
                   />
                   <Button onClick={handleSubmit} className="rounded-full px-8">Search</Button>
                 </form>
@@ -305,7 +332,7 @@ function BlogPage() {
                     key={blog._id}
                     className=" rounded-xl w-full md:w-[35vw] lg:w-[32%]  flex flex-col "
                   >
-                    <Link to={`/blog/${blog.category.slug}/${blog.slug}`}>
+                    <Link to={`/blog/${blog.subcategory.slug}/${blog.slug}`}>
                           
                           <img
                             src={blog.featuredimage}
@@ -314,7 +341,7 @@ function BlogPage() {
                           </Link>
                     <div className="p-4 flex flex-col justify-center items-center gap-3">
                       <span className=" inline-block px-3 py-1 text-xs font-semibold text-white bg-gray-700 rounded-full">
-                        {blog.category.name}
+                        {blog.subcategory.name}
                       </span>
                       <p className="text-black font-semibold text-lg text-center">
                         {blog.title}
@@ -341,7 +368,7 @@ function BlogPage() {
                       </p>
 
                       <div className="mt-3">
-                        <Link to={`/blog/${blog.category.slug}/${blog.slug}`}>
+                        <Link to={`/blog/${blog.subcategory.slug}/${blog.slug}`}>
                           <p className="text-white text-sm font-bold bg-blue-700 px-4 py-2 rounded-md">
                             {" "}
                             Read More...{" "}
@@ -355,7 +382,7 @@ function BlogPage() {
                     key={blog._id}
                     className=" rounded-xl w-full md:w-[35vw] lg:w-[32%]  flex flex-col "
                   >
-                    <Link to={`/blog/${blog.category.slug}/${blog.slug}`}>
+                    <Link to={`/blog/${blog.subcategory.slug}/${blog.slug}`}>
                           
                           <img
                             src={blog.featuredimage}
@@ -364,7 +391,7 @@ function BlogPage() {
                           </Link>
                     <div className="p-4 flex flex-col justify-center items-center gap-3">
                       <span className=" inline-block px-3 py-1 text-xs font-semibold text-white bg-gray-700 rounded-full">
-                        {blog.category.name}
+                        {blog.subcategory.name}
                       </span>
                       <p className="text-black font-semibold text-lg text-center">
                         {blog.title}
@@ -391,7 +418,7 @@ function BlogPage() {
                       </p>
 
                       <div className="mt-3">
-                        <Link to={`/blog/${blog.category.slug}/${blog.slug}`}>
+                        <Link to={`/blog/${blog.subcategory.slug}/${blog.slug}`}>
                           <p className="text-white text-sm font-bold bg-blue-700 px-4 py-2 rounded-md">
                             {" "}
                             Read More...{" "}
@@ -407,7 +434,7 @@ function BlogPage() {
                     key={blog._id}
                     className=" rounded-xl w-full md:w-[35vw] lg:w-[32%]  flex flex-col "
                   >
-                    <Link to={`/blog/${blog.category.slug}/${blog.slug}`}>
+                    <Link to={`/blog/${blog.subcategory.slug}/${blog.slug}`}>
                           
                     <img
                       src={blog.featuredimage}
@@ -416,7 +443,7 @@ function BlogPage() {
                     </Link>
                     <div className="p-4 flex flex-col justify-center items-center gap-3">
                       <span className=" inline-block px-3 py-1 text-xs font-semibold text-white bg-gray-700 rounded-full">
-                        {blog.category.name}
+                        {blog.subcategory.name}
                       </span>
                       <p className="text-black font-semibold text-lg text-center">
                         {blog.title}
@@ -443,7 +470,7 @@ function BlogPage() {
                       </p>
 
                       <div className="mt-3">
-                        <Link to={`/blog/${blog.category.slug}/${blog.slug}`}>
+                        <Link to={`/blog/${blog.subcategory.slug}/${blog.slug}`}>
                           <p className="text-white text-sm font-bold bg-blue-700 px-4 py-2 rounded-md">
                             {" "}
                             Read More...{" "}

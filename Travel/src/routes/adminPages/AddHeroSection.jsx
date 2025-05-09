@@ -14,18 +14,20 @@ import AddLinks from "../../components/adminComponents/addLinks";
 import EditLinks from "../../components/adminComponents/editLink";
 import AddHero from "../../components/adminComponents/AddHero";
 import EditHero from "../../components/adminComponents/EditHero";
+import { useSelector } from "react-redux";
 
 
 function AddHeroSection() {
   const navigate = useNavigate();
-  const { isSignedIn } = useAuth();
-  if (isSignedIn === false) {
-    navigate("/admin-login");
-  }
-  const { user } = useUser();
+  const user = useSelector((state) => state.user);
+  // console.log(user);
+  
 
-  // const user = useSelector((state)=> state.user)
-  console.log("user", user);
+  // Protect the /single page route
+  if (!user.isAdminLoggedIn) {
+    return <Navigate to="/admin-login" replace />;
+  }
+  
 
   const [filePreview, setFilePreview] = useState();
   const [uploading, setUploading] = useState(false);
@@ -42,7 +44,7 @@ function AddHeroSection() {
     credentials: "include",
   });
 
-  console.log(otherData);
+  
 
   const {
     data: HeroData,
@@ -52,7 +54,7 @@ function AddHeroSection() {
     credentials: "include",
   });
 
-  console.log(HeroData);
+  
 
   
 
@@ -66,7 +68,7 @@ function AddHeroSection() {
         <Sidebar />
       </div>
 
-      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(public/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat px-6 py-6 min-h-screen">
+      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat px-6 py-6 min-h-screen">
         {/* Toggle Button for Mobile */}
         <div className="lg:hidden flex justify-end mb-4">
           <button

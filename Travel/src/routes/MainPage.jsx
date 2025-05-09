@@ -32,6 +32,8 @@ import { useDispatch } from "react-redux";
 import { removeUser } from "../redux/user/user.slice";
 import { InteractiveHoverButton } from "../components/magicui/interactive-hover-button";
 import AddsSlot from "../components/AddsSlot";
+import Marquee from "react-fast-marquee";
+import { cn } from "../lib/utils";
 
 function MainPage() {
   const user = useSelector((state) => state.user);
@@ -48,6 +50,75 @@ function MainPage() {
   const navigate = useNavigate();
   const dispath = useDispatch();
   let [searchData, setSearchData] = useState();
+  const [category, setCategory] = useState([]);
+
+  const {
+      data: newsData,
+      
+    } = useFetch(`${getEnv("VITE_API_BASE_URL")}/blog/get-all-flah-news`, {
+      method: "get",
+      credentials: "include",
+    });
+
+   
+    
+
+  useEffect(() => {
+      const fetchCategories = async () => {
+        try {
+          const response = await fetch(
+            `${getEnv("VITE_API_BASE_URL")}/category/tree`,
+            {
+              method: "get",
+              credentials: "include",
+            }
+          );
+          const data = await response.json();
+          if (response.ok) {
+            setCategory(data);
+            
+            
+          } else {
+            console.error("Failed to fetch categories", data.message);
+          }
+        } catch (error) {
+          console.error("Error fetching categories:", error);
+        }
+      };
+  
+      fetchCategories();
+    }, []);
+  
+   
+  const ReviewCard = ({
+    
+    name,
+    slug
+  }) => {
+    return (
+      <figure
+        className={cn(
+          "relative cursor-pointer overflow-hidden rounded-xl border p-4 bg-gray-200",
+         
+        )}
+      >
+        <div className="flex flex-row items-center gap-2 ">
+          <div className="w-4 h-4 rounded-full bg-red-800"></div>
+          <div className="flex flex-col">
+            <figcaption className="text-sm font-medium dark:text-white">
+            <Link to={`/blog/${slug}/${slug}`}>
+              {name}
+            </Link>
+            </figcaption>
+           
+          </div>
+        </div>
+      
+      </figure>
+    );
+  };
+
+
   const {
     data: categoryData,
     loading,
@@ -57,6 +128,16 @@ function MainPage() {
     credentials: "include",
   });
 
+  const {
+    data: locationData,
+    
+  } = useFetch(`${getEnv("VITE_API_BASE_URL")}/blog/get-all-location`, {
+    method: "get",
+    credentials: "include",
+  });
+  
+  
+
   const { data: HeroData } = useFetch(
     `${getEnv("VITE_API_BASE_URL")}/herosection/`,
     {
@@ -64,7 +145,7 @@ function MainPage() {
       credentials: "include",
     }
   );
-  console.log(HeroData);
+  
 
   const { data: blogData } = useFetch(
     `${getEnv("VITE_API_BASE_URL")}/blog/trending?limit=${limit}`,
@@ -75,7 +156,7 @@ function MainPage() {
   );
 
   // setTrendingBlogs(blogData);
-  console.log(blogData);
+
 
   const categories = categoryData?.category;
 
@@ -91,7 +172,7 @@ function MainPage() {
       const data = await response.json();
       if (response.ok) {
         setSelectedCategoryBlogs(data.blogs);
-        console.log(data);
+        
 
         setSearchData(undefined);
       } else {
@@ -116,7 +197,7 @@ function MainPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(query);
+  
 
     const response = await fetch(
       `${getEnv("VITE_API_BASE_URL")}/blog/search/${query}`,
@@ -155,10 +236,41 @@ function MainPage() {
     }
   };
 
+  const handleLocationChange = async (event) => {
+              const location = event.target.value.toString();
+              const isChecked = event.target.checked;
+              
+              
+              
+
+              if (isChecked) {
+                try {
+                  const response = await fetch(
+                    `${getEnv("VITE_API_BASE_URL")}/blog/getblogbylocation/${location}`,
+                    {
+                      method: "GET",
+                      credentials: "include",
+                    }
+                  );
+
+                  const data = await response.json();
+                  if (response.ok) {
+                    setSelectedCategoryBlogs(data.blogs);
+                  } else {
+                    console.error("Failed to fetch blogs by location", data.message);
+                  }
+                } catch (error) {
+                  console.error("Error fetching blogs by location:", error);
+                }
+              } else {
+                setSelectedCategoryBlogs(undefined); // Reset if unchecked
+              }
+            };
+
   return (
     <div className=" flex flex-col ">
       <DropdownMenu>
-        <DropdownMenuTrigger className="fixed bottom-10 right-10 z-50 flex">
+        <DropdownMenuTrigger className="hidden lg:flex fixed bottom-10 right-10 z-50 ">
           <Avatar className="w-16 h-16 border-gray-800 border-2">
             <AvatarImage src={user.user.avatar} />
             <AvatarFallback>CN</AvatarFallback>
@@ -203,13 +315,14 @@ function MainPage() {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <div className="w-full h-[50%] md:h-[33vh] lg:h-[50vh] overflow-hidden bg-gradient-to-b from-[#3f4247b4] to-[#1a1c208b] bg-opacity-10">
+      {/* hero section */}
+      <div className="w-full h-[25%] md:h-[33vh] lg:h-[50vh] overflow-hidden bg-gradient-to-b from-[#3f4247b4] to-[#1a1c208b] bg-opacity-10">
         <img
           src={HeroData?.heroSections.featuredImage}
-          className="w-full h-[60%] absolute top-16 -z-10 bg-cover "
+          className="w-full h-[40%] lg:h-[63%] absolute top-16 -z-10 bg-cover "
         />
         {/* breadcrumb */}
-        <div className="lg:h-96 h-96 md:h-80 flex flex-col justify-center mt-10 md:mt-6 ">
+        <div className="lg:h-96 h-36 md:h-80 flex flex-col justify-center mt-10 md:mt-6 ">
           {/* introduction */}
           <div className="lg:px-32 md:px-16 flex flex-col  items-center md:gap-10 ">
             
@@ -230,8 +343,30 @@ function MainPage() {
         </div>
       </div>
 
-      <div className=" bg-[url(public/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat pb-20 ">
-        <div className="lg:px-32 pt-5 pb-10 px-1 md:px-0">
+      {/* end hero section */}
+
+      {newsData && newsData?.blog?.length > 0 && <div className="lg:px-32 mt-6 mb-6">
+      <div className="relative flex w-full flex-col items-center justify-center overflow-hidden">
+      <Marquee speed={50} 
+      gradient={false}
+      pauseOnHover={true}>
+        <div className="w-full flex gap-3 items-center">
+          {newsData?.blog.map((blog) => (
+          <ReviewCard key={blog._id} name={blog?.title} slug={blog?.slug}/>
+        ))}
+        </div>
+        
+      </Marquee>
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-background"></div>
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-background"></div>
+      
+      </div>
+
+      
+      </div>}
+
+      <div className=" bg-[url(/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat pb-20 ">
+        <div className="lg:px-32  pb-10 px-1 md:px-0">
           <div className=" md:flex bg-gray-400 rounded-3xl xl:rounded-full p-4 shadow-xl items-center justify-center gap-8 mt-10">
           <div className="hidden md:flex bg-gray-100 p-2 rounded-full  items-center gap-2">
               <svg
@@ -257,25 +392,53 @@ function MainPage() {
             </div>
             <span className="hidden md:block text-xl font-medium">|</span>
             <div className="flex-1 flex items-center justify-between flex-wrap">
-              {categories && categories.length > 0 ? (
-                categories.map((category) => (
-                  <button
-                    key={category._id}
-                    onClick={() => fetchBlogsByCategory(category._id)}
-                    className="bg-gray-700 hover:bg-white hover:text-black text-white rounded-full px-4 py-2 mb-3 lg:mb-0"
-                  >
-                    {category.name}
-                  </button>
-                ))
-              ) : (
-                <></>
-              )}
+              {category.map((category) => (
+                  <DropdownMenu key={category._id}>
+                    <DropdownMenuTrigger className="bg-gray-700 hover:bg-white hover:text-black text-white rounded-full px-4 py-2 mb-3 lg:mb-0">
+                      {category.name}
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      {category.subCategories.length > 0 && category.subCategories.map((sub) => (
+                          <DropdownMenuItem
+                            key={sub._id}
+                            onClick={() => fetchBlogsByCategory(sub._id)}
+                            className="text-gray-700 hover:bg-gray-200"
+                          >
+                            {sub.name}
+                          </DropdownMenuItem>
+                        ))
+                      }
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )
+              ) }
             </div>
             
-
             
           </div>
+          
         </div>
+
+        <div className="lg:px-36 px-4 md:backdrop-blur-md -mt-3">
+        <div className="mb-12">
+              <h2 className="text-lg font-semibold mb-2">Filter by Location</h2>
+              <div className="flex flex-wrap gap-4">
+                {locationData?.locations.length>0 && locationData?.locations.map((location) => (
+                  <label key={location} className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      value={location}
+                      onChange={handleLocationChange}
+                      className="form-checkbox h-5 w-5 text-blue-600"
+                    />
+                    <span className="text-black">{location}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+        </div>
+
+        
 
         <div className="mt-2 md:backdrop-blur-sm ">
           <FeaturedPosts

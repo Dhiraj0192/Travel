@@ -27,7 +27,7 @@ const ProfileManagement = () => {
     { method: "get", credentials: "include" }
   );
 
-  console.log(data);
+  
   
 
   const navigate = useNavigate();
@@ -76,7 +76,7 @@ const ProfileManagement = () => {
     e.preventDefault();
     onSubmit();
     // Add your form submission logic here
-    console.log(profile);
+    
   };
 
   const handleFileSlection = (files) => {

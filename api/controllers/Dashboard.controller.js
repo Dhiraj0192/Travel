@@ -30,7 +30,7 @@ export const showAllBlog = async (req,res,next)=>{
     try {
         const { limit = 9 } = req.query;
 
-        const blog = await Blog.find().populate('category','name slug').sort({createdAt : -1})?.limit(parseInt(limit)).lean().exec()
+        const blog = await Blog.find().populate('subcategory','name slug').sort({createdAt : -1})?.limit(parseInt(limit)).lean().exec()
 
         res.status(200).json({
             blog
@@ -46,7 +46,7 @@ export const showAllPendingBlog = async (req,res,next)=>{
   try {
       const { limit = 9 } = req.query;
 
-      const blog = await Blog.find({status : 'pending'}).populate('category','name slug').sort({createdAt : -1})?.limit(parseInt(limit)).lean().exec()
+      const blog = await Blog.find({status : 'pending'}).populate('subcategory','name slug').sort({createdAt : -1})?.limit(parseInt(limit)).lean().exec()
 
       res.status(200).json({
           blog

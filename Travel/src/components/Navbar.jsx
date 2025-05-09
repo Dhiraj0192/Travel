@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { IKImage } from "imagekitio-react";
 import Image from "./Image";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
   SignedIn,
   SignedOut,
@@ -20,9 +20,9 @@ import {
 } from "../components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 import { FaUserSecret } from "react-icons/fa6";
-import { IoLogoYoutube, IoMdAdd } from "react-icons/io";
-import { IoLogOut } from "react-icons/io5";
-import { MdEmail, MdOutlineSubscriptions } from "react-icons/md";
+import { IoLogoYoutube, IoMdAdd, IoMdHome, IoMdPhotos } from "react-icons/io";
+import { IoLogOut, IoLogoWechat } from "react-icons/io5";
+import { MdContentPaste, MdEmail, MdOutlineSubscriptions, MdOutlineVideoSettings } from "react-icons/md";
 import { removeUser } from "../redux/user/user.slice";
 import { useDispatch } from "react-redux";
 import { Button } from "./ui/button";
@@ -37,14 +37,19 @@ import { SiFacebook } from "react-icons/si";
 import { FaLinkedin, FaTwitter, FaCheck } from "react-icons/fa";
 import { useFetch } from "../hooks/userFetch";
 import { AiFillTikTok } from "react-icons/ai";
+import { RiContactsBook3Line, RiWhatsappFill } from "react-icons/ri";
 
-
+import { LiaBlogSolid } from "react-icons/lia";
+import { LuPackageSearch } from "react-icons/lu";
 
 
 function Navbar() {
+  const location = useLocation();
   const { isSignedIn } = useAuth();
   const [notification, setNotification] = useState();
   const user = useSelector((state) => state.user);
+  console.log(user);
+  
   const [notifications, setNotifications] = useState([]);
   const [open, setOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -60,7 +65,7 @@ function Navbar() {
           credentials: "include",
         });
     
-        console.log(otherData);
+        
 
   
 
@@ -119,7 +124,9 @@ function Navbar() {
         <div className="flex items-center justify-center gap-4 text-white text-sm">
           <div className="flex items-center gap-1">
             <MdEmail className="w-5 h-5" />
-            <span>{otherData?.email}</span>
+            <a href={`mailto:${otherData?.email}`} target="_blank" rel="noopener noreferrer">
+              <span>{otherData?.email}</span>
+            </a>
           </div>
           <div className="flex items-center gap-1">
             <MapIcon className="w-5 h-5" />
@@ -128,6 +135,7 @@ function Navbar() {
         </div>
 
         <div className="flex gap-4 items-center text-white">
+        <Link to=""><IoLogoWechat className="w-7 h-7 hover:text-red-400 cursor-pointer" /></Link>
           <Link to="https://www.tiktok.com/@travelersmirror?_t=ZS-8vsDauBKb3f&_r=1"><AiFillTikTok className="w-7 h-7 hover:text-red-400 cursor-pointer" /></Link>
           <Link to="https://www.facebook.com/share/16Tyh7JMcB/?mibextid=wwXIfr"><SiFacebook className="w-5 h-5 hover:text-blue-600 cursor-pointer" /></Link>
           <Link to="https://www.instagram.com/travelersmirror?igsh=MXY1OHpoaXR2bWM1Mw%3D%3D&utm_source=qr">
@@ -140,55 +148,78 @@ function Navbar() {
         </div>
 
         <div className="flex items-center gap-3">
-          <PhoneCall className="w-8 h-8 rounded-full bg-blue-800 text-white p-2" />
+          <a href={`https://wa.me/${otherData?.number}`} target="_blank" rel="noopener noreferrer">
+            <RiWhatsappFill className="w-8 h-8 rounded-full bg-green-600 text-white p-2" />
+          </a>
           <div className="flex flex-col text-white">
             <p className="font-bold text-sm">Call For Enquiry</p>
-            <p className="text-sm">{otherData?.number}</p>
+            <a href={`https://wa.me/${otherData?.number}`} target="_blank" rel="noopener noreferrer"><p className="text-sm">{otherData?.number}</p></a>
+            
           </div>
         </div>
       </div>
 
       {/* Main Navigation */}
-      <div className="sticky top-0 z-50 bg-gray-200 px-4 lg:px-32 w-full h-18 flex items-center justify-between shadow-md pt-5 pb-3">
+      <div className="sticky top-0 z-50 bg-white px-4 lg:px-32 w-full h-18 flex items-center justify-between shadow-md pt-5 pb-3">
         {/* Logo */}
         <Link
           to={user.isLoggedIn ? "/home" : "/"}
           className="flex items-center gap-2 lg:gap-4"
         >
-          <Image
-            src="logo.png"
+          <img
+            src="/travelersmirror.png"
             alt="logo"
-            w={28}
-            h={28}
-            className="lg:w-10 lg:h-10"
+            
+            className="lg:w-[16vw] lg:h-16 w-[35vw] md:w-[20vw]"
           />
-          <span className="text-black text-lg lg:text-xl font-bold">
+          {/* <span className="text-black text-lg lg:text-xl font-bold">
             Traveler's Mirror
-          </span>
+          </span> */}
         </Link>
 
         {/* Desktop Navigation */}
         <div className="hidden lg:flex items-center gap-8">
           <div className="flex items-center gap-6 text-gray-700 font-medium">
-            <Link to={user?.isLoggedIn ? "/home" : "/"} className="hover:text-blue-800">
+            <Link
+              to={user?.isLoggedIn ? "/home" : "/"}
+              className={`hover:text-blue-800 ${location.pathname === "/home" || location.pathname === "/" ? "text-blue-800 font-bold" : ""}`}
+            >
               Home
             </Link>
-            <Link to="/blogs" className="hover:text-blue-800">
+            <Link
+              to="/blogs"
+              className={`hover:text-blue-800 ${location.pathname === "/blogs" ? "text-blue-800 font-bold" : ""}`}
+            >
               Blogs
             </Link>
-            <Link to="/videos" className="hover:text-blue-800">
+            <Link
+              to="/videos"
+              className={`hover:text-blue-800 ${location.pathname === "/videos" ? "text-blue-800 font-bold" : ""}`}
+            >
               Videos
             </Link>
-            <Link to="/gallery" className="hover:text-blue-800">
+            <Link
+              to="/gallery"
+              className={`hover:text-blue-800 ${location.pathname === "/gallery" ? "text-blue-800 font-bold" : ""}`}
+            >
               Gallery
             </Link>
-            <Link to="/about" className="hover:text-blue-800">
+            <Link
+              to="/about"
+              className={`hover:text-blue-800 ${location.pathname === "/about" ? "text-blue-800 font-bold" : ""}`}
+            >
               About
             </Link>
-            <Link to="/contact" className="hover:text-blue-800">
+            <Link
+              to="/contact"
+              className={`hover:text-blue-800 ${location.pathname === "/contact" ? "text-blue-800 font-bold" : ""}`}
+            >
               Contact
             </Link>
-            <Link to="/travel-packages" className="hover:text-blue-800">
+            <Link
+              to="/travel-packages"
+              className={`hover:text-blue-800 ${location.pathname === "/travel-packages" ? "text-blue-800 font-bold" : ""}`}
+            >
               Packages
             </Link>
           </div>
@@ -279,75 +310,105 @@ function Navbar() {
           onClick={() => setOpen(false)}
         >
           <div
-            className={`absolute left-0 top-16 w-3/4 h-[calc(100vh-4rem)] bg-white transform transition-transform ${
+            className={`absolute left-0 top-0 w-3/4 h-[calc(100vh-0rem)] bg-white transform transition-transform ${
               open ? "translate-x-0" : "-translate-x-full"
             }`}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex flex-col p-4 space-y-4 overflow-y-auto">
+            <div className="flex flex-col p-2 space-y-2 overflow-y-auto">
+              <div className="w-full h-[10vh] bg-blue-800 rounded-sm flex items-center px-2 gap-2">
+                {user.isLoggedIn ? <><img src={user?.user?.avatar} className="w-12 h-12 rounded-full" alt="" srcset="" />
+                <div className="flex flex-col ">
+                <p className="text-white font-bold">{user?.user?.name}</p>
+                <p className="text-white text-sm ">{user?.user?.email}</p>
+                </div></> : <><div className="px-2"><p className="text-white font-bold text-xl">Travelers Mirror</p></div></>}
+              </div>
               <Link
                 to={user?.isLoggedIn ? "/home" : "/"}
-                className="py-2 px-4 text-gray-700 hover:bg-gray-100 rounded-md"
+                className="flex items-center  gap-2 py-2 px-4 text-gray-700 hover:bg-gray-100 rounded-md"
                 onClick={() => setOpen(false)}
-              >
+              ><IoMdHome className="w-5 h-5 mb-1"/>
                 Home
               </Link>
               <Link
                 to="/blogs"
-                className="py-2 px-4 text-gray-700 hover:bg-gray-100 rounded-md"
+                className="flex items-center  gap-2 py-2 px-4 text-gray-700 hover:bg-gray-100 rounded-md"
                 onClick={() => setOpen(false)}
               >
+                <LiaBlogSolid className="w-5 h-5 mb-1"/>
                 Blogs
               </Link>
               <Link
                 to="/videos"
-                className="py-2 px-4 text-gray-700 hover:bg-gray-100 rounded-md"
+                className="flex items-center  gap-2 py-2 px-4 text-gray-700 hover:bg-gray-100 rounded-md"
                 onClick={() => setOpen(false)}
               >
+                <MdOutlineVideoSettings className="w-5 h-5 mb-1"/>
                 Videos
               </Link>
               <Link
                 to="/gallery"
-                className="py-2 px-4 text-gray-700 hover:bg-gray-100 rounded-md"
+                className="flex items-center  gap-2 py-2 px-4 text-gray-700 hover:bg-gray-100 rounded-md"
                 onClick={() => setOpen(false)}
               >
+                <IoMdPhotos className="w-5 h-5 mb-1"/>
                 Gallery
               </Link>
               <Link
                 to="/about"
-                className="py-2 px-4 text-gray-700 hover:bg-gray-100 rounded-md"
+                className="flex items-center  gap-2 py-2 px-4 text-gray-700 hover:bg-gray-100 rounded-md"
                 onClick={() => setOpen(false)}
               >
+                <MdContentPaste className="w-5 h-5 mb-1"/>
                 About
               </Link>
               <Link
                 to="/contact"
-                className="py-2 px-4 text-gray-700 hover:bg-gray-100 rounded-md"
+                className="flex items-center  gap-2 py-2 px-4 text-gray-700 hover:bg-gray-100 rounded-md"
                 onClick={() => setOpen(false)}
               >
+                <RiContactsBook3Line className="w-5 h-5 mb-1"/>
                 Contact
               </Link>
               <Link
                 to="/travel-packages"
-                className="py-2 px-4 text-gray-700 hover:bg-gray-100 rounded-md"
+                className="flex items-center  gap-2 py-2 px-4 text-gray-700 hover:bg-gray-100 rounded-md"
                 onClick={() => setOpen(false)}
               >
+                <LuPackageSearch className="w-5 h-5 mb-1"/>
                 Packages
               </Link>
 
               <div className="border-t pt-4 mt-4">
+                
                 {user.isLoggedIn ? (
                   <>
+                  <Link
+                to="/your-blogs"
+                className="flex items-center  gap-2 py-2 px-4 text-gray-700 hover:bg-gray-100 rounded-md"
+                onClick={() => setOpen(false)}
+              >
+                <LiaBlogSolid className="w-5 h-5 mb-1"/>
+                Your Blogs
+              </Link>
+              <Link
+                to="/account"
+                className="flex items-center  gap-2 py-2 px-4 mb-3 text-gray-700 hover:bg-gray-100 rounded-md"
+                onClick={() => setOpen(false)}
+              >
+                <RiContactsBook3Line className="w-5 h-5 mb-1"/>
+                Account
+              </Link>
                     <Link
                       to="/write-blog"
-                      className="block w-full py-3 px-4 text-center bg-blue-800 text-white rounded-md mb-4"
+                      className="block w-full py-1 px-4 text-center bg-blue-800 text-white rounded-md mb-4"
                       onClick={() => setOpen(false)}
                     >
                       Write Blog
                     </Link>
                     <button
                       onClick={handleLogout}
-                      className="block w-full py-3 px-4 text-center text-red-600 hover:bg-red-50 rounded-md"
+                      className="border-t-2 block w-full py-3 px-4 text-center text-red-600 hover:bg-red-50 rounded-md"
                     >
                       Logout
                     </button>
@@ -355,7 +416,7 @@ function Navbar() {
                 ) : (
                   <Link
                     to="/login"
-                    className="block w-full py-3 px-4 text-center bg-blue-800 text-white rounded-md"
+                    className="block w-full py-1 px-4 text-center bg-blue-800 text-white rounded-md"
                     onClick={() => setOpen(false)}
                   >
                     Login

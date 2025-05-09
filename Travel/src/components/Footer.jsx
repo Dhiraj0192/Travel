@@ -7,12 +7,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from "react-redux";
 import { AiFillTikTok } from 'react-icons/ai';
 import { IoLogoYoutube } from 'react-icons/io';
+import { IoLogoWechat } from 'react-icons/io5';
 
 function Footer() {
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
   const [userSub, setUserSub] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const [subscribeMessage, setSubscribeMessage] = useState();
 
   useEffect(() => {
     const checkSubscription = async () => {
@@ -58,7 +60,8 @@ function Footer() {
         return;
       }
       setUserSub(false)
-      alert("You have successfully subscribed!");
+      
+      setSubscribeMessage("You have successfully subscribed!")
       setIsSubscribed(true);
     } catch (error) {
         setUserSub(false)
@@ -74,6 +77,8 @@ function Footer() {
                 <p className="text-gray-200">Modern publishing platform for bloggers of all levels.</p>
 
                 <div className="flex gap-4 items-center">
+                
+                <Link to=""><IoLogoWechat className="w-7 h-7 hover:text-red-400 cursor-pointer" /></Link>
                 <Link to="https://www.tiktok.com/@travelersmirror?_t=ZS-8vsDauBKb3f&_r=1"><AiFillTikTok className="w-7 h-7 hover:text-red-400 cursor-pointer" /></Link>
                           <Link to="https://www.facebook.com/share/16Tyh7JMcB/?mibextid=wwXIfr"><SiFacebook className="w-5 h-5 hover:text-blue-600 cursor-pointer" /></Link>
                           <Link to="https://www.instagram.com/travelersmirror?igsh=MXY1OHpoaXR2bWM1Mw%3D%3D&utm_source=qr">
@@ -108,17 +113,18 @@ function Footer() {
             >
               {isSubscribed ? "Subscribed !!!" : userSub ? "Please wait...": "Let's Subscribe !"}
             </button>
+            {subscribeMessage != undefined && <p className='text-center text-blue-200'>{subscribeMessage}</p>}
             </div>
         </div>
 
         <div className="flex md:flex-row flex-col md:gap-0 gap-3 items-center justify-between mb-5 lg:px-32 px-3">
             <p className="text-gray-200 text-center">
-            © 2025 Traveler's Mirror. All rights reserved. Designed By Dhiraj Yadav 😎
+            © 2025 Traveler's Mirror. All rights reserved. Developed By Sera Digital Hub
             </p>
             <div className="flex items-center justify-between gap-4">
                 <Link to="/terms-condition">Terms of Service</Link>
-                <Link to="/terms-condition">Privacy Policy</Link>
-                <Link to="/terms-condition">Cookie Policy</Link>
+                <Link to="/privacy-policy">Privacy Policy</Link>
+                
             </div>
         </div>
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FiSearch, FiPlus, FiFilter, FiChevronDown } from "react-icons/fi";
 import Sidebar from "../../components/adminComponents/Sidebar";
 import AllPost from "../../components/adminComponents/AllPost";
-import { showToast } from "../..//helpers/showToast";
+import { showToast } from "../../helpers/showToast";
 import { Card } from "../../components/ui/card";
 import {
   Form,
@@ -31,7 +31,7 @@ import Dropzone from "react-dropzone";
 import Editor from "../../components/Editor";
 import { useSelector } from "react-redux";
 import { useAuth, useUser } from "@clerk/clerk-react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 import { decode } from "entities";
 import Loading from "../../components/Loading";
@@ -39,21 +39,24 @@ import { Checkbox } from "../../components/ui/checkbox";
 import { toast } from "react-toastify";
 
 function EditBlog() {
-  const navigate = useNavigate()
-    const { isSignedIn } = useAuth();
-    if (isSignedIn === false) {
+  const navigate = useNavigate();
+  const user = useSelector((state) => state.user);
+  console.log(user);
   
-      navigate('/admin-login');
-      
-    }
-  
+
+  // Protect the /single page route
+  if (!user.isAdminLoggedIn) {
+    return <Navigate to="/admin-login" replace />;
+  }
+
   const blogid = useParams();
 
-  const { user } = useUser();
+  // const { user } = useUser();
 
   const [filePreview, setFilePreview] = useState();
   const [file, setFile] = useState();
-    const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [subcategories, setSubcategories] = useState([]);
   const { data: categoryData } = useFetch(
     `${getEnv("VITE_API_BASE_URL")}/category/all-category`,
     {
@@ -70,38 +73,49 @@ function EditBlog() {
     },
     [blogid?.blog_id]
   );
-  
-  
+ 
 
   const formSchema = z.object({
+    subcategory: z.string().min(3, "Category field must be selected."),
     category: z.string().min(3, "Category field must be 3 character long."),
     title: z.string().min(3, "Title must be at least 3 character long."),
     slug: z.string().min(3, "Slug must be 3 character long."),
     blogContent: z.string().min(3, "Blog content must be 3 character long."),
+    location: z.string().min(3, "Location must be at least 3 character long."),
     isFeatured: z.boolean(),
+    isFlashNews: z.boolean(),
     status: z.string(),
   });
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      subcategory: "",
       category: "",
       title: "",
       slug: "",
       blogContent: "",
-      isFeatured : false,
-      status : "published",
+      isFeatured: false,
+      isFlashNews: false,
+      location: "",
+      status: "published",
     },
   });
 
   useEffect(() => {
     if (blogData) {
       setFilePreview(blogData.blog.featuredimage);
-      form.setValue("category", blogData.blog.category._id);
+      form.setValue("category", blogData.blog.subcategory.parentCategory._id);
+      form.setValue("subcategory", blogData.blog.subcategory._id);
+      form.setValue("location", blogData.blog.location);
       form.setValue("title", blogData.blog.title);
       form.setValue("slug", blogData.blog.slug);
       form.setValue("blogContent", decode(blogData.blog.blogcontent));
-      form.setValue("isFeatured",blogData.blog.isFeatured);
+      form.setValue("isFeatured", blogData.blog.isFeatured);
+      form.setValue("isFlashNews", blogData.blog.isFlashNesw);
+
+      // Fetch subcategories for the selected category
+      handleCategoryChange(blogData.blog.subcategory.parentCategory._id);
     }
   }, [blogData]);
 
@@ -129,7 +143,7 @@ function EditBlog() {
     try {
       // Validate all fields
       if (
-        !values.category ||
+        
         !values.title ||
         !values.slug ||
         !values.blogContent
@@ -139,11 +153,11 @@ function EditBlog() {
 
       const newValues = {
         ...values,
-        author: user.fullName || "Unknown Author",
+        author: user?.adminuser?.fullName || "Unknown Author",
       };
       const formData = new FormData();
       if (file) {
-        formData.append("file", file); 
+        formData.append("file", file);
       }
       formData.append("data", JSON.stringify(newValues));
 
@@ -167,34 +181,52 @@ function EditBlog() {
 
       navigate("/admin-posts");
       toast(data.message, {
-              position: "top-right",
-              autoClose: 3000,
-              hideProgressBar: false,
-              closeOnClick: false,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "colored",
-              
-              });
-      
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     } catch (error) {
       toast(error.message, {
-              position: "top-right",
-              autoClose: 3000,
-              hideProgressBar: false,
-              closeOnClick: false,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "colored",
-              
-              });
-      
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     }
   }
 
-  
+  const handleCategoryChange = async (categoryId) => {
+    form.setValue("category", categoryId);
+    form.setValue("subcategory","");
+    try {
+      const response = await fetch(
+        `${getEnv("VITE_API_BASE_URL")}/category/subcategories/${categoryId}`,
+        {
+          method: "get",
+          credentials: "include",
+        }
+      );
+      const data = await response.json();
+      if (response.ok) {
+        setSubcategories(data.subcategories || []);
+      } else {
+        console.error(data.message);
+        setSubcategories([]);
+      }
+    } catch (error) {
+      console.error("Error fetching subcategories:", error);
+      setSubcategories([]);
+    }
+  };
 
   return (
     <div className="w-full flex">
@@ -206,9 +238,9 @@ function EditBlog() {
         <Sidebar />
       </div>
 
-      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(public/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat px-6 py-6 min-h-screen">
-         {/* Toggle Button for Mobile */}
-         <div className="lg:hidden flex justify-end mb-4">
+      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat px-6 py-6 min-h-screen">
+        {/* Toggle Button for Mobile */}
+        <div className="lg:hidden flex justify-end mb-4">
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
             className="text-black text-3xl focus:outline-none"
@@ -218,17 +250,13 @@ function EditBlog() {
         </div>
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
           <div className="flex items-center justify-between w-full">
-          <div>
-            <h1 className="text-2xl font-semibold text-black">
-              Edit your blog...
-            </h1>
-            <p className="text-gray-800 mt-3">Manage your blog posts</p>
+            <div>
+              <h1 className="text-2xl font-semibold text-black">
+                Edit your blog...
+              </h1>
+              <p className="text-gray-800 mt-3">Manage your blog posts</p>
+            </div>
           </div>
-
-          
-
-          </div>
-          
         </div>
 
         <div className="">
@@ -259,24 +287,33 @@ function EditBlog() {
                         )}
                       />
                     </div>
-                    <div className="mb-3 ">
+
+                    <div className="mb-3">
                       <FormField
                         control={form.control}
                         name="category"
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel className="text-white text-lg">
-                              Category
+                              Parent Category
                             </FormLabel>
                             <FormControl>
                               <Select
-                                onValueChange={field.onChange}
-                                value={field.value}
+                                onValueChange={(value) =>
+                                  handleCategoryChange(value)
+                                }
+                                defaultValue={field.value}
                               >
-                                <SelectTrigger className="w-[77vw] md:w-[60vw] bg-gray-300 text-black">
-                                  <SelectValue placeholder="Select Category" />
+                                <SelectTrigger className=" w-[80vw] md:w-[60vw] bg-gray-300 text-black">
+                                  <SelectValue placeholder={blogData?.blog.subcategory.parentCategory.name} />
                                 </SelectTrigger>
                                 <SelectContent>
+                                  <SelectItem
+                                    key="select-category"
+                                    value="placeholder"
+                                  >
+                                    Select Category
+                                  </SelectItem>
                                   {categoryData ? (
                                     categoryData.category.map((category) => (
                                       <SelectItem
@@ -298,6 +335,70 @@ function EditBlog() {
                         )}
                       />
                     </div>
+
+                    <div className="mb-3">
+                      <FormField
+                        control={form.control}
+                        name="subcategory"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-white text-lg">
+                              Subcategory
+                            </FormLabel>
+                            <FormControl>
+                              <Select
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
+                                <SelectTrigger className=" w-[80vw] md:w-[60vw] bg-gray-300 text-black">
+                                  <SelectValue placeholder={blogData?.blog.subcategory.name} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {subcategories.length > 0 ? (
+                                    subcategories.map((subcategory) => (
+                                      <SelectItem
+                                        key={subcategory._id}
+                                        value={subcategory._id}
+                                      >
+                                        {subcategory.name}
+                                      </SelectItem>
+                                    ))
+                                  ) : (
+                                    <SelectItem value="no-subcategories">
+                                      No Subcategories
+                                    </SelectItem>
+                                  )}
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <div className="mb-3">
+                                          <FormField
+                                            control={form.control}
+                                            name="location"
+                                            render={({ field }) => (
+                                              <FormItem>
+                                                <FormLabel className="text-white text-lg">
+                                                  Location
+                                                </FormLabel>
+                                                <FormControl>
+                                                  <Input
+                                                    className="bg-gray-200 w-[80vw] md:w-[60vw]"
+                                                    placeholder="Enter location.."
+                                                    {...field}
+                                                  />
+                                                </FormControl>
+                    
+                                                <FormMessage />
+                                              </FormItem>
+                                            )}
+                                          />
+                                        </div>
                   </div>
                   <div className="mb-3 ">
                     <span className="text-white pb-4 text-lg">
@@ -380,6 +481,7 @@ function EditBlog() {
                             <Checkbox
                               checked={field.value}
                               onCheckedChange={field.onChange}
+                              className="bg-white"
                             />
 
                             <FormLabel className="text-white text-lg ">
@@ -393,15 +495,53 @@ function EditBlog() {
                     )}
                   />
                 </div>
+
+                <div className="mb-3">
+                  <FormField
+                    control={form.control}
+                    name="isFlashNews"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <div className="flex items-center justify-start gap-3">
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                              className="bg-white"
+                            />
+
+                            <FormLabel className="text-white text-lg ">
+                              Is this a Flash News ?
+                            </FormLabel>
+                          </div>
+                        </FormControl>
+
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
                 <div className="mt-5 text-right">
-                {blogData?.blog.status === "pending" ? <div className="">
-            <Button type="submit" variant="secondary" className="w-[30vw] md:w-[20vw] lg:w-[10vw]">Publish</Button>
-          </div> : <div className="mt-3 text-right">
-          <Button type="submit" className="w-[30vw] md:w-[20vw] lg:w-[10vw] bg-blue-500 text-white">
-                    Update Blog
-                  </Button>
-            </div>}
-                  
+                  {blogData?.blog.status === "pending" ? (
+                    <div className="">
+                      <Button
+                        type="submit"
+                        variant="secondary"
+                        className="w-[30vw] md:w-[20vw] lg:w-[10vw]"
+                      >
+                        Publish
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="mt-3 text-right">
+                      <Button
+                        type="submit"
+                        className="w-[30vw] md:w-[20vw] lg:w-[10vw] bg-blue-500 text-white"
+                      >
+                        Update Blog
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </form>
             </Form>

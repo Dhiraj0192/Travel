@@ -7,12 +7,12 @@ import { BsFileEarmarkPostFill } from "react-icons/bs";
 import CategoriesManagement from "../../components/adminComponents/AllCategories";
 
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { getEnv } from "../../helpers/getEnv";
-import { showToast } from "../..//helpers/showToast";
+import { showToast } from "../../helpers/showToast";
 import { Card } from "../../components/ui/card";
 import {
   Form,
@@ -30,18 +30,28 @@ import { useFetch } from "../../hooks/userFetch.js";
 import EditCategory from "../../components/adminComponents/EditCategory";
 import { useAuth } from "@clerk/clerk-react";
 import { toast } from "react-toastify";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
+import AddSubCategory from "../../components/adminComponents/AddSubCategory";
+import { useSelector } from "react-redux";
 
 function Categories() {
   const navigate = useNavigate()
-    const { isSignedIn } = useAuth();
-    if (isSignedIn === false) {
+  const user = useSelector((state) => state.user);
+  console.log(user);
   
-      navigate('/admin-login');
-      
-    }
+
+  // Protect the /single page route
+  if (!user.isAdminLoggedIn) {
+    return <Navigate to="/admin-login" replace />;
+  }
   
   const [editClicked, setEditClicked] = useState(false);
+  
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const [uploading, setUploading] = useState(false);
+
+    
   
 
   const onDragEnd = (result) => {
@@ -89,6 +99,7 @@ function Categories() {
 
   async function onSubmit(values) {
     try {
+      setUploading(true);
       const response = await fetch(
         `${getEnv("VITE_API_BASE_URL")}/category/add`,
         {
@@ -101,8 +112,10 @@ function Categories() {
 
       const data = await response.json();
       if (!response.ok) {
+        setUploading(false);
         return showToast("error", data.message);
       }
+      setUploading(false);
       form.reset()
       navigate("/admin-categories");
       toast(data.message, {
@@ -118,6 +131,7 @@ function Categories() {
         });
       
     } catch (error) {
+      setUploading(false);
       toast(error.message, {
         position: "top-right",
         autoClose: 3000,
@@ -143,7 +157,7 @@ function Categories() {
       >
         <Sidebar />
       </div>
-      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(public/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat px-6 py-6">
+      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat px-6 py-6">
         {/* Toggle Button for Mobile */}
         <div className="lg:hidden flex justify-end mb-4">
           <button
@@ -251,13 +265,18 @@ function Categories() {
                 </div>
                 <div className="mt-5">
                   <Button type="submit" className="w-full bg-blue-500">
-                    Add New Category
+                    
+                    {uploading ? "Please Wait...." : "Add New Category"}
                   </Button>
                 </div>
               </form>
             </Form>
           </Card>
         </div>: <EditCategory/>}
+
+        {/* edit category */}
+
+        <AddSubCategory/>
 
         {/* edit category */}
 

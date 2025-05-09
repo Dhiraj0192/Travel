@@ -61,7 +61,7 @@ const {
         credentials: "include",
       });
   
-      console.log(otherData);
+     
     
 
   const formSchema = z.object({
@@ -92,7 +92,7 @@ const {
   async function onSubmit(values) {
     try {
       setUploading(true);
-      console.log(values.email);
+     
 
      
 

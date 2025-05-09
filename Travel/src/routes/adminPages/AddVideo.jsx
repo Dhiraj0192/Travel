@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FiSearch, FiPlus, FiFilter, FiChevronDown } from "react-icons/fi";
 import Sidebar from "../../components/adminComponents/Sidebar";
 import AllPost from "../../components/adminComponents/AllPost";
-import { showToast } from "../..//helpers/showToast";
+import { showToast } from "../../helpers/showToast";
 import { Card } from "../../components/ui/card";
 import {
   Form,
@@ -40,14 +40,18 @@ import { FaCloudUploadAlt } from "react-icons/fa";
 
 function AddVideo() {
   const navigate = useNavigate();
-  const { isSignedIn } = useAuth();
-  if (isSignedIn === false) {
-    navigate("/admin-login");
-  }
-  const { user } = useUser();
+  const user = useSelector((state) => state.user);
+    console.log(user);
+    
+  
+    // Protect the /single page route
+    if (!user.isAdminLoggedIn) {
+      return <Navigate to="/admin-login" replace />;
+    }
+  // const { user } = useUser();
 
   // const user = useSelector((state)=> state.user)
-  console.log("user", user);
+  
 
   const [filePreview, setFilePreview] = useState();
   const [uploading, setUploading] = useState(false);
@@ -81,11 +85,11 @@ function AddVideo() {
       setUploading(true);
       const newValues = {
         ...values,
-        author: user?.fullName,
+        author: user?.adminuser?.fullName,
         authorimage:
           user?.imageUrl || "https://www.flaticon.com/free-icon/user_9187604",
       };
-      // console.log(newValues);
+      
 
       
       const formData = new FormData();
@@ -152,7 +156,7 @@ function AddVideo() {
         <Sidebar />
       </div>
 
-      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(public/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat px-6 py-6 min-h-screen">
+      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat px-6 py-6 min-h-screen">
         {/* Toggle Button for Mobile */}
         <div className="lg:hidden flex justify-end mb-4">
           <button
@@ -205,7 +209,7 @@ function AddVideo() {
 
                     <div className="mb-3 ">
                     <span className="text-white pb-4 text-lg">
-                      Video
+                      Video <span className="text-green-500 pb-4 text-lg">Optional</span>
                     </span>
                     <Dropzone
                       onDrop={(acceptedFiles) =>
@@ -237,12 +241,12 @@ function AddVideo() {
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel className="text-white text-lg">
-                              Video Link
+                              YouTube Video Link
                             </FormLabel>
                             <FormControl>
                               <Input
                                 className="bg-gray-200 w-[80vw] md:w-[73vw]"
-                                placeholder="Enter video link.."
+                                placeholder="Enter youtube video link.."
                                 {...field}
                               />
                             </FormControl>

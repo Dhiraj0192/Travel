@@ -8,18 +8,22 @@ import { getEnv } from "../../helpers/getEnv";
 import { FiTrash2 } from "react-icons/fi";
 import { showToast } from "../../helpers/showToast";
 import { deleteData } from "../../helpers/handleDelete";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 function Users() {
   const navigate = useNavigate()
-  const { isSignedIn } = useAuth();
+  
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  if (isSignedIn === false) {
+  const user = useSelector((state) => state.user);
+  console.log(user);
+  
 
-    navigate('/admin-login');
-    
+  // Protect the /single page route
+  if (!user.isAdminLoggedIn) {
+    return <Navigate to="/admin-login" replace />;
   }
 
 
@@ -102,7 +106,7 @@ function Users() {
         <Sidebar />
       </div>
 
-      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(public/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat px-6 py-6 h-screen">
+      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat px-6 py-6 h-screen">
         {/* Toggle Button for Mobile */}
         <div className="lg:hidden flex justify-end mb-4">
           <button

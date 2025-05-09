@@ -1,6 +1,6 @@
 import { Link, Navigate } from "react-router-dom";
 import Image from "../components/Image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFetch } from "../hooks/userFetch";
 import { getEnv } from "../helpers/getEnv";
 import Footer from "../components/Footer";
@@ -20,7 +20,7 @@ import UserIcon from "../components/UserIcon";
 
 function UserBlogPage() {
   const user = useSelector((state) => state.user);
-  console.log(user?.user.id);
+  
   
 
   // Protect the /single page route
@@ -34,6 +34,7 @@ function UserBlogPage() {
   const [query, setQuery] = useState();
   let [searchData , setSearchData] = useState();
   const [refreshData, setRefreshData] = useState(false);
+  const [category, setCategory] = useState([]);
 
   const categoryId = "67f36b931b58ce135a81e9d5";
 
@@ -45,6 +46,30 @@ function UserBlogPage() {
     }
   );
 
+  useEffect(() => {
+      const fetchCategories = async () => {
+        try {
+          const response = await fetch(
+            `${getEnv("VITE_API_BASE_URL")}/category/tree`,
+            {
+              method: "get",
+              credentials: "include",
+            }
+          );
+          const data = await response.json();
+          if (response.ok) {
+            setCategory(data);
+          } else {
+            console.error("Failed to fetch categories", data.message);
+          }
+        } catch (error) {
+          console.error("Error fetching categories:", error);
+        }
+      };
+  
+      fetchCategories();
+    }, []);
+
   let {
     data: blogData,
     loading,
@@ -54,7 +79,7 @@ function UserBlogPage() {
     credentials: "include",
   },[refreshData]);
 
-//   console.log(blogData);
+
   
 
   const categories = categoryData?.category;
@@ -71,7 +96,7 @@ function UserBlogPage() {
       );
       const data = await response.json();
       if (response.ok) {
-        // console.log(data.blogs);
+        
 
         setSelectedCategoryBlogs(data.blogs);
         setSearchData(undefined);
@@ -98,7 +123,7 @@ function UserBlogPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(query);
+   
 
     const response = await fetch(
       `${getEnv("VITE_API_BASE_URL")}/blog/usersearch/${user?.user.id}/${query}`,
@@ -109,11 +134,11 @@ function UserBlogPage() {
     );
 
     const usersearchdata = await response.json();
-    console.log(usersearchdata);
+    
     
     if (usersearchdata?.blog.length > 0) {
       setSearchData(usersearchdata?.blog)
-      console.log(searchData);
+      
       
     }
     
@@ -168,10 +193,10 @@ function UserBlogPage() {
   return (
     <div className=" flex flex-col ">
       <UserIcon/>
-      <div className="w-full h-[40vh] md:h-[30vh] lg:h-[30vh] overflow-hidden bg-gradient-to-b from-[#879cbf8b] to-[#1a1c208b] bg-opacity-5">
+      <div className="w-full h-[23vh] md:h-[30vh] lg:h-[30vh] overflow-hidden bg-gradient-to-b from-[#879cbf8b] to-[#1a1c208b] bg-opacity-5">
         <img
           src="/adventure.jpg"
-          className="w-full h-[48vh] md:h-[38vh] lg:h-[48vh] absolute top-0 -z-10 bg-contain "
+          className="w-full h-[35vh] md:h-[38vh] lg:h-[51vh] absolute top-0 -z-10 bg-contain "
         />
         {/* breadcrumb */}
         <div className=" flex flex-col justify-center gap-4">
@@ -190,27 +215,36 @@ function UserBlogPage() {
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-8 w-full  md:mb-20 px-6 md:px-0 -mt-8 md:-mt-0">
-        <div className="lg:pl-32 md:px-6 lg:w-[20vw] md:h-max md:sticky md:top-10">
+      <div className="flex flex-col md:flex-row w-full  md:mb-20 px-6 md:px-0 -mt-8 md:-mt-0">
+      <div className="lg:pl-28 lg:w-[35vw] md:h-max md:sticky md:top-10">
           <h1 className="mt-20 mb-12 text-xl font-medium">Categories </h1>
-          <div className="flex flex-col gap-3 text-sm">
-            {categories && categories.length > 0 ? (
-              categories.map((category) => (
-                <button
-                  key={category._id}
-                  onClick={() => fetchBlogsByCategory(category._id)}
-                  className="underline text-start"
-                >
-                  {category.name}
-                </button>
-              ))
-            ) : (
-              <></>
-            )}
-          </div>
+          <div className="category-tree">
+            {category.map((category) => (
+                <div key={category._id} className="category-node">
+                    <div className="category-name text-md">
+                        📁 {category.name}
+                    </div>
+                    {category.subCategories.length > 0 && (
+                        <div className="subcategories-list">
+                            {category.subCategories.map((sub) => (
+                              <button
+                              key={sub._id}
+                              onClick={() => fetchBlogsByCategory(sub._id)}
+                             className="subcategory-node text-sm"
+                            >
+                              {sub.name}
+                            </button>
+                                
+                            ))}
+                        </div>
+                    )}
+                </div>
+            ))}
+        </div>
+          
         </div>
 
-        <div className="w-full flex flex-col">
+        <div className="w-full flex flex-col ">
           {/* <div className="lg:pr-32 pt-5 pb-10 w-full">
             <div className="hidden md:flex bg-gray-700 rounded-xl xl:rounded-full p-1 shadow-xl items-center justify-center gap-8 mt-10 w-full mb-5">
               <div className="bg-gray-100 p-2 rounded-full flex items-center gap-2 w-full">
@@ -282,13 +316,27 @@ function UserBlogPage() {
                           (plainText.length > 100 ? "..." : "")}
                       </p>
 
-                      <div className="mt-3">
-                        <Link to={`/blog/${blog.category.slug}/${blog.slug}`}>
-                          <p className="text-white text-sm font-bold bg-blue-700 px-4 py-2 rounded-md">
+                      <div className="mt-3 flex items-center justify-between gap-8">
+                        <Link to={`/blog/${blog.subcategory.slug}/${blog.slug}`}>
+                          <p className="text-gray-600 text-sm font-bold flex items-center gap-1">
+                          <FaBookOpenReader className="w-6 h-6" />
                             {" "}
-                            Read More...{" "}
+                            Read{" "}
                           </p>
                         </Link>
+                        <Link to={`/edit-user-blog/${blog._id}`}>
+                          <p className="text-green-500 text-sm font-bold flex items-center ">
+                            <AiFillEdit className="w-6 h-6"/>
+                            Edit{" "}
+                          </p>
+                        </Link>
+                        <button onClick={() => handleDelete(blog._id)}>
+                          <p className="text-red-500 text-sm font-bold flex items-center ">
+                            <MdDelete className="w-6 h-6"/>
+                            {" "}
+                            Delete{" "}
+                          </p>
+                        </button>
                       </div>
                     </div>
                   </div>) :  blogData && Array.isArray(blogData?.blogs)
@@ -303,7 +351,7 @@ function UserBlogPage() {
                     />
                     <div className="p-4 flex flex-col justify-center items-center gap-3">
                       <span className=" inline-block px-3 py-1 text-xs font-semibold text-white bg-gray-700 rounded-full">
-                        {blog.category.name}
+                        {blog.subcategory.name}
                       </span>
                       <p className="text-black font-semibold text-lg text-center">
                         {blog.title}
@@ -330,7 +378,7 @@ function UserBlogPage() {
                       </p>
 
                       <div className="mt-3 flex items-center justify-between gap-8">
-                        <Link to={`/blog/${blog.category.slug}/${blog.slug}`}>
+                        <Link to={`/blog/${blog.subcategory.slug}/${blog.slug}`}>
                           <p className="text-gray-600 text-sm font-bold flex items-center gap-1">
                           <FaBookOpenReader className="w-6 h-6" />
                             {" "}
@@ -366,7 +414,7 @@ function UserBlogPage() {
                     />
                     <div className="p-4 flex flex-col justify-center items-center gap-3">
                       <span className=" inline-block px-3 py-1 text-xs font-semibold text-white bg-gray-700 rounded-full">
-                        {blog.category.name}
+                        {blog.subcategory.name}
                       </span>
                       <p className="text-black font-semibold text-lg text-center">
                         {blog.title}
@@ -392,13 +440,27 @@ function UserBlogPage() {
                           (plainText.length > 100 ? "..." : "")}
                       </p>
 
-                      <div className="mt-3">
-                        <Link to={`/blog/${blog.category.slug}/${blog.slug}`}>
-                          <p className="text-white text-sm font-bold bg-blue-700 px-4 py-2 rounded-md">
+                      <div className="mt-3 flex items-center justify-between gap-8">
+                        <Link to={`/blog/${blog.subcategory.slug}/${blog.slug}`}>
+                          <p className="text-gray-600 text-sm font-bold flex items-center gap-1">
+                          <FaBookOpenReader className="w-6 h-6" />
                             {" "}
-                            Read More...{" "}
+                            Read{" "}
                           </p>
                         </Link>
+                        <Link to={`/edit-user-blog/${blog._id}`}>
+                          <p className="text-green-500 text-sm font-bold flex items-center ">
+                            <AiFillEdit className="w-6 h-6"/>
+                            Edit{" "}
+                          </p>
+                        </Link>
+                        <button onClick={() => handleDelete(blog._id)}>
+                          <p className="text-red-500 text-sm font-bold flex items-center ">
+                            <MdDelete className="w-6 h-6"/>
+                            {" "}
+                            Delete{" "}
+                          </p>
+                        </button>
                       </div>
                     </div>
                   </div>

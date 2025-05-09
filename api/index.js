@@ -22,6 +22,7 @@ import NotificationRoute from "./routes/Notification.route.js";
 import heroSectionRoutes from "./routes/HeroSection.routes.js";
 import OtherRouter from "./routes/Other.routes.js";
 import VideoRoute from "./routes/Video.route.js";
+import AdminUserRoute from "./routes/Adminuser.route.js";
 
 
 dotenv.config();
@@ -58,6 +59,7 @@ app.use("/api/notification", NotificationRoute);
 app.use("/api/herosection", heroSectionRoutes);
 app.use("/api/other", OtherRouter);
 app.use("/api/video", VideoRoute);
+app.use("/api/adminuser", AdminUserRoute);
 
 mongoose
   .connect(process.env.MONGODB_CONN, { dbName: "blog" })

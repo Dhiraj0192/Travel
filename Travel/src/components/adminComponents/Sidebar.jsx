@@ -10,11 +10,21 @@ import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { SignedOut, useAuth, UserButton } from "@clerk/clerk-react";
 import { TbLogs } from "react-icons/tb";
 import { LuPackage } from "react-icons/lu";
+import { IoIosFlash } from "react-icons/io";
+import { useSelector } from "react-redux";
+import { MdOutlineLogout } from "react-icons/md";
+import { getEnv } from "../../helpers/getEnv";
+import { removeAdminUser } from "../../redux/user/user.slice";
+import { useDispatch } from "react-redux";
 
 function Sidebar() {
   const location = useLocation();
   const { isSignedIn } = useAuth();
   const navigate = useNavigate();
+  const dispath = useDispatch()
+  const user = useSelector((state) => state.user);
+  console.log(user);
+  
 
   // if ((location.pathname === '/admin-dashboard' || location.pathname === '/admin-posts' || location.pathname === '/admin-comments' || location.pathname === '/admin-categories') && !isSignedIn) {
   //     return <Navigate to="/admin-login" replace />;
@@ -24,10 +34,27 @@ function Sidebar() {
   //     return <Navigate to="/admin-dashboard" replace />;
   // }
 
+  const handleLogout = async () => {
+    try {
+      const response = await fetch(`${getEnv("VITE_API_BASE_URL")}/adminuser/logout`, {
+        method: "GET",
+        credentials: "include",
+      });
+      const data = await response.json();
+      if (!response.ok) return ;
+      
+      dispath(removeAdminUser());
+      navigate("/admin-login");
+    } catch (error) {
+      console.log(error.message);
+      
+    }
+  };
+
 return (
     <div className='h-screen flex flex-col '>
         <div className="text-center bg-gray-800">
-            <h1 className="font-bold text-blue-500 text-xl pt-5 pb-5 border-b-2 border-gray-700">Traveler's Mirror </h1>
+            <h1 className="font-bold text-gray-100 text-xl pt-5 pb-5 border-b-2 border-gray-700">Traveler's Mirror </h1>
         </div>
 
         <div className="flex-1 overflow-y-auto bg-gray-800">
@@ -39,6 +66,12 @@ return (
                         <FaHome className="w-5 h-5 text-white" />
                         <Link to="/admin-dashboard">
                             <p className="text-gray-300 text-md ">Dashboard</p>{" "}
+                        </Link>
+                    </div>
+                    <div className="ml-6 flex items-center justify-start gap-3">
+                        <IoIosFlash className="w-5 h-5 text-white" />
+                        <Link to="/admin-flashnews">
+                            <p className="text-gray-300 text-md ">Flash News</p>{" "}
                         </Link>
                     </div>
                     <div className="ml-6 flex items-center justify-start gap-3">
@@ -120,7 +153,7 @@ return (
                         <div className="ml-6 flex items-center justify-start gap-3">
                             <FaUser className="w-5 h-5 text-white" />
                             <Link to="/admin-add-advertise">
-                                <p className="text-gray-300 text-md ">Add Advertise</p>{" "}
+                                <p className="text-gray-300 text-md ">Manage Advertise</p>{" "}
                             </Link>
                         </div>
                         <div className=" ml-6 flex items-center justify-start gap-3">
@@ -135,15 +168,15 @@ return (
 
             
         </div>
-        <div className="bg-gray-800 w-full pt-4 border-t-2 border-gray-500 flex items-center pl-6 justify-between">
+        <div className="bg-gray-800 w-full pt-4 pb-4 border-t-2 border-gray-500 flex items-center pl-6 justify-between">
                 <div className="flex items-center justify-between gap-3">
                     <div className="flex flex-col ">
-                        <p className="text-white font-bold text-sm">Dhiraj Yadav</p>
+                        <p className="text-white font-bold text-sm">{user?.adminuser?.fullName}</p>
                         <p className="text-gray-500 text-sm">Administrator</p>
                     </div>
                 </div>
                 <div className="text-white pr-3">
-                    <UserButton className="w-20 h-20" />
+                <MdOutlineLogout className='w-8 h-8 cursor-pointer' onClick={handleLogout}></MdOutlineLogout>
                 </div>
             </div>
     </div>

@@ -52,6 +52,10 @@ import VideosPage from './routes/VideosPage';
 import AddVideo from './routes/adminPages/AddVideo';
 import Videos from './routes/adminPages/Videos';
 import EditVideo from './routes/adminPages/EditVideo';
+import FlashNews from './routes/adminPages/FlashNews';
+import Advertise from './routes/adminPages/Advertise';
+import PrivacyPolicyPage from './routes/PrivacyPolicyPage';
+
 
 
 
@@ -137,6 +141,10 @@ const router = createBrowserRouter([
         path: "/terms-condition",
         element : <TermsConditionPage/>
       },
+      {
+        path: "/privacy-policy",
+        element : <PrivacyPolicyPage/>
+      },
 
       {
         path: "/admin-login",
@@ -205,12 +213,16 @@ const router = createBrowserRouter([
         element : <AddPackage/>
       },
       {
+        path: "/admin-flashnews",
+        element : <FlashNews/>
+      },
+      {
         path: "/admin-packages",
         element : <Packages/>
       },
       {
         path: "/admin-add-advertise",
-        element : <AddAdvertise/>
+        element : <Advertise/>
       },
       {
         path: "/admin-add-hero",

@@ -20,10 +20,10 @@ const blogSchema = new mongoose.Schema({
         type: String,
         
     },
-    category:{
+    subcategory:{
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: 'Category'
+        ref: 'SubCategory'
     },
     title:{
         type: String,
@@ -46,6 +46,11 @@ const blogSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+    location : {
+        type: String,
+        required: true,
+        trim: true
+    },
     status:{
         type: String,
         enum: ['published', 'pending'],
@@ -54,12 +59,15 @@ const blogSchema = new mongoose.Schema({
     },
     
     isFeatured: { type: Boolean, default: false },
+    isFlashNesw: { type: Boolean, default: false },
     
 
 },{timestamps : true})
 
 
 blogSchema.index({ isFeatured: 1, createdAt: -1 });
+
+
 
 const Blog = mongoose.model('Blog', blogSchema , 'blogs')
 export default Blog

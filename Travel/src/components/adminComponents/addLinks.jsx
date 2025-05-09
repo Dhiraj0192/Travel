@@ -73,7 +73,7 @@ function AddLinks() {
   async function onSubmit(values) {
     try {
       setUploading(true);
-      console.log(values.email);
+      
 
      
 

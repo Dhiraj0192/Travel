@@ -36,7 +36,7 @@ function TravelBookingPage() {
         credentials: "include",
       },[refreshData]);
     
-    //   console.log(blogData);
+ 
       
      const {
                       data: otherData,
@@ -56,7 +56,7 @@ function TravelBookingPage() {
     
       const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(query);
+        
     
         const response = await fetch(
           `${getEnv("VITE_API_BASE_URL")}/package/search/${query}`,
@@ -67,11 +67,11 @@ function TravelBookingPage() {
         );
     
         const usersearchdata = await response.json();
-        console.log(usersearchdata);
+        
         
         if (usersearchdata?.packag.length > 0) {
           setSearchData(usersearchdata?.packag)
-          console.log(searchData);
+          
           
         }
         
@@ -88,10 +88,10 @@ function TravelBookingPage() {
     <div className="flex flex-col min-h-screen">
       {user?.isLoggedIn && <UserIcon/>}
       <div className="w-full ">
-        <div className="overflow-hidden bg-gradient-to-b from-[#4b55678b] to-[#1a1c208b] bg-opacity-5 h-[40vh] lg:h-[54vh]">
+        <div className="overflow-hidden bg-gradient-to-b from-[#4b55678b] to-[#1a1c208b] bg-opacity-5 h-[38vh] lg:h-[54vh]">
         <img
           src="https://images.pexels.com/photos/5077049/pexels-photo-5077049.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-          className="w-full h-[47vh] lg:h-[74vh] absolute top-0 -z-10 bg-cover "
+          className="w-full h-[50vh] lg:h-[74vh] absolute top-0 -z-10 bg-cover "
         />
         {/* breadcrumb */}
         <div className="h-[40vh] flex flex-col justify-center">

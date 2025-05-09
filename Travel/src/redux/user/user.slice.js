@@ -4,6 +4,8 @@ import { Slice } from 'lucide-react'
 const initialState = {
   isLoggedIn : false,
   user: {},
+  isAdminLoggedIn : false,
+  adminuser: {},
 }
 
 export const userSlice = createSlice({
@@ -18,10 +20,19 @@ export const userSlice = createSlice({
     removeUser: (state, action)=>{
         state.isLoggedIn = false,
         state.user = {}
+    },
+    setAdminUser:(state,action)=>{
+      const payload = action.payload
+      state.isAdminLoggedIn =true
+      state.adminuser = payload
+    },
+    removeAdminUser: (state, action)=>{
+      state.isAdminLoggedIn = false,
+      state.adminuser = {}
     }
   },
 })
 
 
-export const {setUser,removeUser} = userSlice.actions
+export const {setUser,removeUser,setAdminUser,removeAdminUser} = userSlice.actions
 export default userSlice.reducer

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FiSearch, FiPlus, FiFilter, FiChevronDown } from "react-icons/fi";
 import Sidebar from "../../components/adminComponents/Sidebar";
 import AllPost from "../../components/adminComponents/AllPost";
-import { showToast } from "../..//helpers/showToast";
+import { showToast } from "../../helpers/showToast";
 import { Card } from "../../components/ui/card";
 import {
   Form,
@@ -31,7 +31,7 @@ import Dropzone from "react-dropzone";
 import Editor from "../../components/Editor";
 import { useSelector } from "react-redux";
 import { useAuth, useUser } from "@clerk/clerk-react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 import { decode } from "entities";
 import Loading from "../../components/Loading";
@@ -40,46 +40,45 @@ import { toast } from "react-toastify";
 
 function EditAdvertise() {
   const navigate = useNavigate()
-    const { isSignedIn } = useAuth();
-    if (isSignedIn === false) {
+  const user = useSelector((state) => state.user);
+  // console.log(user);
   
-      navigate('/admin-login');
-      
-    }
+
+  // Protect the /single page route
+  if (!user.isAdminLoggedIn) {
+    return <Navigate to="/admin-login" replace />;
+  }
   
   const advertiseid = useParams();
   const [uploading, setUploading] = useState(false);
-  
-  
-
-  const { user } = useUser();
+  const [id, setId] = useState();
 
   const [filePreview, setFilePreview] = useState();
   const [file, setFile] = useState();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  
 
-  const { data: advertiseData, loading: advertiseLoading } = useFetch(
-    `${getEnv("VITE_API_BASE_URL")}/advertise/edit/${advertiseid?.advertise_id}`,
-    {
-      method: "get",
-      credentials: "include",
-    },
-    [advertiseid?.advertise_id]
+  
+  
+  const { data: advertise } = useFetch(
+      `${getEnv("VITE_API_BASE_URL")}/advertise/advertise`,
+      {
+        method: "get",
+        credentials: "include",
+      }
   );
 
-
-
-  const form = useForm();
-  
   useEffect(() => {
-    if (advertiseData) {
-      setFilePreview(advertiseData?.advertise.image);
+    if (advertise?.advertise.length > 0) {
+      setId(advertise ? advertise?.advertise[0]._id : "");
      
       
+      setFilePreview(advertise?.advertise[0].image);
+      
     }
-  }, [advertiseData]);
+  }, [advertise]);
 
+  
+  const form = useForm();
   
 
   const handleFileSlection = (files) => {
@@ -97,11 +96,12 @@ function EditAdvertise() {
         formData.append("file", file); // Add file only if it exists
       }
       
-      console.log(advertiseid?.advertise_id);
+      
+      
       
 
       const response = await fetch(
-        `${getEnv("VITE_API_BASE_URL")}/advertise/update/${advertiseid.advertise_id}`,
+        `${getEnv("VITE_API_BASE_URL")}/advertise/update/${advertiseid.advertise_id ? advertiseid.advertise_id : id}`,
         {
           method: "put",
           credentials: "include",
@@ -162,29 +162,11 @@ function EditAdvertise() {
   
 
   return (
-    <div className="w-full flex bg-transparent">
-      <div
-        className={`fixed z-50 bg-gray-800 h-screen transition-transform ${
-          sidebarOpen ? "translate-x-0 w-[65%]" : "-translate-x-full"
-        } lg:translate-x-0 lg:w-[20%]`}
-      >
-        <Sidebar />
-      </div>
-
-      <div className="w-full lg:w-[80%] absolute lg:left-[20%] bg-[url(public/346596-PAQ0SL-281.jpg)] bg-cover bg-no-repeat px-6 py-6 min-h-screen">
-        {/* Toggle Button for Mobile */}
-        <div className="lg:hidden flex justify-end mb-4">
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="text-black text-3xl focus:outline-none"
-          >
-            {sidebarOpen ? "✕" : "☰"}
-          </button>
-        </div>
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6 lg:pt-[13vh] lg:pl-[16vw]">
+    <div className="">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6  lg:pl-[16vw]">
           <div>
-            <h1 className="text-2xl font-semibold text-black">
-              Let's Update Advertise
+          <h1 className="text-2xl font-semibold text-black">
+              Below Hero Section Advertise
             </h1>
             
           </div>
@@ -201,7 +183,10 @@ function EditAdvertise() {
                   
                   <div className="mb-3 ">
                   <span className="text-white pb-4 text-lg">
-                    Advertise Image
+                    Advertise Image or GIF
+                  </span>
+                  <span className="text-red-600 pb-4 text-sm ml-2">
+                    (only banner adds is allowed)
                   </span>
                   <Dropzone
                     onDrop={(acceptedFiles) =>
@@ -212,7 +197,7 @@ function EditAdvertise() {
                       <div {...getRootProps()}>
                         <input {...getInputProps()} />
 
-                        <div className="flex justify-center items-center w-44 h-44 border-2 border-dashed rounded cursor-pointer">
+                        <div className="flex justify-center items-center w-[47vw] h-44 border-2 border-dashed rounded cursor-pointer">
                           <img src={filePreview} alt="" srcset="" />
                         </div>
                       </div>
@@ -237,7 +222,6 @@ function EditAdvertise() {
             </Form>
           </Card>
         </div>
-      </div>
     </div>
   );
 }

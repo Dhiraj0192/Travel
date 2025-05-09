@@ -11,7 +11,7 @@ function AddsSlot() {
             method: "get",
             credentials: "include",
           });
-          console.log(advertise);
+          
           
   return (
     <div className=" flex flex-col w-full">

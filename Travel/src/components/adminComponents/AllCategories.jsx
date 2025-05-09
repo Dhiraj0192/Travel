@@ -46,7 +46,7 @@ const CategoriesManagement = ({editClicked, setEditClicked}) => {
   
     const handleSubmit = async (e) => {
       e.preventDefault();
-      console.log(query);
+   
   
       const response = await fetch(
         `${getEnv("VITE_API_BASE_URL")}/category/search/${query}`,
