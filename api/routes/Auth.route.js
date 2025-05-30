@@ -9,7 +9,7 @@ AuthRoute.post('/google-login', GoogleLogin)
 
 AuthRoute.get('/logout', Logout)
 AuthRoute.get('/google', (req, res) => {
-  const redirectUri =  'https://api.travelersmirror.com/api/auth/google/callback';
+  const redirectUri =  'https://travel-k4x6.vercel.app/api/auth/google/callback';
   const clientId = process.env.GOOGLE_CLIENT_ID;
   const scope = 'openid email profile';
   const state = 'state123'; // In production, generate a random state
