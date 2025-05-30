@@ -20,11 +20,12 @@ import UserIcon from "../components/UserIcon";
 
 function UserBlogPage() {
   const user = useSelector((state) => state.user);
+  const storedToken = localStorage.getItem('access_token');
   
   
 
   // Protect the /single page route
-  if (!user.isLoggedIn) {
+  if (!user.isLoggedIn && !storedToken) {
     return <Navigate to="/login" replace />;
   }
 

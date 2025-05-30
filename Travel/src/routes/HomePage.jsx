@@ -8,6 +8,10 @@ import Footer from "../components/Footer";
 import PopularCategories from "../components/PopularCategories";
 import RecentBlogs from "../components/RecentBlogs";
 import Partners from "../components/Partners";
+import { useFetch } from "../hooks/userFetch";
+import { getEnv } from "../helpers/getEnv";
+import Marquee from "react-fast-marquee";
+import { cn } from "../lib/utils";
 
 
 function HomePage() {
@@ -17,6 +21,43 @@ function HomePage() {
     const timer = setTimeout(() => setLoading(false), 1000); // Simulate loading delay
     return () => clearTimeout(timer);
   }, []);
+
+  const {
+        data: newsData,
+        
+      } = useFetch(`${getEnv("VITE_API_BASE_URL")}/blog/get-all-flah-news`, {
+        method: "get",
+        credentials: "include",
+      });
+
+      const ReviewCard = ({
+          
+          name,
+          slug
+        }) => {
+          return (
+            <figure
+              className={cn(
+                "relative cursor-pointer overflow-hidden rounded-xl border p-4 bg-gray-200",
+               
+              )}
+            >
+              <div className="flex flex-row items-center gap-2 ">
+                <div className="w-4 h-4 rounded-full bg-red-800"></div>
+                <div className="flex flex-col">
+                  <figcaption className="text-sm font-medium dark:text-white">
+                  <Link to={`/blog/${slug}/${slug}`}>
+                    {name}
+                  </Link>
+                  </figcaption>
+                 
+                </div>
+              </div>
+            
+            </figure>
+          );
+        };
+  
 
   return (
     <div className="mt-0 flex flex-col items-center rounded-3xl justify-center ">
@@ -55,6 +96,26 @@ function HomePage() {
         
         </div>
       </div>
+
+      {newsData && newsData?.blog?.length > 0 && <div className="lg:px-20 mt-6 -mb-16">
+      <div className="relative flex w-[90vw] bg-slate-300 flex-col items-center justify-center overflow-hidden">
+      <Marquee speed={50} 
+      gradient={false}
+      pauseOnHover={true}>
+        <div className="w-full flex gap-3 items-center">
+          {newsData?.blog.map((blog) => (
+          <ReviewCard key={blog._id} name={blog?.title} slug={blog?.slug}/>
+        ))}
+        </div>
+        
+      </Marquee>
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-background"></div>
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-background"></div>
+      
+      </div>
+
+      
+      </div>}
 
       <div className=" ">
        

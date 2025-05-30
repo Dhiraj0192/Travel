@@ -48,7 +48,11 @@ function Navbar() {
   const { isSignedIn } = useAuth();
   const [notification, setNotification] = useState();
   const user = useSelector((state) => state.user);
-  console.log(user);
+  const storedToken = localStorage.getItem('access_token');
+  
+  console.log(storedToken);
+  
+  
   
   const [notifications, setNotifications] = useState([]);
   const [open, setOpen] = useState(false);
@@ -111,11 +115,22 @@ function Navbar() {
       if (!response.ok) return showToast("error", data.message);
       
       dispatch(removeUser());
+      localStorage.removeItem('access_token');
       navigate("/");
     } catch (error) {
       showToast("error", error.message);
     }
   };
+
+  useEffect(() => {
+    const handleUnload = () => {
+      localStorage.clear();
+    };
+    window.addEventListener('unload', handleUnload);
+    return () => {
+      window.removeEventListener('unload', handleUnload);
+    };
+  }, []);
 
   return (
     <div className="flex flex-col items-center relative w-full">
@@ -163,7 +178,7 @@ function Navbar() {
       <div className="sticky top-0 z-50 bg-white px-4 lg:px-32 w-full h-18 flex items-center justify-between shadow-md pt-5 pb-3">
         {/* Logo */}
         <Link
-          to={user.isLoggedIn ? "/home" : "/"}
+          to={user.isLoggedIn || storedToken ? "/home" : "/"}
           className="flex items-center gap-2 lg:gap-4"
         >
           <img
@@ -181,7 +196,7 @@ function Navbar() {
         <div className="hidden lg:flex items-center gap-8">
           <div className="flex items-center gap-6 text-gray-700 font-medium">
             <Link
-              to={user?.isLoggedIn ? "/home" : "/"}
+              to={user?.isLoggedIn || storedToken ? "/home" : "/"}
               className={`hover:text-blue-800 ${location.pathname === "/home" || location.pathname === "/" ? "text-blue-800 font-bold" : ""}`}
             >
               Home
@@ -224,7 +239,7 @@ function Navbar() {
             </Link>
           </div>
 
-          {user.isLoggedIn && (
+          {user.isLoggedIn || storedToken && (
             <DropdownMenu>
               <DropdownMenuTrigger className="relative mr-4">
                 <IoNotifications className="h-6 w-6 text-gray-700" />
@@ -257,7 +272,7 @@ function Navbar() {
           )}
 
           <div className="flex items-center gap-4 ml-4">
-            {user.isLoggedIn ? (
+            {user.isLoggedIn || storedToken ? (
               <>
                 <Link
                   to="/write-blog"
@@ -281,7 +296,7 @@ function Navbar() {
 
         {/* Mobile Navigation */}
         <div className="flex lg:hidden items-center gap-4">
-          {user.isLoggedIn && (
+          {user.isLoggedIn || storedToken && (
             <div className="relative">
               <IoNotifications className="h-6 w-6 text-gray-700" />
               {notifications.length > 0 && (
@@ -317,14 +332,14 @@ function Navbar() {
           >
             <div className="flex flex-col p-2 space-y-2 overflow-y-auto">
               <div className="w-full h-[10vh] bg-blue-800 rounded-sm flex items-center px-2 gap-2">
-                {user.isLoggedIn ? <><img src={user?.user?.avatar} className="w-12 h-12 rounded-full" alt="" srcset="" />
+                {user.isLoggedIn || storedToken  ? <><img src={user?.user?.avatar} className="w-12 h-12 rounded-full" alt="" srcset="" />
                 <div className="flex flex-col ">
                 <p className="text-white font-bold">{user?.user?.name}</p>
                 <p className="text-white text-sm ">{user?.user?.email}</p>
                 </div></> : <><div className="px-2"><p className="text-white font-bold text-xl">Travelers Mirror</p></div></>}
               </div>
               <Link
-                to={user?.isLoggedIn ? "/home" : "/"}
+                to={user?.isLoggedIn || storedToken ?  "/home" : "/"}
                 className="flex items-center  gap-2 py-2 px-4 text-gray-700 hover:bg-gray-100 rounded-md"
                 onClick={() => setOpen(false)}
               ><IoMdHome className="w-5 h-5 mb-1"/>
@@ -381,7 +396,7 @@ function Navbar() {
 
               <div className="border-t pt-4 mt-4">
                 
-                {user.isLoggedIn ? (
+                {user.isLoggedIn || storedToken ? (
                   <>
                   <Link
                 to="/your-blogs"

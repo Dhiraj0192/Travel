@@ -76,23 +76,33 @@ import 'ckeditor5/ckeditor5.css';
  */
 const LICENSE_KEY = 'GPL'; // or <YOUR_LICENSE_KEY>.
 
-export default function Editor({props}) {
+export default function Editor({ initialData, onChange }) {
 	const editorContainerRef = useRef(null);
 	const editorRef = useRef(null);
 	const editorWordCountRef = useRef(null);
+	const ckeditorInstanceRef = useRef(null); // Store CKEditor instance
 	const [isLayoutReady, setIsLayoutReady] = useState(false);
 
 	useEffect(() => {
 		setIsLayoutReady(true);
-
 		return () => setIsLayoutReady(false);
 	}, []);
+
+	useEffect(() => {
+		if (
+			ckeditorInstanceRef.current &&
+			initialData !== undefined &&
+			initialData !== null &&
+			ckeditorInstanceRef.current.getData() !== initialData
+		) {
+			ckeditorInstanceRef.current.setData(initialData);
+		}
+	}, [initialData]);
 
 	const { editorConfig } = useMemo(() => {
 		if (!isLayoutReady) {
 			return {};
 		}
-
 		return {
 			editorConfig: {
 				toolbar: {
@@ -278,7 +288,7 @@ export default function Editor({props}) {
 						'resizeImage'
 					]
 				},
-				initialData: props?.initialData || '',
+				initialData: initialData || '',
 				licenseKey: LICENSE_KEY,
 				link: {
 					addTargetToExternalLinks: true,
@@ -316,7 +326,7 @@ export default function Editor({props}) {
 				}
 			}
 		};
-	}, [isLayoutReady]);
+	}, [isLayoutReady, initialData]);
 
 	return (
 		<div className="main-container">
@@ -328,14 +338,15 @@ export default function Editor({props}) {
 					<div ref={editorRef}>
 						{editorConfig && (
 							<CKEditor
-								
-								onChange={props.onChange}
+								onChange={onChange}
 								onReady={editor => {
+									ckeditorInstanceRef.current = editor;
 									const wordCount = editor.plugins.get('WordCount');
 									editorWordCountRef.current.appendChild(wordCount.wordCountContainer);
 								}}
 								onAfterDestroy={() => {
 									Array.from(editorWordCountRef.current.children).forEach(child => child.remove());
+									ckeditorInstanceRef.current = null;
 								}}
 								editor={ClassicEditor}
 								config={editorConfig}

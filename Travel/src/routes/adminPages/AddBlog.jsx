@@ -41,17 +41,17 @@ import { FaCloudUploadAlt } from "react-icons/fa";
 function AddBlog() {
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
-    // console.log(user);
-    
-  
-    // Protect the /single page route
-    if (!user.isAdminLoggedIn) {
-      return <Navigate to="/admin-login" replace />;
-    }
+  // console.log(user);
+
+
+  // Protect the /single page route
+  if (!user.isAdminLoggedIn) {
+    return <Navigate to="/admin-login" replace />;
+  }
   // const { user } = useUser();
 
   // const user = useSelector((state)=> state.user)
- 
+
 
   const [filePreview, setFilePreview] = useState();
   const [uploading, setUploading] = useState(false);
@@ -115,7 +115,7 @@ function AddBlog() {
         authorimage:
           user?.imageUrl || "https://www.flaticon.com/free-icon/user_9187604",
       };
-     
+
 
       if (!file) {
         setUploading(false);
@@ -202,9 +202,8 @@ function AddBlog() {
     <div className="w-full flex ">
       {/* Sidebar */}
       <div
-        className={`fixed z-50 bg-gray-800 h-screen transition-transform ${
-          sidebarOpen ? "translate-x-0 w-[65%]" : "-translate-x-full"
-        } lg:translate-x-0 lg:w-[20%]`}
+        className={`fixed z-50 bg-gray-800 h-screen transition-transform ${sidebarOpen ? "translate-x-0 w-[65%]" : "-translate-x-full"
+          } lg:translate-x-0 lg:w-[20%]`}
       >
         <Sidebar />
       </div>
@@ -383,10 +382,10 @@ function AddBlog() {
                             {filePreview === undefined && (
                               <div className="flex items-center gap-2">
                                 <p className="text-white">Upload</p>
-                                <FaCloudUploadAlt className="text-white"/>
+                                <FaCloudUploadAlt className="text-white" />
                               </div>
                             )}
-                            <img src={filePreview} alt="" srcset="" />
+                            <img src={filePreview} alt="" srcset="" className="h-40" />
                           </div>
                         </div>
                       )}
@@ -428,11 +427,10 @@ function AddBlog() {
                         </FormLabel>
                         <FormControl>
                           <Editor
-                            props={{
-                              initialData: field.value,
-                              onChange: handleEditorData,
-                            }}
+                            initialData={field.value || ""}
+                            onChange={handleEditorData}
                           />
+                          
                         </FormControl>
 
                         <FormMessage />

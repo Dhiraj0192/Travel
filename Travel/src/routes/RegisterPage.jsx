@@ -223,69 +223,30 @@ function RegisterPage() {
                         Log In
                       </Link>
                     </div>
-                    <div className="mt-5 w-full flex justify-center">
-                      <GoogleLogin
-                        onSuccess={async (credentialResponse) => {
-                          try {
-                            
-                            const user = jwtDecode(
-                              credentialResponse.credential
-                            );
-                            const bodyData = {
-                              name: user.name,
-                              email: user.email,
-                              avatar: user.picture,
-                            };
-                            const response = await fetch(
-                              `${getEnv(
-                                "VITE_API_BASE_URL"
-                              )}/auth/google-login`,
-                              {
-                                method: "post",
-                                headers: { "Content-type": "application/json" },
-                                credentials: "include",
-                                body: JSON.stringify(bodyData),
-                              }
-                            );
-
-                            const data = await response.json();
-                            if (!response.ok) {
-                              return showToast("error", data.message);
-                            }
-
-                            dispath(setUser(data.user))
-                            navigate("/home");
-                            // toast(data.message, {
-                            //         position: "top-right",
-                            //         autoClose: 1000,
-                            //         hideProgressBar: false,
-                            //         closeOnClick: false,
-                            //         pauseOnHover: true,
-                            //         draggable: true,
-                            //         progress: undefined,
-                            //         theme: "colored",
-                                    
-                            //         });
-                          } catch (error) {
-                            toast(error.message, {
-                                    position: "top-right",
-                                    autoClose: 1000,
-                                    hideProgressBar: false,
-                                    closeOnClick: false,
-                                    pauseOnHover: true,
-                                    draggable: true,
-                                    progress: undefined,
-                                    theme: "colored",
-                                    
-                                    });
-                          }
-
-                          navigate("/home");
-                        }}
-                        onError={() => console.log("Login Failed")}
-                        auto_select={true}
-                      />
-                    </div>
+                    <div className="mt-3 w-full flex justify-center">
+                                          <a
+                                            href="#"
+                                            onClick={async (e) => {
+                                              e.preventDefault();
+                                              window.location.href = `${getEnv("VITE_API_BASE_URL")}/auth/google`;
+                                            }}
+                                            className="w-full flex items-center justify-center gap-2 bg-white border border-gray-300 text-gray-700 py-2  rounded shadow hover:bg-gray-100 transition-colors"
+                                            
+                                          >
+                                            <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" style={{ width: 22, height: 22, marginRight: 3 }} />
+                                            <span className="text-sm">Sign in with Google</span>
+                                          </a>
+                                        </div>
+                    
+                                        {/* Handle Google OAuth callback response */}
+                                        {window.location.pathname === '/home' && new URLSearchParams(window.location.search).get('user') && (() => {
+                                          try {
+                                            const user = JSON.parse(decodeURIComponent(new URLSearchParams(window.location.search).get('user')));
+                                            dispath(setUser(user));
+                                            // Optionally, remove user param from URL
+                                            window.history.replaceState({}, document.title, window.location.pathname);
+                                          } catch (e) { }
+                                        })()}
                   </div>
                 </form>
               </Form>

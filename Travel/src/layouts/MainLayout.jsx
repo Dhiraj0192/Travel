@@ -1,30 +1,43 @@
 import React from 'react'
 import Navbar from '../components/Navbar'
 import { Outlet, useLocation, Navigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import Cookies from 'js-cookie'
+import { useEffect } from 'react'
+import { setUser } from '../redux/user/user.slice.js'
 
 function MainLayout() {
   const location = useLocation();
   const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   const hideNavbarPaths = ['/','/blogs','/write','/login','/register',
     '/home','/account','/contact','/about','/write-blog','/your-blogs','/travel-packages','/gallery','/terms-condition','/privacy-policy','/videos'
   ];
 
-  // Protect the /home route
-  if (location.pathname === '/home' && !user.isLoggedIn) {
-    return <Navigate to="/login" replace />;
-  }
-
-  // Protect the /home route
-  if (location.pathname === '/account' && !user.isLoggedIn) {
-    return <Navigate to="/login" replace />;
-  }
+ 
   
+
+  // protect home page
+  const params = new URLSearchParams(window.location.search);
+  const urlToken = params.get('token');
+  // Store token in localStorage if present in URL
+  if (urlToken) {
+    localStorage.setItem('access_token', urlToken);
+  }
+  // Retrieve token from localStorage
+  const storedToken = localStorage.getItem('access_token');
+  if (location.pathname === '/home' && !storedToken && !user.isLoggedIn) {
+    return <Navigate to="/login" replace />;
+  }
 
   // check user login 
   if ((location.pathname === '/login' || location.pathname === '/register') && user.isLoggedIn) {
     return <Navigate to="/home" replace />;
+  }
+
+  if (location.pathname === '/account' && !user.isLoggedIn && !storedToken) {
+    return <Navigate to="/login" replace />;
   }
 
   return (

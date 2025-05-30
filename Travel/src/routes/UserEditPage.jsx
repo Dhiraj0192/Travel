@@ -73,7 +73,7 @@ function UserEditPage() {
   );
 
   blogDesc = blogData?.blog.blogcontent;
- 
+
 
   const formSchema = z.object({
     subcategory: z.string().min(3, "Category field must be selected."),
@@ -104,7 +104,7 @@ function UserEditPage() {
       form.setValue("location", blogData.blog.location);
       form.setValue("title", blogData.blog.title);
       form.setValue("slug", blogData.blog.slug);
-      form.setValue("blogcontent", decode(blogDesc));
+      form.setValue("blogcontent", decode(blogData.blog.blogcontent));
       // Fetch subcategories for the selected category
       handleCategoryChange(blogData.blog.subcategory.parentCategory._id);
     }
@@ -151,8 +151,7 @@ function UserEditPage() {
 
       formData.append("data", JSON.stringify(newValues));
       const response = await fetch(
-        `${getEnv("VITE_API_BASE_URL")}/blog/update-user-blog/${
-          blogid.blog_id
+        `${getEnv("VITE_API_BASE_URL")}/blog/update-user-blog/${blogid.blog_id
         }`,
         {
           method: "put",
@@ -466,7 +465,7 @@ function UserEditPage() {
               <div className="mb-3 mt-4">
                 <FormField
                   control={form.control}
-                  name="blogContent"
+                  name="blogcontent"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-gray-500 text-2xl">
@@ -475,11 +474,10 @@ function UserEditPage() {
                       <div className="mt-6">
                         <FormControl>
                           <Editor
-                            props={{
-                              initialData: blogData?.blog.blogcontent,
-                              onChange: handleEditorData,
-                            }}
+                            initialData={field.value || ""}
+                            onChange={handleEditorData}
                           />
+                          
                         </FormControl>
                       </div>
 

@@ -45,7 +45,7 @@ function FeaturedPosts({ lineBar = true , selectedCategoryBlogs, searchData }) {
                   <Link className="rounded-xl object-cover w-1/2
                           shadow-2xl aspect-video" to={`/blog/${blog.subcategory.slug}/${blog.slug}`}> <img
                       src={blog.featuredimage}
-                      className="rounded-xl"
+                      className="rounded-xl h-36 w-full object-cover "
                     /></Link>
                     <Link to={`/blog/${blog.subcategory.slug}/${blog.slug}`}></Link>
                     <div className="w-2/3 flex flex-col gap-3">
@@ -71,7 +71,7 @@ function FeaturedPosts({ lineBar = true , selectedCategoryBlogs, searchData }) {
                   <Link className="rounded-xl object-cover w-1/2
                           shadow-2xl aspect-video" to={`/blog/${blog.subcategory.slug}/${blog.slug}`}> <img
                       src={blog.featuredimage}
-                      className="rounded-xl"
+                      className="rounded-xl h-36 w-full object-cover"
                     /></Link>
                     <div className="w-2/3 flex flex-col gap-3">
                       <div className="flex items-center gap-4 text-sm lg:text-base ">
@@ -99,7 +99,7 @@ function FeaturedPosts({ lineBar = true , selectedCategoryBlogs, searchData }) {
                 <Link className="rounded-xl object-cover w-1/2
                           shadow-2xl aspect-video" to={`/blog/${blog.subcategory.slug}/${blog.slug}`}> <img
                       src={blog.featuredimage}
-                      className="rounded-xl"
+                      className="rounded-xl h-36 w-full object-cover"
                     /></Link>
                   <div className="w-2/3 flex flex-col gap-3">
                     <div className="flex items-center gap-4 text-sm lg:text-base ">

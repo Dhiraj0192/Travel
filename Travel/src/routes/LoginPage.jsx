@@ -21,7 +21,7 @@ import { getEnv } from "../helpers/getEnv.js";
 import { GoogleLogin, googleLogout } from "@react-oauth/google";
 
 import { jwtDecode } from "jwt-decode";
-import {useDispatch} from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { setUser } from "../redux/user/user.slice.js";
 import { toast } from "react-toastify";
 
@@ -69,8 +69,8 @@ function LoginPage() {
           draggable: true,
           progress: undefined,
           theme: "colored",
-          
-          });
+
+        });
       }
 
       dispath(setUser(data.user))
@@ -85,7 +85,7 @@ function LoginPage() {
       //   draggable: true,
       //   progress: undefined,
       //   theme: "colored",
-        
+
       //   });
       // showToast("success", data.message);
     } catch (error) {
@@ -99,8 +99,8 @@ function LoginPage() {
         draggable: true,
         progress: undefined,
         theme: "colored",
-        
-        });
+
+      });
     }
   }
 
@@ -108,7 +108,7 @@ function LoginPage() {
     <div className="w-full h-screen">
       <div className="w-full lg:px-32">
         <div className="flex md:flex-row flex-col items-center justify-between gap-0">
-        <div className="w-full md:w-[63%] md:h-[84vh] flex justify-center flex-col lg:justify-end pr-10  lg:pb-40 pl-10 rounded-3xl pt-10 md:pt-0">
+          <div className="w-full md:w-[63%] md:h-[84vh] flex justify-center flex-col lg:justify-end pr-10  lg:pb-40 pl-10 rounded-3xl pt-10 md:pt-0">
             <p className="text-3xl md:text-5xl lg:text-7xl font-bold">Share Your Story</p>
             <span className="text-4xl md:text-4xl lg:text-6xl font-bold text-blue-800 mt-2 md:mt-5">
               {" "}
@@ -171,8 +171,8 @@ function LoginPage() {
                   </div>
                   <div className="mt-5">
                     <Button type="submit" className="w-full bg-blue-600">
-                    {uploading ? "Please Wait...." : "Log In"}
-                      
+                      {uploading ? "Please Wait...." : "Log In"}
+
                     </Button>
                     <div className="mt-5 text-sm flex justify-center items-center gap-2">
                       <p>Don&apos;t have account?</p>
@@ -183,47 +183,31 @@ function LoginPage() {
                         Sign Up
                       </Link>
                     </div>
-                    <div className="mt-5 w-full flex justify-center">
+                    {/* <div className="mt-5 w-full flex justify-center">
                       <GoogleLogin
                         onSuccess={async (credentialResponse) => {
                           try {
-                            
                             const user = jwtDecode(credentialResponse.credential)
                             const bodyData = {
-                              name : user.name,
+                              name: user.name,
                               email: user.email,
                               avatar: user.picture
                             }
                             const response = await fetch(
-                              `${getEnv(
-                                "VITE_API_BASE_URL"
-                              )}/auth/google-login`,
+                              `${getEnv("VITE_API_BASE_URL")}/auth/google-login`,
                               {
-                                method: "post",
+                                method: "POST",
                                 headers: { "Content-type": "application/json" },
                                 credentials: "include",
                                 body: JSON.stringify(bodyData),
                               }
                             );
-
                             const data = await response.json();
                             if (!response.ok) {
                               return showToast("error", data.message);
                             }
-
                             dispath(setUser(data.user))
                             navigate("/home");
-                            // toast(data.message, {
-                            //   position: "top-right",
-                            //   autoClose: 1000,
-                            //   hideProgressBar: false,
-                            //   closeOnClick: false,
-                            //   pauseOnHover: true,
-                            //   draggable: true,
-                            //   progress: undefined,
-                            //   theme: "colored",
-                              
-                            //   });
                           } catch (error) {
                             toast(error.message, {
                               position: "top-right",
@@ -234,15 +218,37 @@ function LoginPage() {
                               draggable: true,
                               progress: undefined,
                               theme: "colored",
-                              
-                              });
+                            });
                           }
-
                         }}
                         onError={() => console.log("Login Failed")}
                         auto_select={true}
                       />
+                    </div> */}
+                    <div className="mt-3 w-full flex justify-center">
+                      <a
+                        href="#"
+                        onClick={async (e) => {
+                          e.preventDefault();
+                          window.location.href = `${getEnv("VITE_API_BASE_URL")}/auth/google`;
+                        }}
+                        className="w-full flex items-center justify-center gap-2 bg-white border border-gray-300 text-gray-700 py-2  rounded shadow hover:bg-gray-100 transition-colors"
+                        
+                      >
+                        <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" style={{ width: 22, height: 22, marginRight: 3 }} />
+                        <span className="text-sm">Sign in with Google</span>
+                      </a>
                     </div>
+
+                    {/* Handle Google OAuth callback response */}
+                    {window.location.pathname === '/home' && new URLSearchParams(window.location.search).get('user') && (() => {
+                      try {
+                        const user = JSON.parse(decodeURIComponent(new URLSearchParams(window.location.search).get('user')));
+                        dispath(setUser(user));
+                        // Optionally, remove user param from URL
+                        window.history.replaceState({}, document.title, window.location.pathname);
+                      } catch (e) { }
+                    })()}
                   </div>
                 </form>
               </Form>

@@ -39,14 +39,14 @@ import { toast } from "react-toastify";
 import { FaCloudUploadAlt } from "react-icons/fa";
 
 function AddLinks() {
-  const navigate = useNavigate();
-  const { isSignedIn } = useAuth();
-  if (isSignedIn === false) {
-    navigate("/admin-login");
-  }
-  const { user } = useUser();
-
-  // const user = useSelector((state)=> state.user)
+  const user = useSelector((state) => state.user);
+    // console.log(user);
+    
+  
+    // Protect the /single page route
+    if (!user.isAdminLoggedIn) {
+      return <Navigate to="/admin-login" replace />;
+    }
 
   const [filePreview, setFilePreview] = useState();
   const [uploading, setUploading] = useState(false);

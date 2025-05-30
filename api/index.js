@@ -60,6 +60,15 @@ app.use("/api/herosection", heroSectionRoutes);
 app.use("/api/other", OtherRouter);
 app.use("/api/video", VideoRoute);
 app.use("/api/adminuser", AdminUserRoute);
+// app.use("/google-login", (req, res, next) => {
+//   // This will forward GET requests to /google-login to the AuthRoute
+//   req.url = "/google-login";
+//   AuthRoute(req, res, next);
+// });
+// app.use("/auth/google/callback", (req, res, next) => {
+//   req.url = "/auth/google/callback";
+//   AuthRoute(req, res, next);
+// });
 
 mongoose
   .connect(process.env.MONGODB_CONN, { dbName: "blog" })

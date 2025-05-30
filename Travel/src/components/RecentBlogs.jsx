@@ -45,7 +45,7 @@ function RecentBlogs() {
                 {blogData && Array.isArray(blogData?.blog)
               ? blogData?.blog.map((blog, index) => (<div className="flex flex-col items-center justify-center gap-2 px-8 md:px-0 md:w-[26vw] mb-10">
                 
-                <Link to={`/blog/${blog.subcategory.slug}/${blog.slug}`}> <img src={blog.featuredimage} alt="" srcset="" className='lg:w-[26vw] lg:h-[30vh] rounded-lg'/> 
+                <Link to={`/blog/${blog.subcategory.slug}/${blog.slug}`}> <img src={blog.featuredimage} alt="" srcset="" className='h-[15vh] w-[70vw] lg:w-[100vw] object-cover  lg:h-[35vh] rounded-lg'/> 
                    </Link>
 
                 <h1 className="font-bold text-center text-black text-base hover:text-gray-600 mt-1">{blog.title}</h1>

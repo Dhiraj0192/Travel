@@ -2,6 +2,7 @@ import { handleError } from "../helpers/handleError.js"
 import User from "../models/user.model.js"
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import axios from 'axios';
 
 export const Register = async (req,res,next)=>{
     try {
@@ -139,3 +140,72 @@ export const Logout = async (req,res)=>{
         next(handleError(500,error.message))
     }
 }
+
+export const GoogleOAuthCallback = async (req, res, next) => {
+    try {
+        const code = req.query.code;
+        if (!code) {
+            return res.status(400).json({ message: 'No code provided' });
+        }
+
+        // Exchange code for tokens
+        const tokenRes = await axios.post('https://oauth2.googleapis.com/token', null, {
+            params: {
+                code,
+                client_id: process.env.GOOGLE_CLIENT_ID,
+                client_secret: process.env.GOOGLE_CLIENT_SECRET,
+                redirect_uri: process.env.BACKEND_URL + '/api/auth/google/callback',
+                grant_type: 'authorization_code',
+            },
+        });
+
+        const { access_token, id_token } = tokenRes.data;
+        
+        // Get user info
+        const userInfoRes = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
+            headers: { Authorization: `Bearer ${access_token}` },
+        });
+
+        const { name, email, picture } = userInfoRes.data;
+        
+        // Find or create user
+        let user = await User.findOne({ email });
+        if (!user) {
+            const password = Math.random().toString();
+            const hashedPassword = bcryptjs.hashSync(password);
+            const newUser = new User({
+                name,
+                email,
+                password: hashedPassword,
+                avatar: picture,
+            });
+            user = await newUser.save();
+        }
+
+        const token = jwt.sign({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            avatar: user.avatar,
+        }, process.env.JWT_SECRET);
+
+        // Set cookie and redirect
+        res.cookie('access_token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
+            path: '/',
+        });
+
+        const newuser = user.toObject({ getters: true})
+        delete newuser.password
+
+        // Redirect to frontend with token and user as query params
+        res.redirect(`${process.env.FRONTEND_URL}/home?token=${token}&user=${encodeURIComponent(JSON.stringify(newuser))}`);
+        
+    } catch (error) {
+        console.error('Google OAuth Error:', error.response?.data || error.message);
+        // Redirect to frontend with error
+        res.redirect(`${process.env.FRONTEND_URL}/login?error=google_auth_failed`);
+    }
+};

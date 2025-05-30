@@ -35,10 +35,13 @@ import { FaCloudUploadAlt } from "react-icons/fa";
 
 function WriteBlogPage() {
   const user = useSelector((state) => state.user);
+  const storedToken = localStorage.getItem('access_token');
+  console.log(storedToken);
+  
   const navigate = useNavigate();
 
   // Protect the /single page route
-  if (!user.isLoggedIn) {
+  if (!storedToken && !user.isLoggedIn) {
     return <Navigate to="/login" replace />;
   }
 
@@ -366,27 +369,27 @@ function WriteBlogPage() {
                     />
                   </div>
                   <div className="mb-3">
-                                        <FormField
-                                          control={form.control}
-                                          name="location"
-                                          render={({ field }) => (
-                                            <FormItem>
-                                              <FormLabel className="text-black text-lg">
-                                                Location
-                                              </FormLabel>
-                                              <FormControl>
-                                                <Input
-                                                  className="bg-gray-200 w-[90vw] md:w-[69vw]"
-                                                  placeholder="Enter location.."
-                                                  {...field}
-                                                />
-                                              </FormControl>
-                  
-                                              <FormMessage />
-                                            </FormItem>
-                                          )}
-                                        />
-                                      </div>
+                    <FormField
+                      control={form.control}
+                      name="location"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-black text-lg">
+                            Location
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              className="bg-gray-200 w-[90vw] md:w-[69vw]"
+                              placeholder="Enter location.."
+                              {...field}
+                            />
+                          </FormControl>
+
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                 </div>
                 <div className="mb-3 ">
                   <FormLabel className="text-gray-500 text-xl w-[14vw]">
@@ -448,11 +451,10 @@ function WriteBlogPage() {
                       </FormLabel>
                       <div className="mt-6">
                         <FormControl>
+
                           <Editor
-                            props={{
-                              initialData: "",
-                              onChange: handleEditorData,
-                            }}
+                            initialData={field.value || ""}
+                            onChange={handleEditorData}
                           />
                         </FormControl>
                       </div>

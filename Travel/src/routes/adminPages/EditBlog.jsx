@@ -458,10 +458,8 @@ function EditBlog() {
                         </FormLabel>
                         <FormControl>
                           <Editor
-                            props={{
-                              initialData: field.value || "",
-                              onChange: handleEditorData,
-                            }}
+                            initialData={field.value || ""}
+                            onChange={handleEditorData}
                           />
                         </FormControl>
 

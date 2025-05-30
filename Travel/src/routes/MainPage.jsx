@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import MainCategories from "../components/MainCategories";
 import PostList from "../components/PostList";
@@ -13,7 +13,7 @@ import { getEnv } from "../helpers/getEnv";
 import moment from "moment";
 import { convert } from "html-to-text";
 import { decode } from "entities";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,10 +25,9 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 import { GrNotes } from "react-icons/gr";
 import { IoLogOut } from "react-icons/io5";
-import { useEffect } from "react";
+import { setUser } from "../redux/user/user.slice";
 
 import { showToast } from "../helpers/showToast";
-import { useDispatch } from "react-redux";
 import { removeUser } from "../redux/user/user.slice";
 import { InteractiveHoverButton } from "../components/magicui/interactive-hover-button";
 import AddsSlot from "../components/AddsSlot";
@@ -37,18 +36,19 @@ import { cn } from "../lib/utils";
 
 function MainPage() {
   const user = useSelector((state) => state.user);
+  const storedToken = localStorage.getItem('access_token');
+  const dispath = useDispatch();
+  const navigate = useNavigate();
 
   // Protect the /single page route
-  if (!user.isLoggedIn) {
-    return <Navigate to="/login" replace />;
-  }
+  // if (!user.isLoggedIn) {
+  //   return <Navigate to="/login" replace />;
+  // }
   const [trendingBlogs, setTrendingBlogs] = useState([]);
   const [timeRange, setTimeRange] = useState("month");
   const [limit, setLimit] = useState(9);
   const [selectedCategoryBlogs, setSelectedCategoryBlogs] = useState();
   const [query, setQuery] = useState();
-  const navigate = useNavigate();
-  const dispath = useDispatch();
   let [searchData, setSearchData] = useState();
   const [category, setCategory] = useState([]);
 
@@ -230,6 +230,7 @@ function MainPage() {
       }
 
       dispath(removeUser());
+      localStorage.removeItem('access_token');
       navigate("/");
     } catch (error) {
       showToast("error", error.message);
@@ -266,6 +267,19 @@ function MainPage() {
                 setSelectedCategoryBlogs(undefined); // Reset if unchecked
               }
             };
+
+  useEffect(() => {
+    const userParam = new URLSearchParams(window.location.search).get('user');
+    if (userParam) {
+      try {
+        const user = JSON.parse(decodeURIComponent(userParam));
+        console.log(user);
+        
+        dispath(setUser(user));
+        window.history.replaceState({}, document.title, window.location.pathname);
+      } catch (e) {}
+    }
+  }, []);
 
   return (
     <div className=" flex flex-col ">
@@ -476,7 +490,7 @@ function MainPage() {
                       src={blog.featuredimage}
                       alt=""
                       srcset=""
-                      className="md:w-[30vw] w-full h-[30vh] rounded-lg"
+                      className="md:w-[30vw] w-full h-[30vh] object-cover rounded-lg"
                     />
                   </Link>
 
